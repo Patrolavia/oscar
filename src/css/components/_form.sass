@@ -1,0 +1,29 @@
+.form-title
+  font-size: $b-fontSize-xs
+  color: MDcolor(blue-grey, 50)
+  display: block
+  padding: $b-space-s 0
+
+.form-input
+  background: none
+  border: 0
+  outline: none
+  width: 100%
+  color: white
+  padding: $b-space-xs 0
+  font-size: $b-space * 1.2
+  margin-bottom: $b-space-xs
+  border-bottom: 1px MDcolor(blue-grey, 200) solid
+
+.form-input-wb
+  @extend .form-input
+  color: MDcolor(blue-grey, 500)
+
+.form-errorMsg
+  +box-shadow(0, 1px ,2px , rgba(0, 0, 0, .2) inset)
+  +text-shadow(0, -1px, 1px, rgba(255, 255, 255, .3))
+  text-align: right
+  padding: $b-space-xs $b-space
+  background-color: MDcolor(red, 200)
+  font-size: $b-fontSize-s
+  color: MDcolor(red, 900)

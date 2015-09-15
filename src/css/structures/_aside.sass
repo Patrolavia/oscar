@@ -1,0 +1,210 @@
+// *************************************
+//
+//   Aside
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// #aside
+//   .toolbar
+//     .toolbar-action
+//       i.[^=icon] (create & search)
+//     i.[^=icon] (home)
+//     .toolbar-from (create & search)
+//   .toc
+//     .toc-list
+//       a.toc-listItem.[^=tier]
+//
+// *************************************
+
+.aside
+  width: 100%
+  position: fixed
+  height: 81px
+  bottom: 0
+  z-index: 999
+  +breakpoint($middle)
+    +span(2 of map-get($columnSetting, middle))
+    position: absolute
+    height: 100%
+    top: 0
+    visibility: visible
+    border-right: 1px MDcolor(grey, 300) solid
+    background-color: rgba(MDcolor(grey, 300), .5)
+  +breakpoint($large)
+    +span(3 of map-get($columnSetting, large))
+
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+.toolbar
+  background: none
+  border-bottom: 0
+  +breakpoint($middle)
+    @extend .header
+    border-bottom: 1px MDcolor(grey, 300) solid
+    display: table
+    width: 100%
+    i
+      display: table-cell
+      font-size: $b-fontSize-l
+      height: 100%
+      width: 20%
+      vertical-align: middle
+      cursor: pointer
+      text-align: center
+      &:hover
+        color: MDcolor(blue-grey, 500)
+
+  .icon-home
+    display: none
+    +breakpoint($middle)
+      display: table-cell
+
+.toolbar-action
+  display: none
+  +breakpoint($middle)
+    display: table
+    overflow: hidden
+    float: left
+    height: 68px
+    width: 50%
+  i.is-active
+    color: MDcolor(blue-grey, 600)
+
+.toolbar-form
+  +border-radius-separate(0, 0, 3px, 3px)
+  +box-shadow(0, 1px, 2px, rgba(0, 0, 0, .2))
+  +transform(perspective(500px))
+  z-index: 999
+  position: absolute
+  left: 0
+  display: block
+  background-color: MDcolor(blue-grey, 500)
+  width: 100%
+  &[data-type='createForm']
+    visibility: hidden
+  +breakpoint($middle)
+    padding-right: 0
+    top: 70px
+    &[data-type='createForm']
+      visibility: visible
+
+
+  .toolbar-formTitle
+    visibility: hidden
+    +breakpoint($middle)
+      @extend .form-title
+      visibility: visible
+  input
+    @extend .form-input
+
+.toolbar-create,
+.toolbar-search
+  padding: $b-space-s
+  padding-top: 0
+  overflow: hidden
+
+.toolbar-search
+  padding-right: 40px
+  margin-right: $b-space-s
+  +breakpoint($middle)
+    padding-right: 0
+
+.toolbar-searchTypes
+  position: absolute
+  top: -$b-space-s
+  right: 41px
+  width: 160px
+  font-size: $b-fontSize-s
+  +breakpoint($middle)
+    @extend .bucket
+    position: relative
+    width: 100%
+    right: 0
+    top: 0
+    margin: $b-space-xs 0
+    font-size: $b-fontSize
+    span
+      display: block
+
+.toolbar-searchType
+  @extend .bucket-content
+  color: MDcolor(blue-grey, 200)
+  cursor: pointer
+  &.is-active,
+  &:hover
+    color: white
+  i
+    font-size: $b-fontSize-l
+    &:hover
+      color: inherit
+  span
+    display: none
+    +breakpoint($middle)
+      display: block
+      font-size: $b-fontSize-xs
+      text-align: center
+
+.toolbar-errorMsg
+  @extend .form-errorMsg
+
+.toc
+  display: none
+  +breakpoint($middle)
+    top: 10px
+    display: block
+    height: 90%
+
+.toc-list
+  margin-top: $b-space
+  overflow: auto
+  height: 100%
+
+.toc-listItem
+  display: block
+  font-size: $b-fontSize-s
+  margin: $b-space-s
+  &.tier2
+    padding-left: $b-space
+  &.tier3
+    padding-left: $b-space-l
+
+.toolbar-toggleSearchOptions
+  font-size: $b-fontSize-s
+  display: block
+  color: MDcolor(blue-grey, 300)
+  margin-bottom: $b-space-s
+
+.toolbar-searchOptions
+  display: block
+  font-size: $b-fontSize-s
+  color: white
+  padding: $b-space-s
+  background-color: MDcolor(blue-grey, 600)
+
+.toolbar-searchBtn
+  text-align: center
+  margin: $b-space-s
+
+.toolbar-searchOption
+  position: absolute
+  top: $b-space-s
+  input
+    width: auto
+    margin-right: $b-space-xs
+  +breakpoint($middle)
+    position: relative
+    display: block
+    clear: both
+    top: 0
+    left: 0
+    padding: $b-space-xs 0
+    span
+      display: inline-block
+    input
+      width: auto
+      margin: 0 $b-space-xs

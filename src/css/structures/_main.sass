@@ -1,0 +1,17 @@
+// *************************************
+//
+//   Main
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .main
+//
+// *************************************
+
+.main
+  +breakpoint($middle)
+    +span(omega 6 of map-get($columnSetting, middle))
+  +breakpoint($large)
+    +span(omega 13 of map-get($columnSetting, large))

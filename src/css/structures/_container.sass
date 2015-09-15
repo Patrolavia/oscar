@@ -1,0 +1,46 @@
+// *************************************
+//
+//   Container
+//   -> simple: above footer
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// #container
+//
+// *************************************
+
+.container
+  position: relative
+  min-height: calc(100vh - 40px)
+  height: 100%
+  overflow: hidden
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+.container-floatBtn
+  z-index: 1000
+  position: fixed
+  right: 0
+  bottom: 0
+  height: 40px
+  width: 40px
+  line-height: 40px
+  text-align: center
+  color: white
+  background-color: MDcolor(blue-grey, 300)
+  cursor: pointer
+  &:hover,
+  &:focus
+    color: white
+  +breakpoint($middle)
+   display: none
+
+.container-floatBtn--search
+  @extend .container-floatBtn
+  bottom: 41px
+  &.is-active
+    background-color: MDcolor(blue-grey, 600)

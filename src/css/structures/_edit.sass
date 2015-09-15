@@ -1,0 +1,130 @@
+// *************************************
+//
+//   Edit
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+//  .editPad
+//    .editPad-title
+//      span.editPad-optionTitle
+//      input
+//    .editPad-content
+//      span.editPad-optionTitle
+//      textarea
+//    .editPad-options
+//      .editPad-cooperates
+//      .editPad-tags
+//      .editPad-submit
+//      .editPad-errorMsg
+//
+// *************************************
+
+.editPad
+  @extend .padList-item
+  height: 100%
+
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+.editPad-optionTitle
+  font-size: $b-fontSize-xs
+  margin-bottom: $b-space
+  display: block
+  color: MDcolor(blue-grey, 300)
+
+.editPad-title,
+.editPad-content
+  padding: $b-space
+  min-height: 50px
+  border-bottom: 1px MDcolor(grey, 200) solid
+
+.editPad-title
+  input
+    @extend .form-input-wb
+    background: none
+    border: 0
+
+.editPad-content
+  background: white
+  height: 100%
+  textarea
+    min-height: 300px
+    min-width: 100%
+    max-width: 100%
+    border: 0
+
+.editPad-options
+  +breakpoint($middle)
+    @extend .bucket
+
+.editPad-cooperates,
+.editPad-tags
+  display: block
+  width: inherit
+  overflow: hidden
+  padding: $b-space
+  +breakpoint($middle)
+    display: table-cell
+    width: 100000px
+
+.editPad-tags
+  border-top: 1px MDcolor(grey, 200) solid
+  +breakpoint($middle)
+    border-top: none
+
+.editPad-submit
+  width: 100%
+  display: block
+  overflow: hidden
+  background-color: MDcolor(grey, 200)
+  border-top: 1px MDcolor(grey, 200) solid
+
+.editPad-errorMsg
+  @extend .form-errorMsg
+
+.editPad-completions
+  display: block
+
+.editPad-completion
+  +border-radius(3px)
+  position: relative
+  float: left
+  margin: $b-space-s
+  margin-left: 0
+  padding: $b-space-xs $b-space-s
+  font-size: $b-fontSize-s
+  color: white
+  cursor: pointer
+  background-color: MDcolor(blue-grey, 500)
+
+  img
+    +border-radius(3px)
+    position: absolute
+    left: 3px
+    top: 3px
+    height: 24px
+    width: 24px
+
+  span
+    margin-left: $b-space * 1.5
+
+.editPad-completions--tag
+  span
+    margin-left: 0
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+.is-disable
+  .editPad-content
+    textarea
+      color: MDcolor(grey, 500)
+  .react-tagsinput-input
+    visibility: hidden
+  .react-tagsinput-remove
+    display: none
