@@ -31,7 +31,7 @@ module.exports = {
     loaders: [
       { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules|bower_components/ },
       {
-        test: /\.scss$|\.sass$/,
+        test: /\.scss$|\.sass$|\.css$/,
         loader: ExtractTextPlugin.extract('css-loader?sourceMap!autoprefixer-loader?{browsers:["last 2 version"]}!sass-loader?indentedSyntax&sourceMap&sourceMapContents')
       },
       { test: /\.png$|\.jpe?g$|\.gif$|img\/.*\.svg$/, loader: 'file-loader?name=' + opts.img },

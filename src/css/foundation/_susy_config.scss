@@ -1,0 +1,36 @@
+$breakPoint: (
+  small: 600px,
+  middle: 900px,
+  large: 1440px
+);
+
+$columnSetting: (
+  small: 4,
+  middle: 8,
+  large: 16
+);
+
+$susy: (
+  columns: map-get($columnSetting, small),
+  gutters: .25,
+  gutter-position: inside,
+  // debug: (
+  //   image: show,
+  //   color: #ddd,
+  //   output: overlay,
+  //   toggle: top right
+  // )
+);
+
+$middle: map-get($breakPoint, middle);
+$large: map-get($breakPoint, large);
+
+#app {
+  @include container($susy);
+  @include breakpoint($middle) {
+    @include container(map-get($columnSetting, middle));
+  }
+  @include breakpoint($large) {
+    @include container(map-get($columnSetting, large));
+  }
+}

@@ -69,5 +69,17 @@
   "scripts": {
     "postinstall": "bower install",
     "init": "git init;git add .;git commit -m 'first commit'"
+  },
+  "dependencies": {
+    "breakpoint-sass": "^2.6.1",
+    "gsap": "^1.18.0",
+    "isomorphic-fetch": "^2.1.1",
+    "normalize.css": "^3.0.3",
+    "react": "^0.13.3",
+    "react-router": "1.0.0-rc1",
+    "react-tagsinput": "^1.4.3",
+    "redux": "^3.0.0",
+    "redux-react-router": "^1.0.0-alpha2",
+    "susy": "^2.2.5"
   }
 }
