@@ -2,16 +2,26 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-react-router';
 
+import Header from 'containers/Header';
+import Toolbar from 'components/Toolbar';
+import Toc from 'components/Toc';
+
 class App extends Component {
-  componentDidMount() {
-    console.log('componentDidMount');
-  }
   render() {
     const { children } = this.props;
     return (
       <div>
-        <h1>App</h1>
-        {children}
+        <div className="container">
+          <div className="aside">
+            <Toolbar />
+            <Toc />
+          </div>
+          <div className="main">
+            <Header />
+            {children}
+          </div>
+        </div>
+        <footer>Copyright Ⓒ 2015 Patrolavia Studio</footer>
       </div>
     );
   }

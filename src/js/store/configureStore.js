@@ -4,7 +4,6 @@ import { devTools } from 'redux-devtools';
 import createHistory from 'history/lib/createHashHistory';
 import routes from '../routes';
 import thunk from 'redux-thunk';
-import api from '../middleware/api';
 import createLogger from 'redux-logger';
 import rootReducer from '../reducers';
 
@@ -15,7 +14,7 @@ const logger = createLogger({
 });
 
 const finalCreateStore = compose(
-  applyMiddleware(thunk, api),
+  applyMiddleware(thunk),
   reduxReactRouter({ routes, createHistory }),
   applyMiddleware(logger),
   devTools()

@@ -7,7 +7,7 @@ var router = express.Router();
 var apis = require('./apis');
 
 router.get('/api/pads', function(req, res) {
-  res.json(apis.pads.source());
+  res.json(apis.pads);
 });
 
 module.exports = router;

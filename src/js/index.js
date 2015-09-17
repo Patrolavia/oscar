@@ -10,8 +10,10 @@ import configureStore from 'store/configureStore';
 const store = configureStore();
 
 render(
-  <Provider store={store}>
-    <ReduxRouter />
-  </Provider>,
+  <div>
+    <Provider store={store}>
+      <ReduxRouter />
+    </Provider>
+  </div>,
   document.getElementById('app')
 );

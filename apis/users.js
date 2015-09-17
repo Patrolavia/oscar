@@ -1,7 +1,4 @@
-var mock = require('mockjs');
-
-function source() {
-  return {
+module.exports = {
     'result': true,
     'message': '',
     'data': [
