@@ -10,4 +10,8 @@ router.get('/api/pads', function(req, res) {
   res.json(apis.pads);
 });
 
+router.get('/api/users', function(req, res) {
+  res.json(apis.users);
+});
+
 module.exports = router;
