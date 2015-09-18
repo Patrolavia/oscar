@@ -1,17 +1,28 @@
-import { FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS } from 'actions';
+import { FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE } from 'actions';
+import { merge } from 'lodash';
+
 const initialState = {
-  result: false,
-  message: 'Fetching pads...',
+  isFetching: false,
   data: []
 };
 
 export default function Pads(state = initialState, action) {
   switch (action.type) {
     case FETCH_PADS_REQUEST:
-      return state;
+      return merge({}, state, {
+        isFetching: true,
+        message: 'Fetching pads...'
+      });
 
     case FETCH_PADS_SUCCESS:
-      return action.json || state;
+      return merge({}, state, action.json, {
+        isFetching: false
+      });
+
+    case FETCH_PADS_FAILURE:
+      return merge({}, state, action.json, {
+        isFetching: false
+      });
 
     default:
       return state;

@@ -3,10 +3,20 @@ import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each } from 'lodash';
 
+import LoadingDots from 'components/LoadingDots';
+
 export default class Pads extends Component {
+
+  contextTypes: { router: PropTypes.func }
+
   componentDidMount() {
     this.props.fetchPads();
     this.props.fetchUsers();
+  }
+
+  onClickPad() {
+    // this.context.router.pushState(null, '/show');
+
   }
 
   renderTags(tags) {
@@ -40,7 +50,7 @@ export default class Pads extends Component {
     each(padsData, (value, key) => {
       const { user: userId, id: padId, title, tags } = value;
       padRows.push(
-        <div className="padList-item" key={ padId }>
+        <div className="padList-item" key={ padId } onClick={ this.onClickPad.bind(this) }>
           <span className="padList-title">{ title }</span>
           { tags.length > 0 &&
             <div className="padList-tags">
@@ -65,9 +75,10 @@ export default class Pads extends Component {
   }
 
   render() {
-    const { padsFetchResult } = this.props;
+    const { padsFetchResult, padsIsFetching } = this.props;
     return (
       <div className="padList">
+        { padsIsFetching && <LoadingDots /> }
         { padsFetchResult && this.renderPads() }
       </div>
     );
@@ -75,7 +86,8 @@ export default class Pads extends Component {
 }
 
 Pads.propTypes = {
-  padsFetchResult: PropTypes.bool.isRequired,
+  padsIsFetching: PropTypes.bool.isRequired,
+  padsFetchResult: PropTypes.bool,
   padsFetchMessage: PropTypes.string,
   padsData: PropTypes.array.isRequired,
   usersData: PropTypes.array.isRequired,
@@ -86,6 +98,7 @@ Pads.propTypes = {
 
 function mapStateToProps(state) {
   const {
+    isFetching: padsIsFetching,
     result: padsFetchResult,
     message: padsFetchMessage,
     data: padsData
@@ -96,6 +109,7 @@ function mapStateToProps(state) {
   } = state.users;
 
   return {
+    padsIsFetching: padsIsFetching,
     padsFetchResult: padsFetchResult,
     padsFetchMessage: padsFetchMessage,
     padsData: padsData,
