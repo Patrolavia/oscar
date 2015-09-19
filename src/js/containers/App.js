@@ -5,6 +5,7 @@ import { pushState } from 'redux-react-router';
 import Header from 'containers/Header';
 import Toolbar from 'components/Toolbar';
 import Toc from 'components/Toc';
+import LoadingDots from 'components/LoadingDots';
 
 class App extends Component {
   render() {
@@ -18,7 +19,7 @@ class App extends Component {
           </div>
           <div className="main">
             <Header />
-            {children}
+            { children }
           </div>
         </div>
         <footer>Copyright Ⓒ 2015 Patrolavia Studio</footer>

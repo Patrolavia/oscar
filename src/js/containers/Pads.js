@@ -2,21 +2,22 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each } from 'lodash';
-
 import LoadingDots from 'components/LoadingDots';
 
 export default class Pads extends Component {
 
-  contextTypes: { router: PropTypes.func }
+  static contextTypes = {
+      history: PropTypes.object
+  };
 
   componentDidMount() {
     this.props.fetchPads();
     this.props.fetchUsers();
   }
 
-  onClickPad() {
-    // this.context.router.pushState(null, '/show');
-
+  onClickPad(padId) {
+    const path = '/show/' + padId;
+    this.context.history.pushState(null, path);
   }
 
   renderTags(tags) {
@@ -50,7 +51,7 @@ export default class Pads extends Component {
     each(padsData, (value, key) => {
       const { user: userId, id: padId, title, tags } = value;
       padRows.push(
-        <div className="padList-item" key={ padId } onClick={ this.onClickPad.bind(this) }>
+        <div className="padList-item" key={ padId } onClick={ this.onClickPad.bind(this, padId) }>
           <span className="padList-title">{ title }</span>
           { tags.length > 0 &&
             <div className="padList-tags">
@@ -75,10 +76,10 @@ export default class Pads extends Component {
   }
 
   render() {
-    const { padsFetchResult, padsIsFetching } = this.props;
+    const { isFetching, padsFetchResult } = this.props;
     return (
       <div className="padList">
-        { padsIsFetching && <LoadingDots /> }
+        { isFetching && <LoadingDots /> }
         { padsFetchResult && this.renderPads() }
       </div>
     );
@@ -86,7 +87,7 @@ export default class Pads extends Component {
 }
 
 Pads.propTypes = {
-  padsIsFetching: PropTypes.bool.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   padsFetchResult: PropTypes.bool,
   padsFetchMessage: PropTypes.string,
   padsData: PropTypes.array.isRequired,
@@ -98,18 +99,16 @@ Pads.propTypes = {
 
 function mapStateToProps(state) {
   const {
-    isFetching: padsIsFetching,
     result: padsFetchResult,
     message: padsFetchMessage,
     data: padsData
   } = state.pads;
 
-  const {
-    data: usersData
-  } = state.users;
+  const { data: usersData } = state.users;
+  const { isFetching } = state.process;
 
   return {
-    padsIsFetching: padsIsFetching,
+    isFetching: isFetching,
     padsFetchResult: padsFetchResult,
     padsFetchMessage: padsFetchMessage,
     padsData: padsData,

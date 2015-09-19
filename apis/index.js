@@ -1,4 +1,5 @@
 module.exports = {
   pads: require('./pads'),
-  users: require('./users')
+  users: require('./users'),
+  pad: require('./pad')
 };

@@ -1,21 +1,21 @@
-import { FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE } from 'actions';
+import { FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE } from 'actions';
 import { merge } from 'lodash';
 
 const initialState = {
-  data: []
+  data: {}
 };
 
-export default function Pads(state = initialState, action) {
+export default function Pad(state = initialState, action) {
   switch (action.type) {
-    case FETCH_PADS_REQUEST:
+    case FETCH_PAD_REQUEST:
       return merge({}, state, {
         message: 'Fetching pads...'
       });
 
-    case FETCH_PADS_SUCCESS:
+    case FETCH_PAD_SUCCESS:
       return merge({}, state, action.json);
 
-    case FETCH_PADS_FAILURE:
+    case FETCH_PAD_FAILURE:
       return merge({}, state, action.json);
 
     default:
