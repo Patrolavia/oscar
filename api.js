@@ -14,8 +14,16 @@ router.get('/api/users', function(req, res) {
   res.json(apis.users);
 });
 
-router.get('/api/pad', function(req, res) {
-  res.json(apis.pad);
+router.get('/api/pad/0', function(req, res) {
+  res.json(apis.pad[0]);
+});
+
+router.get('/api/pad/1', function(req, res) {
+  res.json(apis.pad[1]);
+});
+
+router.get('/api/pad/2', function(req, res) {
+  res.json(apis.pad[2]);
 });
 
 module.exports = router;

@@ -2,9 +2,9 @@ import fetch from 'isomorphic-fetch';
 import { getBaseUrl } from 'untils/config';
 
 const APIs = {
-  pads: '/api/pads',
-  users: '/api/users',
-  pad: '/api/pad'
+  pads: '/api/pads/',
+  users: '/api/users/',
+  pad: '/api/pad/'
 }
 
 // fetch process, for loading stage
@@ -20,7 +20,12 @@ const fetchSuccess = () => {
   return { type: FETCH_SUCCESS }
 }
 
-const fetchAPI = (types, dispatch, APIUrl, requireLoading) => {
+const fetchAPI = (
+  types,
+  dispatch,
+  APIUrl,
+  requireLoading
+) => {
   const [ REQUIRE_TYPE, SUCCESS_TYPE ] = types;
   if (requireLoading) dispatch(fetchRequest());
   dispatch({ type: REQUIRE_TYPE });
@@ -73,8 +78,8 @@ export const FETCH_PAD_REQUEST = 'FETCH_PAD_REQUEST';
 export const FETCH_PAD_SUCCESS = 'FETCH_PAD_SUCCESS';
 export const FETCH_PAD_FAILURE = 'FETCH_PAD_FAILURE';
 
-export function fetchPad() {
-  const APIUrl = getBaseUrl() + APIs.pad;
+export function fetchPad(param) {
+  const APIUrl = getBaseUrl() + APIs.pad + param.pid;
   return dispatch => {
     fetchAPI(
       [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS],
