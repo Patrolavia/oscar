@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes, cloneElement } from 'react';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-react-router';
 
@@ -9,7 +9,7 @@ import LoadingDots from 'components/LoadingDots';
 
 class App extends Component {
   render() {
-    const { children } = this.props;
+    const { children, location: { pathname: key} } = this.props;
     return (
       <div>
         <div className="container">
@@ -19,7 +19,11 @@ class App extends Component {
           </div>
           <div className="main">
             <Header />
-            { children }
+            <div className="content">
+              <div className="padContent" ref="padContent">
+                { children }
+              </div>
+            </div>
           </div>
         </div>
         <footer>Copyright Ⓒ 2015 Patrolavia Studio</footer>
@@ -27,6 +31,11 @@ class App extends Component {
     );
   }
 }
+
+
+// <EnterAnimation>
+//   { cloneElement(children || <div/>, {key: key}) }
+// </EnterAnimation>
 
 App.propTypes = {
   pushState: PropTypes.func.isRequired,

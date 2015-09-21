@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes, findDOMNode } from 'react';
 import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each } from 'lodash';
 import LoadingDots from 'components/LoadingDots';
+import 'gsap';
 
 export default class Pads extends Component {
 
@@ -13,6 +14,18 @@ export default class Pads extends Component {
   componentDidMount() {
     this.props.fetchPads();
     this.props.fetchUsers();
+  }
+
+  componentDidUpdate() {
+    const $contentNode = findDOMNode(this.refs.contentWrapper);
+
+    if ($contentNode) {
+      TweenLite.fromTo(
+        $contentNode, 0.5,
+        {opacity: 0, ease: "Power1.easeOut"},
+        {opacity: 1}
+      );
+    };
   }
 
   onClickPad(padId) {
@@ -78,7 +91,7 @@ export default class Pads extends Component {
   render() {
     const { isFetching, padsFetchResult } = this.props;
     return (
-      <div className="padList">
+      <div className="padList" ref="contentWrapper">
         { isFetching && <LoadingDots /> }
         { padsFetchResult && this.renderPads() }
       </div>
@@ -101,11 +114,11 @@ function mapStateToProps(state) {
   const {
     result: padsFetchResult,
     message: padsFetchMessage,
-    data: padsData
+    data: padsData,
+    isFetching: isFetching
   } = state.pads;
 
   const { data: usersData } = state.users;
-  const { isFetching } = state.process;
 
   return {
     isFetching: isFetching,

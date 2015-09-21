@@ -2,27 +2,21 @@ import { FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE } from 'a
 import { merge } from 'lodash';
 
 const initialState = {
-  isFetching: false,
   data: []
 };
 
-export default function Pads(state = initialState, action) {
+export default function Users(state = initialState, action) {
   switch (action.type) {
     case FETCH_USERS_REQUEST:
       return merge({}, state, {
-        isFetching: true,
         message: 'Fetching users...'
       });
 
     case FETCH_USERS_SUCCESS:
-      return merge({}, state, action.json, {
-        isFetching: false
-      });
+      return merge({}, state, action.json);
 
     case FETCH_USERS_FAILURE:
-      return merge({}, state, action.json, {
-        isFetching: false
-      });
+      return merge({}, state, action.json);
 
     default:
       return state;

@@ -7,33 +7,17 @@ const APIs = {
   pad: '/api/pad/'
 }
 
-// fetch process, for loading stage
-export const FETCH_REQUEST = 'FETCH_REQUEST';
-export const FETCH_SUCCESS = 'FETCH_SUCCESS';
-export const FETCH_FAILURE = 'FETCH_FAILURE';
-
-const fetchRequest = () => {
-  return { type: FETCH_REQUEST }
-}
-
-const fetchSuccess = () => {
-  return { type: FETCH_SUCCESS }
-}
-
 const fetchAPI = (
   types,
   dispatch,
-  APIUrl,
-  requireLoading
+  APIUrl
 ) => {
   const [ REQUIRE_TYPE, SUCCESS_TYPE ] = types;
-  if (requireLoading) dispatch(fetchRequest());
   dispatch({ type: REQUIRE_TYPE });
 
   return fetch(APIUrl)
     .then(req => req.json())
     .then((json => {
-      if (requireLoading) dispatch(fetchSuccess());
       dispatch({
         type: SUCCESS_TYPE,
         json
@@ -51,8 +35,7 @@ export function fetchPads() {
     fetchAPI(
       [FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS],
       dispatch,
-      APIUrl,
-      true
+      APIUrl
     );
   };
 }
@@ -68,8 +51,7 @@ export function fetchUsers() {
     fetchAPI(
       [FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS],
       dispatch,
-      APIUrl,
-      false
+      APIUrl
     );
   };
 }
@@ -84,8 +66,7 @@ export function fetchPad(param) {
     fetchAPI(
       [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS],
       dispatch,
-      APIUrl,
-      true
+      APIUrl
     );
   };
 }
