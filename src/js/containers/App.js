@@ -31,13 +31,7 @@ class App extends Component {
   }
 }
 
-
-// <EnterAnimation>
-//   { cloneElement(children || <div/>, {key: key}) }
-// </EnterAnimation>
-
 App.propTypes = {
-  pushState: PropTypes.func.isRequired,
   // Injected by React Router
   children: PropTypes.node
 };

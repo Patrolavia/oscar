@@ -1,4 +1,5 @@
-import React, { Component, PropTypes, findDOMNode } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import { fetchPad } from 'actions';
 import { each } from 'lodash';
 import { connect } from 'react-redux';
@@ -21,6 +22,13 @@ export default class Pad extends Component {
         {opacity: 1}
       );
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { fetchPad, location: { pathname } } = this.props;
+    if (pathname !== nextProps.location.pathname) {
+      fetchPad(nextProps.params);
+    }
   }
 
   renderTags(tags) {
