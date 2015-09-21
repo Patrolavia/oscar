@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { reduxReactRouter } from 'redux-react-router';
+import { reduxReactRouter } from 'redux-router';
 import { devTools } from 'redux-devtools';
 import createHistory from 'history/lib/createHashHistory';
 import routes from '../routes';

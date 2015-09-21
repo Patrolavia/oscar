@@ -1,6 +1,5 @@
 import React, { Component, PropTypes, cloneElement } from 'react';
 import { connect } from 'react-redux';
-import { pushState } from 'redux-react-router';
 
 import Header from 'containers/Header';
 import Toolbar from 'components/Toolbar';
@@ -9,7 +8,7 @@ import LoadingDots from 'components/LoadingDots';
 
 class App extends Component {
   render() {
-    const { children, location: { pathname: key} } = this.props;
+    const { children } = this.props;
     return (
       <div>
         <div className="container">
@@ -47,6 +46,4 @@ function mapStateToProps(state) {
   return {};
 }
 
-export default connect(mapStateToProps, {
-  pushState
-})(App);
+export default connect(mapStateToProps)(App);

@@ -1,4 +1,4 @@
-import { routerStateReducer as router } from 'redux-react-router';
+import { routerStateReducer as router } from 'redux-router';
 import { combineReducers } from 'redux';
 
 import pad from './pad';
