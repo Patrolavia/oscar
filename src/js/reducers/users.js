@@ -9,7 +9,8 @@ export default function Users(state = initialState, action) {
   switch (action.type) {
     case FETCH_USERS_REQUEST:
       return merge({}, state, {
-        message: 'Fetching users...'
+        message: 'Fetching users...',
+        result: false
       });
 
     case FETCH_USERS_SUCCESS:

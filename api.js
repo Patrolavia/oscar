@@ -26,4 +26,12 @@ router.get('/api/pad/2', function(req, res) {
   res.json(apis.pad[2]);
 });
 
+router.get('/api/pad/3', function(req, res) {
+  res.json(apis.pad[3]);
+});
+
+router.get('/api/whale', function(req, res) {
+  res.json(apis.whale);
+});
+
 module.exports = router;

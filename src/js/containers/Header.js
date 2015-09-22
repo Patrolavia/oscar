@@ -8,7 +8,7 @@ export default class Header extends Component {
     return (
       <div className="header">
         <h1>
-          PadList
+          <span>PadList</span>
         </h1>
         <Auth />
       </div>

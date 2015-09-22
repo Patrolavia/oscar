@@ -1,0 +1,16 @@
+{
+  "msg": {
+    "noPads": {
+      "title": "Hey, There are no pads here.",
+      "msg": "Enjoy today ;)"
+    },
+    "noSuchPad": {
+      "title": "Sorry! No such pad. :(",
+      "msg": "The pad you are looking for was deleted or dose not exist."
+    },
+    "unknownError": {
+      "title": "Oops!",
+      "msg": "An unexpected error has occurred."
+    }
+  }
+}

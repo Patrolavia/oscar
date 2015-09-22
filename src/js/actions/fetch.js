@@ -2,9 +2,10 @@ import fetch from 'isomorphic-fetch';
 import { getBaseUrl } from 'untils/config';
 
 const APIs = {
+  pad: '/api/pad/',
   pads: '/api/pads/',
   users: '/api/users/',
-  pad: '/api/pad/'
+  whale: '/api/whale'
 }
 
 const fetchAPI = (
@@ -12,17 +13,25 @@ const fetchAPI = (
   dispatch,
   APIUrl
 ) => {
-  const [ REQUIRE_TYPE, SUCCESS_TYPE ] = types;
+  const [ REQUIRE_TYPE, SUCCESS_TYPE, FAILURE_TYPE ] = types;
   dispatch({ type: REQUIRE_TYPE });
 
+  setTimeout(() => {
   return fetch(APIUrl)
-    .then(req => req.json())
-    .then((json => {
+    .then((res) => {
+      if (res.status >= 400) {
+        return { errorStatus: res.status };
+      }
+      return res.json();
+    })
+    .then((json) => {
+      const currentType = (json.errorStatus) ? FAILURE_TYPE : SUCCESS_TYPE;
       dispatch({
-        type: SUCCESS_TYPE,
+        type: currentType,
         json
       });
-    }));
+    });
+  }, 1000)
 }
 
 export const FETCH_PADS_REQUEST = 'FETCH_PADS_REQUEST';
@@ -33,7 +42,7 @@ export function fetchPads() {
   const APIUrl = getBaseUrl() + APIs.pads;
   return dispatch => {
     fetchAPI(
-      [FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS],
+      [FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE],
       dispatch,
       APIUrl
     );
@@ -49,7 +58,7 @@ export function fetchUsers() {
   const APIUrl = getBaseUrl() + APIs.users;
   return dispatch => {
     fetchAPI(
-      [FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS],
+      [FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE],
       dispatch,
       APIUrl
     );
@@ -61,10 +70,10 @@ export const FETCH_PAD_SUCCESS = 'FETCH_PAD_SUCCESS';
 export const FETCH_PAD_FAILURE = 'FETCH_PAD_FAILURE';
 
 export function fetchPad(param) {
-  const APIUrl = getBaseUrl() + APIs.pad + param.pid;
+  const APIUrl = (param.pid) ? getBaseUrl() + APIs.pad + param.pid : getBaseUrl() + APIs.whale;
   return dispatch => {
     fetchAPI(
-      [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS],
+      [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE],
       dispatch,
       APIUrl
     );

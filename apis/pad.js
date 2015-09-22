@@ -1,5 +1,9 @@
 module.exports = [
   {
+    'result': false,
+    'message': 'Cannot load pad#0 from database.'
+  },
+  {
     'result': true,
     'message': '',
     'data': {
@@ -10,7 +14,7 @@ module.exports = [
       'cooperator': [],
       'tags': ['Tag'],
       'version': 0,
-      'id': 0
+      'id': 1
     }
   },
   {
@@ -24,7 +28,7 @@ module.exports = [
       'cooperator': [0],
       'tags': ['Tag'],
       'version': 0,
-      'id': 1
+      'id': 2
     }
   },
   {
@@ -38,7 +42,7 @@ module.exports = [
       'cooperator': [0, 1],
       'tags': ['Tag'],
       'version': 0,
-      'id': 2
+      'id': 3
     }
   }
 ]

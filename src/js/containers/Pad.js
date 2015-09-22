@@ -4,6 +4,7 @@ import { fetchPad } from 'actions';
 import { each } from 'lodash';
 import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
+import MsgBox from 'components/MsgBox';
 import 'gsap';
 
 export default class Pad extends Component {
@@ -42,21 +43,31 @@ export default class Pad extends Component {
     return tagRows;
   }
 
+  renderPad() {
+    const { data: { tags, html, version } } = this.props;
+    return (
+      <div>
+        { tags.length &&
+          <div className="content-tags">
+            <i className="icon-tags"></i>
+            { this.renderTags(tags)}
+          </div>
+        }
+        <div id="innerContent" dangerouslySetInnerHTML={{__html: html}}></div>
+      </div>
+    )
+  }
+
   render() {
-    const { isFetching, result, data: { tags, html, version } } = this.props;
+    const { isFetching, result, errorStatus } = this.props;
+    const currentMsgState = (errorStatus) ? 'unknownError' : 'noSuchPad';
+
     return (
       <div ref="contentWrapper">
-        { isFetching && <LoadingDots /> }
-        { result &&
-          <div>
-            { tags.length &&
-              <div className="content-tags">
-                <i className="icon-tags"></i>
-                { this.renderTags(tags)}
-              </div>
-            }
-            <div id="innerContent" dangerouslySetInnerHTML={{__html: html}}></div>
-          </div>
+        { result ?
+          this.renderPad()
+        :
+          isFetching ? <LoadingDots /> : <MsgBox state={ currentMsgState } />
         }
       </div>
     );
@@ -66,8 +77,8 @@ export default class Pad extends Component {
 Pad.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   result: PropTypes.bool,
-  message: PropTypes.string,
   data: PropTypes.object,
+  errorStatus: PropTypes.number,
   fetchPad: PropTypes.func.isRequired
 };
 
@@ -75,14 +86,14 @@ function mapStateToProps(state) {
   const {
     isFetching,
     result,
-    message,
-    data
+    data,
+    errorStatus
   } = state.pad;
 
   return {
     isFetching: isFetching,
     result: result,
-    message: message,
+    errorStatus: errorStatus,
     data
   };
 }

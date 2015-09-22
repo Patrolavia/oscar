@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each } from 'lodash';
 import LoadingDots from 'components/LoadingDots';
-import 'gsap';
+import MsgBox from 'components/MsgBox';
+import { fadeIn } from 'untils/animation';
 
 export default class Pads extends Component {
 
@@ -19,14 +20,7 @@ export default class Pads extends Component {
 
   componentDidUpdate() {
     const $contentNode = findDOMNode(this.refs.contentWrapper);
-
-    if ($contentNode) {
-      TweenLite.fromTo(
-        $contentNode, 0.5,
-        {opacity: 0, ease: "Power1.easeOut"},
-        {opacity: 1}
-      );
-    };
+    fadeIn($contentNode);
   }
 
   onClickPad(padId) {
@@ -90,11 +84,15 @@ export default class Pads extends Component {
   }
 
   render() {
-    const { isFetching, padsFetchResult } = this.props;
+    const { padsData, isFetching, padsFetchResult } = this.props;
+
     return (
-      <div className="padList" ref="contentWrapper">
-        { isFetching && <LoadingDots /> }
-        { padsFetchResult && this.renderPads() }
+      <div ref="contentWrapper">
+        { padsFetchResult ?
+          padsData.length ? <div className="padList">{ this.renderPads() }</div> : <MsgBox state="noPads" />
+        :
+          isFetching ? <LoadingDots /> : <MsgBox state={"unknownError"} />
+        }
       </div>
     );
   }
@@ -116,7 +114,7 @@ function mapStateToProps(state) {
     result: padsFetchResult,
     message: padsFetchMessage,
     data: padsData,
-    isFetching: isFetching
+    isFetching
   } = state.pads;
 
   const { data: usersData } = state.users;

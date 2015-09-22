@@ -22,7 +22,8 @@ export default function Pad(state = initialState, action) {
 
     case FETCH_PAD_FAILURE:
       return merge({}, state, action.json, {
-        isFetching: false
+        isFetching: false,
+        result: false
       });
 
     default:
