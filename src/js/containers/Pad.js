@@ -5,7 +5,7 @@ import { each } from 'lodash';
 import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
-import 'gsap';
+import { fadeIn } from 'untils/animation';
 
 export default class Pad extends Component {
   componentDidMount() {
@@ -15,14 +15,7 @@ export default class Pad extends Component {
 
   componentDidUpdate() {
     const $contentNode = findDOMNode(this.refs.contentWrapper);
-
-    if ($contentNode) {
-      TweenLite.fromTo(
-        $contentNode, 0.5,
-        {opacity: 0, ease: "Power1.easeOut"},
-        {opacity: 1}
-      );
-    };
+    fadeIn($contentNode);
   }
 
   componentWillReceiveProps(nextProps) {

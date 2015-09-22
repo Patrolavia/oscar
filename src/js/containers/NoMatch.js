@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { fetchPad } from 'actions';
+import MsgBox from 'components/MsgBox';
 import { fadeIn } from 'untils/animation';
 
 export default class NoMatch extends Component {
@@ -19,7 +20,8 @@ export default class NoMatch extends Component {
     const { data: { html, title } } = this.props;
     return (
       <div ref="contentWrapper">
-        <h3>{ title }</h3>
+        <hr />
+        <h5>{ title }</h5>
         <div className="content-whale" dangerouslySetInnerHTML={{__html: html}}></div>
       </div>
     )
@@ -29,8 +31,7 @@ export default class NoMatch extends Component {
     const { isFetching, result } = this.props;
     return (
       <div id="innerContent">
-        <h1>Page not found.</h1>
-        <p>Looks like you are lost. Maybe <Link to="/">go back to list</Link>?</p>
+        <MsgBox state="pageNotFound" />
         { ! isFetching && result && this.renderWhale() }
       </div>
     );
