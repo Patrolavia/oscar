@@ -6,8 +6,8 @@ module.exports = {
     "title": "Wise words from whale",
     "tags": [],
     "cooperator": [],
-    "content": "```\nToo much is just enough.\n\t\t-- Mark Twain, on whiskey\n\n```",
-    "html": "<pre class=\"linenums prettyprint\"><code>Too much is just enough.\n        -- Mark Twain, on whiskey\n\n</code></pre>\n",
+    "content": "```\nWhy is it that we rejoice at a birth and grieve at a funeral?  It is because we\nare not the person involved.\n\t\t-- Mark Twain, \"Pudd'nhead Wilson's Calendar\"\n\n```",
+    "html": "<pre class=\"linenums prettyprint\"><code>Why is it that we rejoice at a birth and grieve at a funeral?  It is because we\nare not the person involved.\n        -- Mark Twain, &quot;Pudd'nhead Wilson's Calendar&quot;\n\n</code></pre>\n",
     "version": 0
   }
 }
