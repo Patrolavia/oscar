@@ -78,6 +78,7 @@
     "isomorphic-fetch": "^2.1.1",
     "normalize.css": "^3.0.3",
     "normalizr": "^1.0.0",
+    "prettify": "^0.1.7",
     "react": "^0.14.0-beta3",
     "react-dom": "^0.14.0-rc1",
     "react-redux": "^2.1.2",
@@ -85,7 +86,7 @@
     "react-tagsinput": "^1.5.0-beta1",
     "redux": "^3.0.0",
     "redux-logger": "^1.0.7",
-    "redux-react-router": "^1.0.0-beta1",
+    "redux-router": "^1.0.0-beta3",
     "redux-thunk": "^0.1.0",
     "susy": "^2.2.5"
   }

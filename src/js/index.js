@@ -1,17 +1,20 @@
 require('../index.jade');
 require('../css/application.sass');
+require('untils/g11n');
 
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { ReduxRouter } from 'redux-react-router';
+import { ReduxRouter } from 'redux-router';
 import configureStore from 'store/configureStore';
 
 const store = configureStore();
 
 render(
-  <Provider store={store}>
-    <ReduxRouter />
-  </Provider>,
+  <div>
+    <Provider store={store}>
+      <ReduxRouter />
+    </Provider>
+  </div>,
   document.getElementById('app')
 );
