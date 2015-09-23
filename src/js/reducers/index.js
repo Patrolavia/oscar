@@ -5,7 +5,7 @@ import pad from './pad';
 import pads from './pads';
 import users from './users';
 import pageTitle from './pageTitle';
-import me from './me';
+import auth from './auth';
 
 const rootReducer = combineReducers({
   router,
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   pads,
   users,
   pageTitle,
-  me
+  auth
 });
 
 export default rootReducer;

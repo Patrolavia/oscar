@@ -12,4 +12,4 @@ const notLogged = {
   "message": "Not logged in"
 };
 
-module.exports = isLogged;
+module.exports = notLogged;

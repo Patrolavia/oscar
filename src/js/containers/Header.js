@@ -1,22 +1,23 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchMe } from 'actions';
+import { fetchMe, fetchPaths } from 'actions';
 
 import Auth from 'components/Auth';
 
 export default class Header extends Component {
   componentDidMount() {
     this.props.fetchMe();
+    this.props.fetchPaths();
   }
 
   render() {
-    const { title, authResult, authData } = this.props;
+    const { title } = this.props;
     return (
       <div className="header">
         <h1>
           <span>{ title }</span>
         </h1>
-        <Auth result={authResult} data={authData}/>
+        <Auth { ...this.props }/>
       </div>
     );
   }
@@ -24,15 +25,13 @@ export default class Header extends Component {
 
 function mapStateToProps(state) {
   const { title } = state.pageTitle;
-  const { result: authResult, data: authData } = state.me;
   return {
     title: title,
-    authResult: authResult,
-    authData: authData
+    authState: state.auth
   };
 }
 
 export default connect(
   mapStateToProps,
-  { fetchMe }
+  { fetchMe, fetchPaths }
 )(Header);
