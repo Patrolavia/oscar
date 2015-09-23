@@ -66,7 +66,6 @@ export default class Auth extends Component {
 
   render() {
     const { result, data: { name, image }, paths } = this.props.authState;
-    console.log(result);
     return (
       <div className="userInfo"
         onMouseEnter={this.onMouseEnterHandler.bind(this)}
