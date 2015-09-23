@@ -34,4 +34,12 @@ router.get('/api/whale', function(req, res) {
   res.json(apis.whale);
 });
 
+router.get('/api/me', function(req, res) {
+  res.json(apis.me);
+});
+
+router.get('/api/paths', function(req, res) {
+  res.json(apis.paths);
+});
+
 module.exports = router;

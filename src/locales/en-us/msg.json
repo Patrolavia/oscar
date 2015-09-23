@@ -9,7 +9,7 @@
       "msg": "The pad you are looking for was deleted or never existed."
     },
     "pageNotFound": {
-      "title": "Page not found.",
+      "title": "The truth is ... Page not found.",
       "msg": "Looks like you are lost. Maybe go back to list?"
     },
     "unknownError": {
