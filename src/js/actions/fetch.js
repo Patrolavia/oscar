@@ -5,7 +5,8 @@ const APIs = {
   pad: '/api/pad/',
   pads: '/api/pads/',
   users: '/api/users/',
-  whale: '/api/whale'
+  whale: '/api/whale',
+  me: '/api/me'
 }
 
 const fetchAPI = (
@@ -74,6 +75,21 @@ export function fetchPad(param) {
   return dispatch => {
     fetchAPI(
       [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE],
+      dispatch,
+      APIUrl
+    );
+  };
+}
+
+export const FETCH_ME_REQUEST = 'FETCH_ME_REQUEST';
+export const FETCH_ME_SUCCESS = 'FETCH_ME_SUCCESS';
+export const FETCH_ME_FAILURE = 'FETCH_ME_FAILURE';
+
+export function fetchMe() {
+  const APIUrl = getBaseUrl() + APIs.me;
+  return dispatch => {
+    fetchAPI(
+      [FETCH_ME_REQUEST, FETCH_ME_SUCCESS, FETCH_ME_FAILURE],
       dispatch,
       APIUrl
     );

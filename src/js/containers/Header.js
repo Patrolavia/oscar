@@ -1,27 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { fetchMe } from 'actions';
 
 import Auth from 'components/Auth';
 
 export default class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      title: 'Loading...'
-    }
-  }
-
-  componentWillUpdate(nextProps) {
-    this.state.title = nextProps.title;
+  componentDidMount() {
+    this.props.fetchMe();
   }
 
   render() {
+    const { title, authResult, authData } = this.props;
     return (
       <div className="header">
         <h1>
-          <span>{ this.state.title }</span>
+          <span>{ title }</span>
         </h1>
-        <Auth />
+        <Auth result={authResult} data={authData}/>
       </div>
     );
   }
@@ -29,11 +24,15 @@ export default class Header extends Component {
 
 function mapStateToProps(state) {
   const { title } = state.pageTitle;
+  const { result: authResult, data: authData } = state.me;
   return {
-    title: title
+    title: title,
+    authResult: authResult,
+    authData: authData
   };
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  { fetchMe }
 )(Header);
