@@ -17,7 +17,7 @@ module.exports = {
       'id': 2
     },
     {
-      'title': 'Pad-3 title',
+      'title': 'mdpad API',
       'user': 2,
       'cooperator': [0, 1],
       'tags': ['Tag', 'Another'],

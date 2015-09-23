@@ -1,9 +1,9 @@
 const isLogged = {
   "result": true,
   "data": {
-    "id": 1,
-    "name": "Fraina Huang",
-    "image": "https://lh3.googleusercontent.com/-Dich606HyuY/AAAAAAAAAAI/AAAAAAAAAOQ/_HgtLJLZF5U/photo.jpg?sz=50"
+    "id": 0,
+    "name": "Foo",
+    "image": "https://avatars1.githubusercontent.com/u/7220804?v=3&u=0e1f06f58768c5dbae5adb02e2513526ca5c79d1&s=140"
   }
 };
 
