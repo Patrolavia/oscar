@@ -2,6 +2,7 @@ import { FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE } from 'acti
 import { merge } from 'lodash';
 
 const initialState = {
+  errorStatus: null,
   isFetching: false,
   data: []
 };
@@ -17,6 +18,7 @@ export default function Pads(state = initialState, action) {
 
     case FETCH_PADS_SUCCESS:
       return merge({}, state, action.json, {
+        errorStatus: null,
         isFetching: false
       });
 

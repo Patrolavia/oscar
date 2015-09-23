@@ -8,7 +8,7 @@ import MsgBox from 'components/MsgBox';
 import { fadeIn } from 'untils/animation';
 
 export default class Pad extends Component {
-  componentDidMount() {
+  componentWillMount() {
     const { fetchPad, params } = this.props;
     fetchPad(params);
   }
@@ -37,7 +37,7 @@ export default class Pad extends Component {
   }
 
   renderPad() {
-    const { data: { tags, html, version } } = this.props;
+    const { data: { html, tags, version } } = this.props;
     return (
       <div>
         { tags.length &&

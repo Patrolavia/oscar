@@ -20,9 +20,8 @@ export default class NoMatch extends Component {
     const { data: { html, title } } = this.props;
     return (
       <div ref="contentWrapper">
-        <hr />
-        <h5>{ title }</h5>
         <div className="content-whale" dangerouslySetInnerHTML={{__html: html}}></div>
+        <MsgBox state="pageNotFound" />
       </div>
     )
   }
@@ -31,7 +30,6 @@ export default class NoMatch extends Component {
     const { isFetching, result } = this.props;
     return (
       <div id="innerContent">
-        <MsgBox state="pageNotFound" />
         { ! isFetching && result && this.renderWhale() }
       </div>
     );
