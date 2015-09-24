@@ -51,6 +51,21 @@ export function fetchPads() {
   };
 }
 
+export const FETCH_PAD_REQUEST = 'FETCH_PAD_REQUEST';
+export const FETCH_PAD_SUCCESS = 'FETCH_PAD_SUCCESS';
+export const FETCH_PAD_FAILURE = 'FETCH_PAD_FAILURE';
+
+export function fetchPad(param) {
+  const APIUrl = (param.pid) ? getBaseUrl() + APIs.pad + param.pid : getBaseUrl() + APIs.whale;
+  return dispatch => {
+    fetchAPI(
+      [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE],
+      dispatch,
+      APIUrl
+    );
+  };
+}
+
 
 export const FETCH_USERS_REQUEST = 'FETCH_USERS_REQUEST';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
@@ -61,21 +76,6 @@ export function fetchUsers() {
   return dispatch => {
     fetchAPI(
       [FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE],
-      dispatch,
-      APIUrl
-    );
-  };
-}
-
-export const FETCH_PAD_REQUEST = 'FETCH_PAD_REQUEST';
-export const FETCH_PAD_SUCCESS = 'FETCH_PAD_SUCCESS';
-export const FETCH_PAD_FAILURE = 'FETCH_PAD_FAILURE';
-
-export function fetchPad(param) {
-  const APIUrl = (param.pid) ? getBaseUrl() + APIs.pad + param.pid : getBaseUrl() + APIs.whale;
-  return dispatch => {
-    fetchAPI(
-      [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE],
       dispatch,
       APIUrl
     );

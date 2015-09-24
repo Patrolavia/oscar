@@ -27,7 +27,7 @@ export default function PageTitle(state = initialState, action) {
     case FETCH_PAD_SUCCESS:
       const padData = action.json.data;
       return merge({}, state, {
-        title: (padData) ? padData.title : ''
+        title: (padData) ? padData.title : 'No such pad.'
       });
       break;
 
