@@ -12,14 +12,14 @@ module.exports = {
     {
       'title': 'Pad-2 title',
       'user': 1,
-      'cooperator': [0],
+      'cooperator': [1],
       'tags': ['Tag'],
       'id': 2
     },
     {
       'title': 'mdpad API',
       'user': 2,
-      'cooperator': [0, 1],
+      'cooperator': [1, 2],
       'tags': ['Tag', 'Another'],
       'id': 3
     }

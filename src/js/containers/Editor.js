@@ -1,26 +1,62 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
-import { fetchPad } from 'actions';
+import { fetchPad, fetchUser } from 'actions';
+import { each, findWhere } from 'lodash';
 
 import EditorTitle from 'components/EditorTitle';
 import EditorContent from 'components/EditorContent';
+import EditorCooperate from 'components/EditorCooperate';
 
 export default class Editor extends Component {
-  componentDidMount() {
-    const { fetchPad, params } = this.props;
-    fetchPad(params);
-  }
 
-  componentWillReceiveProps(nextProps) {
-    const { fetchPad, location: { pathname } } = this.props;
-    if (pathname !== nextProps.location.pathname) {
-      fetchPad(nextProps.params);
+  constructor() {
+    super();
+    this.state = {
+      cooperator: []
     }
   }
 
+  componentDidMount() {
+    const { fetchPad, params } = this.props;
+    fetchPad(params);
+  }FETCH_USER_SUCCESS
+
+  componentWillReceiveProps(nextProps) {
+    const { isFetching, fetchPad, location: { pathname } } = this.props;
+    if (pathname !== nextProps.location.pathname) {
+      fetchPad(nextProps.params);
+    }
+
+    const { result, data, users } = nextProps;
+    const { fetchUser } = this.props;
+    const cooperatorList = [];
+
+    if (result && data.cooperator.length !== this.state.cooperator.length || data.cooperator === undefined) {
+      const { cooperator } = data;
+      each(cooperator, (value) => {
+        const currentUser = findWhere(users.data, { 'id': value });
+        if (currentUser) {
+          cooperatorList.push(currentUser.name);
+        } else {
+          fetchUser(value);
+        }
+      })
+      this.setState({
+        cooperator: cooperatorList
+      })
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { cooperator: nextPropsCooperator } = nextProps.data
+    const isFetching = this.props.isFetching !== nextProps.isFetching;
+    const usersUpdated = nextProps.users !== this.props.users;
+    const getAllCooperators = (! nextPropsCooperator) ? false : nextPropsCooperator.length === nextState.cooperator.length;
+    return isFetching || usersUpdated || getAllCooperators;
+  }
+
   render() {
-    const { isFetching, result } = this.props;
     return (
       <div className="editPad" ref="editPad">
         <div className="editPad-title">
@@ -34,7 +70,7 @@ export default class Editor extends Component {
         <div className="editPad-options">
           <div className="editPad-cooperates">
             <span className="editPad-optionTitle">Cooperate</span>
-            <input ref="EditCooperate"/>
+            <EditorCooperate ref="EditCooperate" { ...this.props } cooperator={this.state.cooperator} />
           </div>
           <div className="editPad-tags">
             <span className="editPad-optionTitle">Tags</span>
@@ -70,11 +106,12 @@ function mapStateToProps(state) {
   return {
     isFetching: isFetching,
     result: result,
-    data
+    data,
+    users: state.users
   };
 }
 
 export default connect(
   mapStateToProps,
-  { fetchPad }
+  { fetchPad, fetchUser }
 )(Editor);

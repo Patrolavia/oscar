@@ -12,7 +12,6 @@ export default class EditorTitle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(this.props)
     const { result, data } = nextProps;
     if (nextProps.isFetching) {
       this.setState(this.defaultState);

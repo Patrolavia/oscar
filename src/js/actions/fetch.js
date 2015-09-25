@@ -5,6 +5,7 @@ const APIs = {
   pad: '/api/pad/',
   pads: '/api/pads/',
   users: '/api/users/',
+  user: '/api/user/',
   whale: '/api/whale',
   me: '/api/me',
   paths: '/api/paths'
@@ -13,12 +14,11 @@ const APIs = {
 const fetchAPI = (
   types,
   dispatch,
-  APIUrl
+  APIUrl,
 ) => {
-  const [ REQUIRE_TYPE, SUCCESS_TYPE, FAILURE_TYPE ] = types;
-  dispatch({ type: REQUIRE_TYPE });
+  const [ SUCCESS_TYPE, FAILURE_TYPE, REQUIRE_TYPE ] = types;
+  if (REQUIRE_TYPE) dispatch({ type: REQUIRE_TYPE });
 
-  setTimeout(() => {
   return fetch(APIUrl)
     .then((res) => {
       if (res.status >= 400) {
@@ -33,7 +33,6 @@ const fetchAPI = (
         json
       });
     });
-  }, 1000)
 }
 
 export const FETCH_PADS_REQUEST = 'FETCH_PADS_REQUEST';
@@ -44,7 +43,7 @@ export function fetchPads() {
   const APIUrl = getBaseUrl() + APIs.pads;
   return dispatch => {
     fetchAPI(
-      [FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE],
+      [FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE, FETCH_PADS_REQUEST],
       dispatch,
       APIUrl
     );
@@ -59,13 +58,12 @@ export function fetchPad(param) {
   const APIUrl = (param.pid) ? getBaseUrl() + APIs.pad + param.pid : getBaseUrl() + APIs.whale;
   return dispatch => {
     fetchAPI(
-      [FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE],
+      [FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE, FETCH_PAD_REQUEST],
       dispatch,
       APIUrl
     );
   };
 }
-
 
 export const FETCH_USERS_REQUEST = 'FETCH_USERS_REQUEST';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
@@ -75,7 +73,22 @@ export function fetchUsers() {
   const APIUrl = getBaseUrl() + APIs.users;
   return dispatch => {
     fetchAPI(
-      [FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE],
+      [FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE],
+      dispatch,
+      APIUrl
+    );
+  };
+}
+
+export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
+export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
+
+export function fetchUser(userId) {
+  const APIUrl = getBaseUrl() + APIs.user + userId;
+  return dispatch => {
+    fetchAPI(
+      [FETCH_USER_SUCCESS, FETCH_USER_FAILURE],
       dispatch,
       APIUrl
     );
@@ -90,7 +103,7 @@ export function fetchMe() {
   const APIUrl = getBaseUrl() + APIs.me;
   return dispatch => {
     fetchAPI(
-      [FETCH_ME_REQUEST, FETCH_ME_SUCCESS, FETCH_ME_FAILURE],
+      [FETCH_ME_SUCCESS, FETCH_ME_FAILURE],
       dispatch,
       APIUrl
     );
@@ -105,7 +118,7 @@ export function fetchPaths() {
   const APIUrl = getBaseUrl() + APIs.paths;
   return dispatch => {
     fetchAPI(
-      [FETCH_PATHS_REQUEST, FETCH_PATHS_SUCCESS, FETCH_PATHS_FAILURE],
+      [FETCH_PATHS_SUCCESS, FETCH_PATHS_FAILURE],
       dispatch,
       APIUrl
     );

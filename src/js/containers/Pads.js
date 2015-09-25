@@ -102,8 +102,8 @@ Pads.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   padsFetchResult: PropTypes.bool,
   padsFetchMessage: PropTypes.string,
-  padsData: PropTypes.array.isRequired,
-  usersData: PropTypes.array.isRequired,
+  padsData: PropTypes.array,
+  usersData: PropTypes.array,
 
   fetchPads: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired

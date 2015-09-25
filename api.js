@@ -42,4 +42,16 @@ router.get('/api/paths', function(req, res) {
   res.json(apis.paths);
 });
 
+router.get('/api/user/1', function(req, res) {
+  res.json(apis.users.data[0]);
+});
+
+router.get('/api/user/2', function(req, res) {
+  res.json(apis.users.data[1]);
+});
+
+router.get('/api/user/3', function(req, res) {
+  res.json(apis.users.data[2]);
+});
+
 module.exports = router;
