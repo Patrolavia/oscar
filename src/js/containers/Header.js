@@ -29,7 +29,7 @@ function mapStateToProps(state) {
   const { title } = state.pageTitle;
   return {
     title: title,
-    authState: state.auth,
+    auth: state.auth,
     router: state.router
   };
 }

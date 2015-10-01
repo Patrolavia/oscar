@@ -32,10 +32,11 @@ const data = [
 ]
 
 module.exports = (padId) => {
-  const isValid = (4 > padId > 0);
+  const isValid = (padId < 4 && padId > 0);
+  const message = (isValid) ? '' : 'Cannot load pad#' + padId + ' from database.';
   const ret = {
     'result': isValid,
-    'message': (isValid) ? '' : 'Cannot load pad#0 from database.',
+    'message': message
   }
   if (isValid) ret.data = data[padId - 1];
 

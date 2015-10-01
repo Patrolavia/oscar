@@ -1,19 +1,21 @@
 import { routerStateReducer as router } from 'redux-router';
 import { combineReducers } from 'redux';
 
+import auth from './auth';
+import edit from './edit';
 import pad from './pad';
 import pads from './pads';
-import users from './users';
 import pageTitle from './pageTitle';
-import auth from './auth';
+import users from './users';
 
 const rootReducer = combineReducers({
   router,
+  auth,
+  edit,
   pad,
   pads,
-  users,
   pageTitle,
-  auth
+  users
 });
 
 export default rootReducer;

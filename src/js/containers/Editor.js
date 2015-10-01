@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPad, fetchUser } from 'actions';
 import { each, findWhere } from 'lodash';
+import classNames from 'classnames';
 
 import EditorTitle from 'components/EditorTitle';
 import EditorContent from 'components/EditorContent';
@@ -15,7 +16,8 @@ export default class Editor extends Component {
     super();
     this.state = {
       cooperator: [],
-      tags: []
+      tags: [],
+      isLogged: false
     }
   }
 
@@ -25,7 +27,7 @@ export default class Editor extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isFetching, fetchPad, location: { pathname } } = this.props;
+    const { isFetching, fetchPad, location: { pathname }, auth: { result: isLogged } } = this.props;
     if (pathname !== nextProps.location.pathname) {
       fetchPad(nextProps.params);
     }
@@ -53,37 +55,41 @@ export default class Editor extends Component {
 
       this.setState({
         cooperator: cooperatorList,
-        tags: (tags) ? tags : []
+        tags: (tags) ? tags : [],
+        isLogged: isLogged
       })
     }
   }
 
   render() {
+    const { isLogged } = this.state;
+    const { result: fetchResult } = this.props;
+    // TODO: is cooperator or owner
     return (
-      <div className="editPad" ref="editPad">
+      <div className={classNames('editPad', {'is-disable': ! isLogged || ! fetchResult})} ref="editPad">
         <div className="editPad-title">
           <span className="editPad-optionTitle">Pad title</span>
-          <EditorTitle ref="EditTitle" { ...this.props } authority={ true }/>
+          <EditorTitle ref="EditTitle" { ...this.props } authority={ isLogged && fetchResult }/>
         </div>
         <div className="editPad-content">
           <span className="editPad-optionTitle">Content</span>
-          <EditorContent ref="EditContent" { ...this.props } authority={ true } />
+          <EditorContent ref="EditContent" { ...this.props } authority={ isLogged && fetchResult } />
         </div>
         <div className="editPad-options">
           <div className="editPad-cooperates">
             <span className="editPad-optionTitle">Cooperate</span>
-            <EditorCooperate ref="EditCooperate" { ...this.props } cooperator={this.state.cooperator} />
+            <EditorCooperate ref="EditCooperate" { ...this.props } cooperator={this.state.cooperator} authority={ isLogged && fetchResult } />
           </div>
           <div className="editPad-tags">
             <span className="editPad-optionTitle">Tags</span>
-            <EditorTags ref="EditTag" { ...this.props } tags={this.state.tags}/>
+            <EditorTags ref="EditTag" { ...this.props } tags={this.state.tags} />
           </div>
           <div className="editPad-submit">
-            <a className="button-wb button-larger">Submit</a>
+            <a className={classNames('button-wb', 'button-larger', {'is-disable': ! isLogged})}>Submit</a>
             <a className="button-wb button-larger cancel">Cancel</a>
           </div>
           <div className="editPad-errorMsg" ref="errorMsg">
-            <span>Error msg</span>
+            <span>{ isLogged ? 'Error msg' : 'Not logged in.' }</span>
           </div>
         </div>
       </div>
@@ -104,10 +110,12 @@ function mapStateToProps(state) {
     result,
     data
   } = state.pad;
+
   return {
     isFetching: isFetching,
     result: result,
     data,
+    auth: state.auth,
     users: state.users,
     pads: state.pads
   };
