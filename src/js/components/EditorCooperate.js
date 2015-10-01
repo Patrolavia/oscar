@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { fetchUser } from 'actions';
+import { connect } from 'react-redux';
+import { fetchUsers } from 'actions';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
 import TagsInput from 'react-tagsinput';
@@ -13,6 +14,7 @@ export default class EditorCooperate extends Component {
       cooperator: []
     }
     this.state = this.defaultState;
+    this.hasFetched = false;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -21,16 +23,27 @@ export default class EditorCooperate extends Component {
       this.setState(this.defaultState);
     } else {
       if (cooperator.length) {
+        const ret = [];
+        each(cooperator, (value) => {
+          ret.push(value.name)
+        })
         this.setState({
-          cooperator: cooperator
+          cooperator: ret
         })
       }
     }
   }
 
 
-  onChangeInputHandler() {
+  onChangeInputHandler(e) {
     console.log('onChangeInputHandler');
+    const { fetchUsers } = this.props;
+    if (e.length) {
+      if (! this.hasFetched) {
+        fetchUsers();
+        this.hasFetched = true;
+      }
+    }
   }
 
   render() {
@@ -41,7 +54,7 @@ export default class EditorCooperate extends Component {
         ref='cooperateInput'
         valueLink={this.linkState('cooperator')}
         placeholder="Search"
-        onChangeInput={this.onChangeInputHandler}
+        onChangeInput={this.onChangeInputHandler.bind(this)}
         addKeys={[]} />
     );
   }
@@ -49,7 +62,17 @@ export default class EditorCooperate extends Component {
 
 EditorCooperate.propTypes = {
   isFetching: PropTypes.bool,
-  cooperator: PropTypes.array
+  cooperator: PropTypes.array,
+  fetchUsers: PropTypes.func.isRequired
 };
 
 ReactMixin(EditorCooperate.prototype, linkState)
+
+function mapStateToProps(state) {
+  return {};
+}
+
+export default connect(
+  mapStateToProps,
+  { fetchUsers }
+)(EditorCooperate);

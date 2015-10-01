@@ -18,9 +18,9 @@ export default class Editor extends Component {
   }
 
   componentDidMount() {
-    const { fetchPad, params } = this.props;
+    const { fetchPad, fetchUser, params } = this.props;
     fetchPad(params);
-  }FETCH_USER_SUCCESS
+  }
 
   componentWillReceiveProps(nextProps) {
     const { isFetching, fetchPad, location: { pathname } } = this.props;
@@ -30,30 +30,29 @@ export default class Editor extends Component {
 
     const { result, data, users } = nextProps;
     const { fetchUser } = this.props;
+    const isStillFetching = (data.cooperator) ? data.cooperator.length !== this.state.cooperator.length : false;
     const cooperatorList = [];
+    const fetchQueue = [];
 
-    if (result && data.cooperator.length !== this.state.cooperator.length || data.cooperator === undefined) {
+    if (result && isStillFetching || data.cooperator === undefined) {
       const { cooperator } = data;
       each(cooperator, (value) => {
         const currentUser = findWhere(users.data, { 'id': value });
         if (currentUser) {
-          cooperatorList.push(currentUser.name);
+          cooperatorList.push(currentUser);
         } else {
-          fetchUser(value);
+          fetchQueue.push(value);
         }
       })
+
+      if (fetchQueue.length) {
+        fetchUser(fetchQueue);
+      }
+
       this.setState({
         cooperator: cooperatorList
       })
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { cooperator: nextPropsCooperator } = nextProps.data
-    const isFetching = this.props.isFetching !== nextProps.isFetching;
-    const usersUpdated = nextProps.users !== this.props.users;
-    const getAllCooperators = (! nextPropsCooperator) ? false : nextPropsCooperator.length === nextState.cooperator.length;
-    return isFetching || usersUpdated || getAllCooperators;
   }
 
   render() {
