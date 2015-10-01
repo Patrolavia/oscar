@@ -122,8 +122,7 @@ export default class EditorTags extends Component {
           placeholder="Search"
           onChangeInput={this.onChangeInputHandler.bind(this)}
           onTagAdd={this.onTagChangesHandler.bind(this)}
-          onTagRemove={this.onTagChangesHandler.bind(this)}
-          addKeys={[]} />
+          onTagRemove={this.onTagChangesHandler.bind(this)} />
 
         <EditorCompletion
           type="tags"
