@@ -15,20 +15,8 @@ router.get('/api/users', function(req, res) {
   res.json(apis.users);
 });
 
-router.get('/api/pad/0', function(req, res) {
-  res.json(apis.pad[0]);
-});
-
-router.get('/api/pad/1', function(req, res) {
-  res.json(apis.pad[1]);
-});
-
-router.get('/api/pad/2', function(req, res) {
-  res.json(apis.pad[2]);
-});
-
-router.get('/api/pad/3', function(req, res) {
-  res.json(apis.pad[3]);
+router.get('/api/pad/:padId', function(req, res) {
+  res.json(apis.pad(req.params.padId));
 });
 
 router.get('/api/whale', function(req, res) {
@@ -46,6 +34,19 @@ router.get('/api/paths', function(req, res) {
 router.post('/api/user', function(req, res) {
   var parameters = JSON.parse(_.keys(req.body)[0])
   var data = apis.user(parameters);
+  res.json(data);
+});
+
+router.post('/api/edit/:padId', function(req, res) {
+  // status code:
+  // 0: Success.
+  // 1: Not logged in.
+  // 2: No such pad.
+  // 3: Not cooperator.
+  // 4: Failed to save pad.
+  // 5: Version not match.
+  var parameters = JSON.parse(_.keys(req.body)[0])
+  var data = apis.edit(0);
   res.json(data);
 });
 

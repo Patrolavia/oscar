@@ -28,7 +28,6 @@ module.exports = (data) => {
   return {
     'result': true,
     'message': '',
-    'test': 'test',
     'data': currentUserList
   }
 }
