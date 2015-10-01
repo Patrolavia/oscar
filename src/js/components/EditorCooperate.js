@@ -6,6 +6,7 @@ import ReactMixin from 'react-mixin';
 import TagsInput from 'react-tagsinput';
 import { each, filter, findWhere, merge, indexOf } from 'lodash';
 import EditorCompletion from 'components/EditorCompletion';
+import classNames from 'classnames';
 
 export default class EditorCooperate extends Component {
 
@@ -99,9 +100,12 @@ export default class EditorCooperate extends Component {
   }
 
   render() {
+    // Only pad owner can edit cooperate field.
     const { completion } = this.state;
+    const { auth, data: { user: ownerId }, authority } = this.props;
+    const isOwner = (authority) ? ownerId === auth.data.id : false;
     return (
-      <div>
+      <div className={classNames({'is-disable': ! isOwner})}>
         <TagsInput
           addOnBlur={false}
           ref='cooperateInput'
@@ -122,6 +126,7 @@ export default class EditorCooperate extends Component {
 }
 
 EditorCooperate.propTypes = {
+  authority: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool,
   cooperatorName: PropTypes.array,
   fetchUsers: PropTypes.func.isRequired
