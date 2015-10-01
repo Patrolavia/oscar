@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var mock = require('mockjs');
 var express = require('express');
 var router = express.Router();
@@ -42,16 +43,10 @@ router.get('/api/paths', function(req, res) {
   res.json(apis.paths);
 });
 
-router.get('/api/user/1', function(req, res) {
-  res.json(apis.users.data[0]);
-});
-
-router.get('/api/user/2', function(req, res) {
-  res.json(apis.users.data[1]);
-});
-
-router.get('/api/user/3', function(req, res) {
-  res.json(apis.users.data[2]);
+router.post('/api/user', function(req, res) {
+  var parameters = JSON.parse(_.keys(req.body)[0])
+  var data = apis.user(parameters);
+  res.json(data);
 });
 
 module.exports = router;

@@ -12,8 +12,9 @@ server.use(function(req, res, next) {
   next();
 });
 
+server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({
-  extended: true,
+  extended: false,
   parameterLimit: 10000,
   limit: 1024 * 1024 * 10
 }));
