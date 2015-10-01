@@ -5,17 +5,19 @@ import { fetchMe, fetchPaths } from 'actions';
 import Auth from 'components/Auth';
 
 export default class Header extends Component {
+
   componentDidMount() {
     this.props.fetchMe();
     this.props.fetchPaths();
   }
 
   render() {
-    const { title } = this.props;
+    const { title, router: { location } } = this.props;
+    const currentTitle = (location.pathname === '/') ? 'Padlist' : title;
     return (
       <div className="header">
         <h1>
-          <span>{ title }</span>
+          <span>{ currentTitle }</span>
         </h1>
         <Auth { ...this.props }/>
       </div>
@@ -27,7 +29,8 @@ function mapStateToProps(state) {
   const { title } = state.pageTitle;
   return {
     title: title,
-    authState: state.auth
+    authState: state.auth,
+    router: state.router
   };
 }
 

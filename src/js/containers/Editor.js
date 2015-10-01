@@ -7,13 +7,15 @@ import { each, findWhere } from 'lodash';
 import EditorTitle from 'components/EditorTitle';
 import EditorContent from 'components/EditorContent';
 import EditorCooperate from 'components/EditorCooperate';
+import EditorTags from 'components/EditorTags';
 
 export default class Editor extends Component {
 
   constructor() {
     super();
     this.state = {
-      cooperator: []
+      cooperator: [],
+      tags: []
     }
   }
 
@@ -35,7 +37,7 @@ export default class Editor extends Component {
     const fetchQueue = [];
 
     if (result && isStillFetching || data.cooperator === undefined) {
-      const { cooperator } = data;
+      const { cooperator, tags } = data;
       each(cooperator, (value) => {
         const currentUser = findWhere(users.data, { 'id': value });
         if (currentUser) {
@@ -50,7 +52,8 @@ export default class Editor extends Component {
       }
 
       this.setState({
-        cooperator: cooperatorList
+        cooperator: cooperatorList,
+        tags: (tags) ? tags : []
       })
     }
   }
@@ -73,7 +76,7 @@ export default class Editor extends Component {
           </div>
           <div className="editPad-tags">
             <span className="editPad-optionTitle">Tags</span>
-            <input ref="EditTag" />
+            <EditorTags ref="EditTag" { ...this.props } tags={this.state.tags}/>
           </div>
           <div className="editPad-submit">
             <a className="button-wb button-larger">Submit</a>
@@ -101,12 +104,12 @@ function mapStateToProps(state) {
     result,
     data
   } = state.pad;
-
   return {
     isFetching: isFetching,
     result: result,
     data,
-    users: state.users
+    users: state.users,
+    pads: state.pads
   };
 }
 

@@ -1,39 +1,36 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchUsers } from 'actions';
+import { fetchPads } from 'actions';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
 import TagsInput from 'react-tagsinput';
-import { each, filter, findWhere, merge, indexOf } from 'lodash';
+import { each, filter, select, findWhere, merge, indexOf } from 'lodash';
 import EditorCompletion from 'components/EditorCompletion';
 
-export default class EditorCooperate extends Component {
+export default class EditorTags extends Component {
 
   constructor() {
     super();
     this.defaultState = {
-      cooperatorName: [],
+      tags: [],
       completion: []
     }
     this.state = this.defaultState;
-    this.hasFetchedUsers = false;
+    this.hasFetchedPads = false;
     this.hasTagChanged = false;
+    this.tagList = [];
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isFetching, cooperator, location } = nextProps;
+    const { isFetching, tags } = nextProps;
     if (isFetching) {
       this.setState(this.defaultState);
       this.hasTagChanged = false;
     } else {
       if (this.hasTagChanged) { return false }
 
-      const ret = [];
-      each(cooperator, (value) => {
-        ret.push(value.name)
-      })
       this.setState({
-        cooperatorName: ret
+        tags: tags
       })
     }
   }
@@ -41,11 +38,11 @@ export default class EditorCooperate extends Component {
   onChangeInputHandler(keyword) {
     clearTimeout(this.keyupTimeout);
 
-    const { fetchUsers, users: { data: usersData } } = this.props;
+    const { fetchPads, tags } = this.props;
     if (keyword.length) {
-      if (! this.hasFetchedUsers) {
-        fetchUsers();
-        this.hasFetchedUsers = true;
+      if (! this.hasFetchedPads) {
+        fetchPads();
+        this.hasFetchedPads = true;
         this.keyupTimeout = setTimeout(() => {
           this.getCompletion(keyword);
         }, 1000)
@@ -57,20 +54,32 @@ export default class EditorCooperate extends Component {
     }
   }
 
+  getTagList() {
+    const { pads: { data: padsData } } = this.props;
+    const ret = [];
+    each(padsData, (pad) => {
+      merge(ret, pad.tags);
+    })
+    this.tagList = ret;
+  }
+
   getCompletion(keyword) {
+    if (! this.tagList.length) {
+      this.getTagList();
+    }
+
     // get filter result
-    const { cooperator, users: { data: usersData }, data: { user: ownerId } } = this.props;
-    const output = filter(usersData, function(user) {
+    const output = filter(this.tagList, function(tag) {
       var input = keyword.toLowerCase();
       // `~` with `indexOf` means "contains"
-      return ~ user.name.toLowerCase().indexOf(input);
+      return ~ tag.toLowerCase().indexOf(input);
     });
 
-    // ignore exist cooperator and owner
+    // ignore exist tags
     const completionList = [];
-    each(output, (item) => {
-      const { cooperatorName } = this.state;
-      if (indexOf(cooperatorName, item.name) < 0 && item.id !== ownerId) {
+    select(output, (item) => {
+      const { tags } = this.state;
+      if (indexOf(tags, item) < 0) {
         completionList.push(item);
       };
     })
@@ -80,15 +89,15 @@ export default class EditorCooperate extends Component {
     })
   }
 
-  onClickCompletion(userName) {
-    this.refs.cooperateInput.addTag(userName);
+  onClickCompletion(tag) {
+    this.refs.tagInput.addTag(tag);
   }
 
   onTagChangesHandler() {
     clearTimeout(this.keyupTimeout);
     this.resetCompletion();
     this.hasTagChanged = true;
-    this.refs.cooperateInput.clearInput();
+    this.refs.tagInput.clearInput();
     return true;
   }
 
@@ -98,14 +107,18 @@ export default class EditorCooperate extends Component {
     })
   }
 
+  renderCompletions() {
+    const { completion } = this.state;
+  }
+
   render() {
     const { completion } = this.state;
     return (
       <div>
         <TagsInput
           addOnBlur={false}
-          ref='cooperateInput'
-          valueLink={this.linkState('cooperatorName')}
+          ref='tagInput'
+          valueLink={this.linkState('tags')}
           placeholder="Search"
           onChangeInput={this.onChangeInputHandler.bind(this)}
           onTagAdd={this.onTagChangesHandler.bind(this)}
@@ -113,7 +126,7 @@ export default class EditorCooperate extends Component {
           addKeys={[]} />
 
         <EditorCompletion
-          type="cooperator"
+          type="tags"
           onClickCompletion={this.onClickCompletion.bind(this)}
           completion={completion} />
       </div>
@@ -121,13 +134,13 @@ export default class EditorCooperate extends Component {
   }
 }
 
-EditorCooperate.propTypes = {
+EditorTags.propTypes = {
   isFetching: PropTypes.bool,
-  cooperatorName: PropTypes.array,
-  fetchUsers: PropTypes.func.isRequired
+  tags: PropTypes.array,
+  fetchPads: PropTypes.func.isRequired
 };
 
-ReactMixin(EditorCooperate.prototype, linkState)
+ReactMixin(EditorTags.prototype, linkState)
 
 function mapStateToProps(state) {
   return {};
@@ -135,5 +148,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchUsers }
-)(EditorCooperate);
+  { fetchPads }
+)(EditorTags);

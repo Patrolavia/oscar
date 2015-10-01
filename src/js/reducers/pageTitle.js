@@ -31,11 +31,6 @@ export default function PageTitle(state = initialState, action) {
       });
       break;
 
-    case FETCH_PADS_SUCCESS:
-      return merge({}, state, {
-        title: 'Padlist'
-      });
-
     default:
       return state;
   }
