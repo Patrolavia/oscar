@@ -4,65 +4,126 @@ import { fetchUsers } from 'actions';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
 import TagsInput from 'react-tagsinput';
-import { each } from 'lodash';
+import { each, filter, select, findWhere, merge, indexOf } from 'lodash';
+import EditorCompletion from 'components/EditorCompletion';
 
 export default class EditorCooperate extends Component {
 
   constructor() {
     super();
     this.defaultState = {
-      cooperator: []
+      cooperatorName: [],
+      completion: []
     }
     this.state = this.defaultState;
-    this.hasFetched = false;
+    this.hasFetchedUsers = false;
+    this.hasTagChanged = false;
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isFetching, cooperator } = nextProps;
+    const { isFetching, cooperator, location } = nextProps;
     if (isFetching) {
       this.setState(this.defaultState);
+      this.hasTagChanged = false;
     } else {
-      if (cooperator.length) {
-        const ret = [];
-        each(cooperator, (value) => {
-          ret.push(value.name)
-        })
-        this.setState({
-          cooperator: ret
-        })
-      }
+      if (this.hasTagChanged) { return false }
+
+      const ret = [];
+      each(cooperator, (value) => {
+        ret.push(value.name)
+      })
+      this.setState({
+        cooperatorName: ret
+      })
     }
   }
 
+  onChangeInputHandler(keyword) {
+    clearTimeout(this.keyupTimeout);
 
-  onChangeInputHandler(e) {
-    console.log('onChangeInputHandler');
-    const { fetchUsers } = this.props;
-    if (e.length) {
-      if (! this.hasFetched) {
+    const { fetchUsers, users: { data: usersData } } = this.props;
+    if (keyword.length) {
+      if (! this.hasFetchedUsers) {
         fetchUsers();
-        this.hasFetched = true;
+        this.hasFetchedUsers = true;
+        this.keyupTimeout = setTimeout(() => {
+          this.getCompletion(keyword);
+        }, 1000)
+      } else {
+        this.getCompletion(keyword);
       }
+    } else {
+      this.resetCompletion();
     }
+  }
+
+  getCompletion(keyword) {
+    // get filter result
+    const { cooperator, users: { data: usersData }, data: { user: ownerId } } = this.props;
+    const output = filter(usersData, function(user) {
+      var input = keyword.toLowerCase();
+      // `~` with `indexOf` means "contains"
+      return ~ user.name.toLowerCase().indexOf(input);
+    });
+
+    // ignore exist cooperator and owner
+    const completionList = [];
+    select(output, (item) => {
+      const { cooperatorName } = this.state;
+      if (indexOf(cooperatorName, item.name) < 0 && item.id !== ownerId) {
+        completionList.push(item);
+      };
+    })
+
+    this.setState({
+      completion: completionList
+    })
+  }
+
+  onClickCompletion(args) {
+    this.refs.cooperateInput.addTag(args.userName);
+  }
+
+  onTagChangesHandler() {
+    clearTimeout(this.keyupTimeout);
+    this.resetCompletion();
+    this.hasTagChanged = true;
+    this.refs.cooperateInput.clearInput();
+    return true;
+  }
+
+  resetCompletion() {
+    this.setState({
+      completion: []
+    })
   }
 
   render() {
     const { authority } = this.props;
+    const { completion } = this.state;
     return (
-      <TagsInput
-        addOnBlur={false}
-        ref='cooperateInput'
-        valueLink={this.linkState('cooperator')}
-        placeholder="Search"
-        onChangeInput={this.onChangeInputHandler.bind(this)}
-        addKeys={[]} />
+      <div>
+        <TagsInput
+          addOnBlur={false}
+          ref='cooperateInput'
+          valueLink={this.linkState('cooperatorName')}
+          placeholder="Search"
+          onChangeInput={this.onChangeInputHandler.bind(this)}
+          onTagAdd={this.onTagChangesHandler.bind(this)}
+          onTagRemove={this.onTagChangesHandler.bind(this)}
+          addKeys={[]} />
+
+        <EditorCompletion
+          onClickCompletion={this.onClickCompletion.bind(this)}
+          completion={completion} />
+      </div>
     );
   }
 }
 
 EditorCooperate.propTypes = {
   isFetching: PropTypes.bool,
-  cooperator: PropTypes.array,
+  cooperatorName: PropTypes.array,
   fetchUsers: PropTypes.func.isRequired
 };
 
