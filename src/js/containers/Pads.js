@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
-import { each } from 'lodash';
+import { each, findWhere } from 'lodash';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
 import { fadeIn } from 'untils/animation';
@@ -41,8 +41,9 @@ export default class Pads extends Component {
 
   renderUser(userId) {
     const { usersData } = this.props;
-    const ownerName = (usersData[userId]) ? usersData[userId].name : 'Unknown';
-    const ownerPic = (usersData[userId]) ? <img src={usersData[userId].image} /> : '';
+    const currentUser = findWhere(usersData, {id: userId});
+    const ownerName = (currentUser) ? currentUser.name : 'Unknown';
+    const ownerPic = (currentUser) ? <img src={currentUser.image} /> : '';
 
     return (
       <div className="padList-ownerInfo">
