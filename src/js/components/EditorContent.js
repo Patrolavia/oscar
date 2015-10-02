@@ -7,7 +7,8 @@ export default class EditorContent extends Component {
   constructor() {
     super();
     this.defaultState = {
-      content: ''
+      content: '',
+      isChanged: false
     }
     this.state = this.defaultState;
   }
@@ -25,14 +26,26 @@ export default class EditorContent extends Component {
     }
   }
 
-  getContent() {
-    return this.state.content;
+  onChangeInputHandler() {
+    if (! this.state.isChanged) {
+      this.setState({
+        isChanged: true
+      })
+    }
+  }
+
+  getState() {
+    return this.state;
   }
 
   render() {
     const { authority } = this.props;
     return (
-      <textarea type="text" readOnly={! this.props.authority} valueLink={this.linkState('content')}/>
+      <textarea
+        type="text"
+        readOnly={! this.props.authority}
+        valueLink={this.linkState('content')}
+        onInput={this.onChangeInputHandler.bind(this)} />
     );
   }
 }

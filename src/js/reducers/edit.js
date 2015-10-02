@@ -3,17 +3,17 @@ import { merge } from 'lodash';
 
 const initialState = {
   isRequesting: false,
-  data: []
+  data: {}
 };
 
 export default function Edit(state = initialState, action) {
   switch (action.type) {
     case EDIT_REQUEST:
-      console.log(action)
       return merge({}, initialState, {
         message: 'Sending edit request...',
         isRequesting: true,
-        result: false
+        result: false,
+        requestData: JSON.parse(action.parameters)
       });
 
     case EDIT_SUCCESS:

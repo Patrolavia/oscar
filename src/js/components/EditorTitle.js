@@ -6,7 +6,8 @@ export default class EditorTitle extends Component {
   constructor() {
     super();
     this.defaultState = {
-      title: ''
+      title: '',
+      isChanged: false
     }
     this.state = this.defaultState;
   }
@@ -35,7 +36,10 @@ export default class EditorTitle extends Component {
   render() {
     const { authority } = this.props;
     return (
-      <input type="text" readOnly={! this.props.authority} valueLink={this.linkState('title')}/>
+      <input
+        type="text"
+        readOnly={! this.props.authority}
+        valueLink={this.linkState('title')} />
     );
   }
 }

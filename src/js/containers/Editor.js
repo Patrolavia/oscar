@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
-import { fetchPad, fetchUser } from 'actions';
+import { fetchPad, fetchUser, fetchUsers, fetchPads, editPad } from 'actions';
 import { each, findWhere, union, intersection } from 'lodash';
 import classNames from 'classnames';
 
@@ -65,42 +65,75 @@ export default class Editor extends Component {
     }
   }
 
-  render() {
-    const { isLogged } = this.state;
-    const { result: fetchResult, auth, data: { user: ownerId, cooperator } } = this.props;
+  onClickSubmit() {
+    const { editPad, data: { id: padId, version } } = this.props;
+    const titleState = this.refs.EditorTitle.getState();
+    const contentState = this.refs.EditorContent.getState();
+    const cooperator = this.refs.EditorCooperate.getCooperator();
+    const tags = this.refs.EditorTags.getTags();
 
-    const hasAuthorized = () => {
-      let userId;
-      if (auth.result) {
-        userId = auth.data.id;
-      } else {
-        return false;
-      }
-
-      return intersection([userId], union([ownerId], cooperator)).length > 0;
+    const parameter = {
+      padid: padId,
+      version: version
     }
 
+    if (contentState.isChanged) { parameter['content'] = contentState.content }
+
+    console.log(parameter);
+
+    editPad(padId, JSON.stringify({'test': 123}));
+  }
+
+  render() {
+    const { isLogged } = this.state;
+    const { result: fetchResult, auth, data: { user: ownerId, cooperator }, fetchUsers, fetchPads } = this.props;
+    const authorityCheck = () => {
+      if (auth.result) {
+        const userId = auth.data.id;
+        return intersection([userId], union([ownerId], cooperator)).length > 0;
+      }
+      return false;
+    }
+
+    const isUneditable = ! isLogged || ! fetchResult || ! authorityCheck();
+    const isAuthorized = isLogged && fetchResult && authorityCheck();
+
     return (
-      <div className={classNames('editPad', {'is-disable': ! isLogged || ! fetchResult || ! hasAuthorized()})} ref="editPad">
+      <div className={classNames('editPad', {'is-disable': isUneditable})} ref="editPad">
         <div className="editPad-title">
           <span className="editPad-optionTitle">Pad title</span>
-          <EditorTitle ref="EditTitle" { ...this.props } authority={ isLogged && fetchResult && hasAuthorized() }/>
+          <EditorTitle
+            ref="EditorTitle"
+            { ...this.props }
+            authority={ isAuthorized }/>
         </div>
         <div className="editPad-content">
           <span className="editPad-optionTitle">Content</span>
-          <EditorContent ref="EditContent" { ...this.props } authority={ isLogged && fetchResult && hasAuthorized() } />
+          <EditorContent
+            ref="EditorContent"
+            { ...this.props }
+            authority={ isAuthorized } />
         </div>
         <div className="editPad-options">
           <div className="editPad-cooperates">
             <span className="editPad-optionTitle">Cooperate</span>
-            <EditorCooperate ref="EditCooperate" { ...this.props } cooperator={this.state.cooperator} authority={ isLogged && fetchResult } />
+            <EditorCooperate
+              ref="EditorCooperate"
+              { ...this.props }
+              fetchUsers={ fetchUsers }
+              cooperator={ this.state.cooperator }
+              authority={ isLogged && fetchResult } />
           </div>
           <div className="editPad-tags">
             <span className="editPad-optionTitle">Tags</span>
-            <EditorTags ref="EditTag" { ...this.props } tags={this.state.tags} />
+            <EditorTags
+              ref="EditorTags"
+              { ...this.props }
+              fetchPads={ fetchPads }
+              tags={ this.state.tags } />
           </div>
           <div className="editPad-submit">
-            <a className={classNames('button-wb', 'button-larger', {'is-disable': ! isLogged})}>Submit</a>
+            <a className="button-wb button-larger" disabled={ isUneditable } onClick={this.onClickSubmit.bind(this)}>Submit</a>
             <a className="button-wb button-larger cancel">Cancel</a>
           </div>
           <div className="editPad-errorMsg" ref="errorMsg">
@@ -138,5 +171,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchPad, fetchUser }
+  { fetchPad, fetchUser, fetchUsers, fetchPads, editPad }
 )(Editor);

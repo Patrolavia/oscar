@@ -9,7 +9,7 @@ const message = [
 
 module.exports = (statusCode) => {
   return {
-    'result': (statusCode > 0) ? false : true,
+    'result': (statusCode === 0) ? true : false,
     'message': message[statusCode],
     'data': {
       'code': statusCode

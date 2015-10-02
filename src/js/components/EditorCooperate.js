@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchUsers } from 'actions';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
 import TagsInput from 'react-tagsinput';
-import { each, filter, findWhere, merge, indexOf } from 'lodash';
+import { each, filter, findWhere, union, indexOf } from 'lodash';
 import EditorCompletion from 'components/EditorCompletion';
 import classNames from 'classnames';
 
@@ -13,6 +12,7 @@ export default class EditorCooperate extends Component {
   constructor() {
     super();
     this.defaultState = {
+      cooperatorId: [],
       cooperatorName: [],
       completion: []
     }
@@ -29,12 +29,15 @@ export default class EditorCooperate extends Component {
     } else {
       if (this.hasTagChanged) { return false }
 
-      const ret = [];
+      const cooperatorName = [];
+      const cooperatorId = [];
       each(cooperator, (value) => {
-        ret.push(value.name)
+        cooperatorName.push(value.name);
+        cooperatorId.push(value.id);
       })
       this.setState({
-        cooperatorName: ret
+        cooperatorId: cooperatorId,
+        cooperatorName: cooperatorName
       })
     }
   }
@@ -81,8 +84,11 @@ export default class EditorCooperate extends Component {
     })
   }
 
-  onClickCompletion(userName) {
-    this.refs.cooperateInput.addTag(userName);
+  onClickCompletion(completion) {
+    this.refs.cooperateInput.addTag(completion.name);
+    this.setState({
+      cooperatorId: union(this.state.cooperatorId, completion.id)
+    })
   }
 
   onTagChangesHandler() {
@@ -97,6 +103,10 @@ export default class EditorCooperate extends Component {
     this.setState({
       completion: []
     })
+  }
+
+  getCooperator() {
+    return this.state.cooperatorId
   }
 
   render() {
@@ -128,17 +138,9 @@ export default class EditorCooperate extends Component {
 EditorCooperate.propTypes = {
   authority: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool,
+  fetchUsers: PropTypes.func.isRequired,
   cooperatorName: PropTypes.array,
   fetchUsers: PropTypes.func.isRequired
 };
 
-ReactMixin(EditorCooperate.prototype, linkState)
-
-function mapStateToProps(state) {
-  return {};
-}
-
-export default connect(
-  mapStateToProps,
-  { fetchUsers }
-)(EditorCooperate);
+ReactMixin(EditorCooperate.prototype, linkState);

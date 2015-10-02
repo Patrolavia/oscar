@@ -20,8 +20,8 @@ export default class EditorCompletion extends Component {
     }
   }
 
-  onClickHandler(userName) {
-    this.props.onClickCompletion(userName);
+  onClickHandler(completion) {
+    this.props.onClickCompletion(completion);
   }
 
   renderCompletions() {
@@ -31,11 +31,11 @@ export default class EditorCompletion extends Component {
 
     each(completion, (value, index) => {
       const isCooperatorType = type === 'cooperator';
-      const completion = (isCooperatorType) ? value.name : value;
+      const completion = (isCooperatorType) ? { name: value.name, id: value.id } : value;
       completionRow.push(
         <span key={ index } className="editPad-completion" onClick={ this.onClickHandler.bind(this, completion) }>
           { isCooperatorType && <img src={ value.image } /> }
-          <span>{ completion }</span>
+          <span>{ isCooperatorType && completion.name || completion }</span>
         </span>
       )
     }, this)

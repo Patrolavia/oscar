@@ -107,6 +107,10 @@ export default class EditorTags extends Component {
     })
   }
 
+  getTags() {
+    return this.state.tags;
+  }
+
   renderCompletions() {
     const { completion } = this.state;
   }
@@ -140,12 +144,3 @@ EditorTags.propTypes = {
 };
 
 ReactMixin(EditorTags.prototype, linkState)
-
-function mapStateToProps(state) {
-  return {};
-}
-
-export default connect(
-  mapStateToProps,
-  { fetchPads }
-)(EditorTags);

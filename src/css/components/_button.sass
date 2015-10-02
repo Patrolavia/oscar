@@ -6,6 +6,8 @@
   border-bottom: 0
   padding: $b-space-xs $b-space-s
   color: MDcolor(grey, 100)
+  &[disabled]
+    pointer-events: none
   &:hover
     color: MDcolor(grey, 50)
     background-color: MDcolor(blue-grey, 600)
@@ -29,7 +31,7 @@
     background-color: rgba(MDcolor(grey, 400), .5)
   &.cancel
     color: MDcolor(blue-grey, 300)
-  &.is-disable
+  &[disabled]
     cursor: default
     color: MDcolor(grey, 400)
     background-color: MDcolor(grey, 200)
