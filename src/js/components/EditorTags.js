@@ -4,7 +4,7 @@ import { fetchPads } from 'actions';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
 import TagsInput from 'react-tagsinput';
-import { each, filter, select, findWhere, merge, indexOf } from 'lodash';
+import { each, filter, select, findWhere, union, indexOf } from 'lodash';
 import EditorCompletion from 'components/EditorCompletion';
 
 export default class EditorTags extends Component {
@@ -56,9 +56,9 @@ export default class EditorTags extends Component {
 
   getTagList() {
     const { pads: { data: padsData } } = this.props;
-    const ret = [];
+    let ret = [];
     each(padsData, (pad) => {
-      merge(ret, pad.tags);
+      ret = union(ret, pad.tags);
     })
     this.tagList = ret;
   }
