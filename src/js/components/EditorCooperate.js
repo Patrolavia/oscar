@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
 import TagsInput from 'react-tagsinput';
-import { each, filter, findWhere, union, indexOf } from 'lodash';
+import { each, filter, findWhere, union, indexOf, without } from 'lodash';
 import EditorCompletion from 'components/EditorCompletion';
 import classNames from 'classnames';
 
@@ -14,20 +14,19 @@ export default class EditorCooperate extends Component {
     this.defaultState = {
       cooperatorId: [],
       cooperatorName: [],
-      completion: []
+      completion: [],
+      isChanged: false
     }
     this.state = this.defaultState;
     this.hasFetchedUsers = false;
-    this.hasTagChanged = false;
   }
 
   componentWillReceiveProps(nextProps) {
     const { isFetching, cooperator, location } = nextProps;
     if (isFetching) {
       this.setState(this.defaultState);
-      this.hasTagChanged = false;
     } else {
-      if (this.hasTagChanged) { return false }
+      if (this.state.isChanged) { return false }
 
       const cooperatorName = [];
       const cooperatorId = [];
@@ -87,14 +86,27 @@ export default class EditorCooperate extends Component {
   onClickCompletion(completion) {
     this.refs.cooperateInput.addTag(completion.name);
     this.setState({
-      cooperatorId: union(this.state.cooperatorId, completion.id)
+      cooperatorId: union(this.state.cooperatorId, [completion.id])
     })
+  }
+
+  beforeTagRemoveHandler(removedTag) {
+    const currentTagIndex = indexOf(this.state.cooperatorName, removedTag);
+    const currentId = this.state.cooperatorId[currentTagIndex];
+    this.setState({
+      cooperatorId: without(this.state.cooperatorId, currentId)
+    });
+    return true;
   }
 
   onTagChangesHandler() {
     clearTimeout(this.keyupTimeout);
+    if (! this.state.isChanged) {
+      this.setState({
+        isChanged: true
+      })
+    }
     this.resetCompletion();
-    this.hasTagChanged = true;
     this.refs.cooperateInput.clearInput();
     return true;
   }
@@ -105,8 +117,8 @@ export default class EditorCooperate extends Component {
     })
   }
 
-  getCooperator() {
-    return this.state.cooperatorId
+  getState() {
+    return this.state;
   }
 
   render() {
@@ -123,7 +135,7 @@ export default class EditorCooperate extends Component {
           placeholder="Search"
           onChangeInput={this.onChangeInputHandler.bind(this)}
           onTagAdd={this.onTagChangesHandler.bind(this)}
-          onTagRemove={this.onTagChangesHandler.bind(this)}
+          beforeTagRemove={this.beforeTagRemoveHandler.bind(this)}
           addKeys={[]} />
 
         <EditorCompletion

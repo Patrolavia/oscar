@@ -29,8 +29,16 @@ export default class EditorTitle extends Component {
     return this.state.title !== nextProps.title;
   }
 
-  getTitle() {
-    return this.state.title;
+  onChangeInputHandler() {
+    if (! this.state.isChanged) {
+      this.setState({
+        isChanged: true
+      })
+    }
+  }
+
+  getState() {
+    return this.state;
   }
 
   render() {
@@ -39,7 +47,8 @@ export default class EditorTitle extends Component {
       <input
         type="text"
         readOnly={! this.props.authority}
-        valueLink={this.linkState('title')} />
+        valueLink={this.linkState('title')}
+        onInput={this.onChangeInputHandler.bind(this)} />
     );
   }
 }

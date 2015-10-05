@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
-import { fetchPad, fetchUser, fetchUsers, fetchPads, editPad } from 'actions';
-import { each, findWhere, union, intersection } from 'lodash';
+import { fetchPad, fetchUser, fetchUsers, fetchPads, editPad, editReset } from 'actions';
+import { each, findWhere, union, intersection, assign } from 'lodash';
 import classNames from 'classnames';
 
 import EditorTitle from 'components/EditorTitle';
@@ -22,17 +22,20 @@ export default class Editor extends Component {
   }
 
   componentDidMount() {
-    const { fetchPad, fetchUser, params } = this.props;
+    const { fetchPad, fetchUser, editReset, params } = this.props;
     fetchPad(params);
+    editReset();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isFetching, fetchPad, location: { pathname }, auth: { result: isLogged } } = this.props;
+    const { isFetching, fetchPad, editReset, location: { pathname }, auth: { result: isLogged } } = this.props;
     if (pathname !== nextProps.location.pathname) {
       fetchPad(nextProps.params);
+      editReset();
     }
 
-    const { result, data, users } = nextProps;
+    const { result, padData, users, edit } = nextProps;
+    const data = (edit.requestData) ? assign(this.props.padData, edit.requestData) : padData;
     const { fetchUser } = this.props;
     const cooperatorList = [];
     const fetchQueue = [];
@@ -66,27 +69,30 @@ export default class Editor extends Component {
   }
 
   onClickSubmit() {
-    const { editPad, data: { id: padId, version } } = this.props;
+    const { editPad, padData: { id: padId, version } } = this.props;
     const titleState = this.refs.EditorTitle.getState();
     const contentState = this.refs.EditorContent.getState();
-    const cooperator = this.refs.EditorCooperate.getCooperator();
-    const tags = this.refs.EditorTags.getTags();
+    const cooperatorState = this.refs.EditorCooperate.getState();
+    const tagsState = this.refs.EditorTags.getState();
 
     const parameter = {
       padid: padId,
       version: version
     }
 
+    if (titleState.isChanged) { parameter['title'] = titleState.title }
     if (contentState.isChanged) { parameter['content'] = contentState.content }
+    if (tagsState.isChanged) { parameter['tags'] = tagsState.tags }
+    if (cooperatorState.isChanged) { parameter['cooperator'] = cooperatorState.cooperatorId }
 
-    console.log(parameter);
-
-    editPad(padId, JSON.stringify({'test': 123}));
+    editPad(padId, JSON.stringify(parameter));
   }
 
   render() {
     const { isLogged } = this.state;
-    const { result: fetchResult, auth, data: { user: ownerId, cooperator }, fetchUsers, fetchPads } = this.props;
+    const { result: fetchResult, auth, padData, padData: { user: ownerId, cooperator }, fetchUsers, fetchPads, edit } = this.props;
+    const data = (edit.requestData) ? assign(this.props.padData, edit.requestData) : padData;
+
     const authorityCheck = () => {
       if (auth.result) {
         const userId = auth.data.id;
@@ -97,6 +103,22 @@ export default class Editor extends Component {
 
     const isUneditable = ! isLogged || ! fetchResult || ! authorityCheck();
     const isAuthorized = isLogged && fetchResult && authorityCheck();
+    const errorOccurred = ! edit.isRequesting && edit.requestData && ! edit.result;
+
+    let message = '';
+    switch(true) {
+      case ! isLogged:
+        message = 'Not logged in.';
+        break;
+      case ! isAuthorized && fetchResult:
+        message = 'Not cooperator.';
+        break;
+      case ! fetchResult:
+        message = 'No such pad.';
+        break;
+      default:
+        message = edit.message || '';
+    }
 
     return (
       <div className={classNames('editPad', {'is-disable': isUneditable})} ref="editPad">
@@ -104,6 +126,7 @@ export default class Editor extends Component {
           <span className="editPad-optionTitle">Pad title</span>
           <EditorTitle
             ref="EditorTitle"
+            data={ data }
             { ...this.props }
             authority={ isAuthorized }/>
         </div>
@@ -111,6 +134,7 @@ export default class Editor extends Component {
           <span className="editPad-optionTitle">Content</span>
           <EditorContent
             ref="EditorContent"
+            data={ data }
             { ...this.props }
             authority={ isAuthorized } />
         </div>
@@ -119,6 +143,7 @@ export default class Editor extends Component {
             <span className="editPad-optionTitle">Cooperate</span>
             <EditorCooperate
               ref="EditorCooperate"
+              data={ data }
               { ...this.props }
               fetchUsers={ fetchUsers }
               cooperator={ this.state.cooperator }
@@ -128,6 +153,7 @@ export default class Editor extends Component {
             <span className="editPad-optionTitle">Tags</span>
             <EditorTags
               ref="EditorTags"
+              data={ data }
               { ...this.props }
               fetchPads={ fetchPads }
               tags={ this.state.tags } />
@@ -136,8 +162,8 @@ export default class Editor extends Component {
             <a className="button-wb button-larger" disabled={ isUneditable } onClick={this.onClickSubmit.bind(this)}>Submit</a>
             <a className="button-wb button-larger cancel">Cancel</a>
           </div>
-          <div className="editPad-errorMsg" ref="errorMsg">
-            <span>{ isLogged ? 'Error msg' : 'Not logged in.' }</span>
+          <div className={classNames('editPad-errorMsg', {'dn': ! message.length})} ref="errorMsg">
+            <span>{ message }</span>
           </div>
         </div>
       </div>
@@ -162,14 +188,15 @@ function mapStateToProps(state) {
   return {
     isFetching: isFetching,
     result: result,
-    data,
+    padData: data,
     auth: state.auth,
     users: state.users,
-    pads: state.pads
+    pads: state.pads,
+    edit: state.edit
   };
 }
 
 export default connect(
   mapStateToProps,
-  { fetchPad, fetchUser, fetchUsers, fetchPads, editPad }
+  { fetchPad, fetchUser, fetchUsers, fetchPads, editPad, editReset }
 )(Editor);

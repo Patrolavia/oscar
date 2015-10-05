@@ -13,7 +13,8 @@ export default class EditorTags extends Component {
     super();
     this.defaultState = {
       tags: [],
-      completion: []
+      completion: [],
+      isChanged: false
     }
     this.state = this.defaultState;
     this.hasFetchedPads = false;
@@ -95,6 +96,11 @@ export default class EditorTags extends Component {
 
   onTagChangesHandler() {
     clearTimeout(this.keyupTimeout);
+    if (! this.state.isChanged) {
+      this.setState({
+        isChanged: true
+      })
+    }
     this.resetCompletion();
     this.hasTagChanged = true;
     this.refs.tagInput.clearInput();
@@ -107,8 +113,8 @@ export default class EditorTags extends Component {
     })
   }
 
-  getTags() {
-    return this.state.tags;
+  getState() {
+    return this.state;
   }
 
   renderCompletions() {

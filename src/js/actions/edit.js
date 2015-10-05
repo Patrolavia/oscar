@@ -8,6 +8,7 @@ const APIs = {
 export const EDIT_REQUEST = 'EDIT_REQUEST';
 export const EDIT_SUCCESS = 'EDIT_SUCCESS';
 export const EDIT_FAILURE = 'EDIT_FAILURE';
+export const EDIT_RESET = 'EDIT_RESET';
 
 export function editPad(padId, parameter) {
   const APIUrl = getBaseUrl() + APIs.edit + padId;
@@ -19,5 +20,13 @@ export function editPad(padId, parameter) {
       APIUrl,
       parameter
     );
+  };
+}
+
+export function editReset() {
+  return dispatch => {
+    dispatch({
+      type: EDIT_RESET
+    });
   };
 }

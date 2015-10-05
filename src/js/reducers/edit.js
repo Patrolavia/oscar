@@ -1,4 +1,4 @@
-import { EDIT_REQUEST, EDIT_SUCCESS, EDIT_FAILURE } from 'actions';
+import { EDIT_REQUEST, EDIT_SUCCESS, EDIT_FAILURE, EDIT_RESET } from 'actions';
 import { merge } from 'lodash';
 
 const initialState = {
@@ -26,6 +26,9 @@ export default function Edit(state = initialState, action) {
       return merge({}, state, action.json, {
         isRequesting: false
       });
+
+    case EDIT_RESET:
+      return initialState;
 
     default:
       return state;
