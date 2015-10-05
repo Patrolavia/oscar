@@ -4,9 +4,7 @@ import { clone } from 'lodash';
 import classNames from 'classnames';
 import gsap from 'gsap';
 
-import ToolbarCreateForm from 'components/ToolbarCreateForm';
 import ToolbarSearchForm from 'components/ToolbarSearchForm';
-
 
 export default class Toolbar extends Component {
 
@@ -28,6 +26,9 @@ export default class Toolbar extends Component {
   }
 
   toggleState(formType) {
+    if (formType.match(/create/)) {
+      this.context.history.pushState(null, '/create');
+    }
     let ret = clone(this.defaultState);
     ret[formType] = ! this.state[formType];
     this.setState(ret);
@@ -68,10 +69,6 @@ export default class Toolbar extends Component {
           <i className={classNames('icon-search', {'is-active': searchFormActive})} onClick={this.toggleState.bind(this, 'searchFormActive')}></i>
         </div>
         <i className="icon-home" onClick={this.onClickHomeHandler.bind(this)}></i>
-        <ToolbarCreateForm
-          isActive={ createFormActive }
-          createAnimationController={this.createAnimationController}
-          toggleState={this.toggleState.bind(this)} />
         <ToolbarSearchForm
           isActive={ searchFormActive }
           createAnimationController={this.createAnimationController}
