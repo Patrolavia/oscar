@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
+import classNames from 'classnames';
 
 export default class ToolbarSearchForm extends Component {
 
@@ -10,15 +12,51 @@ export default class ToolbarSearchForm extends Component {
     this.state = this.defaultState;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
+    this.createAnimationController();
   }
 
-  onChangeInputHandler() {
+  createAnimationController() {
+    const animationTimeline = new TimelineLite();
+
+    var TMinitConfig = {
+      rotationX: 90,
+      top: -40,
+      ease: "Power2.easeInOut"
+    }
+
+    var TMTimelineConfig = {
+      rotationX: 0,
+      top: 65,
+      ease: "Back.easeOut",
+      onComplete: function() {
+        this.target.classList.add('is-active');
+      },
+      onReverseComplete: function() {
+        this.target.classList.remove('is-active');
+      }
+    }
+
+    const targetNode = findDOMNode(this);
+    TweenMax.to(targetNode, 0, TMinitConfig);
+    animationTimeline.to(targetNode, 0.5, TMTimelineConfig);
+    animationTimeline.pause();
+
+    this.animationController = animationTimeline;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    (nextProps.isActive) ? this.animationController.play() : this.animationController.reverse();
+  }
+
+  onClickCloseHandler() {
+    this.props.toggleState('searchModeActive');
   }
 
   render() {
+    const { isActive } = this.props;
     return (
-      <div className="toolbar-form dn" data-type="searchForm">
+      <div className="toolbar-form" data-type="searchForm">
         <div className="toolbar-search">
           <span className="toolbar-formTitle">Search pad</span>
           <input type="text" />
@@ -45,18 +83,14 @@ export default class ToolbarSearchForm extends Component {
           </label>
         </div>
         <a className="button toolbar-searchBtn">Reset</a>
-        <a className="button cancel toolbar-searchBtn">Close</a>
+        <a className="button cancel toolbar-searchBtn" onClick={this.onClickCloseHandler.bind(this)}>Close</a>
       </div>
     );
   }
 }
 
-// EditorContent.propTypes = {
-//   result: PropTypes.bool.isRequired,
-//   data: PropTypes.shape({
-//     content: PropTypes.string
-//   }),
-//   authority: PropTypes.bool.isRequired
-// };
+ToolbarSearchForm.propTypes = {
+  toggleState: PropTypes.func.isRequired
+};
 
 // ReactMixin(EditorContent.prototype, linkState)
