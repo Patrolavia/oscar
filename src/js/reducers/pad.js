@@ -2,15 +2,15 @@ import { FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE } from 'actions
 import { merge } from 'lodash';
 
 const initialState = {
-  errorStatus: null,
   isFetching: false,
+  result: false,
   data: {}
 };
 
 export default function Pad(state = initialState, action) {
   switch (action.type) {
     case FETCH_PAD_REQUEST:
-      return merge({}, state, {
+      return merge({}, initialState, {
         message: 'Fetching pad...',
         isFetching: true,
         result: false

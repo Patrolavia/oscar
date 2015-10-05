@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
 import { fadeIn } from 'untils/animation';
+import 'vendor/prettify/prettify';
 
 export default class Pad extends Component {
   componentWillMount() {
@@ -16,6 +17,7 @@ export default class Pad extends Component {
   componentDidUpdate() {
     const $contentNode = findDOMNode(this.refs.contentWrapper);
     fadeIn($contentNode);
+    prettyPrint();
   }
 
   componentWillReceiveProps(nextProps) {

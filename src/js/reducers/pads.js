@@ -2,7 +2,6 @@ import { FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE } from 'acti
 import { merge } from 'lodash';
 
 const initialState = {
-  errorStatus: null,
   isFetching: false,
   data: []
 };
@@ -10,7 +9,7 @@ const initialState = {
 export default function Pads(state = initialState, action) {
   switch (action.type) {
     case FETCH_PADS_REQUEST:
-      return merge({}, state, {
+      return merge({}, initialState, {
         message: 'Fetching pads...',
         isFetching: true,
         result: false
