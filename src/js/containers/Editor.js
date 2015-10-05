@@ -12,6 +12,10 @@ import EditorTags from 'components/EditorTags';
 
 export default class Editor extends Component {
 
+  static contextTypes = {
+      history: PropTypes.object
+  };
+
   constructor() {
     super();
     this.state = {
@@ -28,14 +32,20 @@ export default class Editor extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isFetching, fetchPad, editReset, location: { pathname }, auth: { result: isLogged } } = this.props;
+    const { isFetching, fetchPad, editReset, location: { pathname } } = this.props;
     if (pathname !== nextProps.location.pathname) {
       fetchPad(nextProps.params);
       editReset();
     }
 
-    const { result, padData, users, edit } = nextProps;
+    const { result, padData, users, edit, auth: { result: isLogged } } = nextProps;
     const data = (edit.requestData) ? assign(this.props.padData, edit.requestData) : padData;
+
+    if (edit.result) {
+      const path = '/show/' + padData.id;
+      this.context.history.pushState(null, path);
+    }
+
     const { fetchUser } = this.props;
     const cooperatorList = [];
     const fetchQueue = [];
@@ -88,10 +98,20 @@ export default class Editor extends Component {
     editPad(padId, JSON.stringify(parameter));
   }
 
+  onClickCancel() {
+    const { padData: { id: padId } } = this.props;
+    if (padId) {
+      const path = '/show/' + padId;
+      this.context.history.pushState(null, path);
+    } else {
+      this.context.history.pushState(null, '/');
+    }
+  }
+
   render() {
     const { isLogged } = this.state;
-    const { result: fetchResult, auth, padData, padData: { user: ownerId, cooperator }, fetchUsers, fetchPads, edit } = this.props;
-    const data = (edit.requestData) ? assign(this.props.padData, edit.requestData) : padData;
+    const { result: fetchResult, isFetching, auth, padData, padData: { user: ownerId, cooperator }, fetchUsers, fetchPads, edit } = this.props;
+    const data = (edit.requestData) ? assign(padData, edit.requestData) : padData;
 
     const authorityCheck = () => {
       if (auth.result) {
@@ -103,7 +123,8 @@ export default class Editor extends Component {
 
     const isUneditable = ! isLogged || ! fetchResult || ! authorityCheck();
     const isAuthorized = isLogged && fetchResult && authorityCheck();
-    const errorOccurred = ! edit.isRequesting && edit.requestData && ! edit.result;
+    const isRequesting = edit.isRequesting;
+    const errorOccurred = ! isRequesting && edit.requestData && ! edit.result;
 
     let message = '';
     switch(true) {
@@ -113,7 +134,7 @@ export default class Editor extends Component {
       case ! isAuthorized && fetchResult:
         message = 'Not cooperator.';
         break;
-      case ! fetchResult:
+      case ! fetchResult && ! isFetching:
         message = 'No such pad.';
         break;
       default:
@@ -159,10 +180,12 @@ export default class Editor extends Component {
               tags={ this.state.tags } />
           </div>
           <div className="editPad-submit">
-            <a className="button-wb button-larger" disabled={ isUneditable } onClick={this.onClickSubmit.bind(this)}>Submit</a>
-            <a className="button-wb button-larger cancel">Cancel</a>
+            <a className="button-wb button-larger" disabled={ isUneditable || isRequesting } onClick={this.onClickSubmit.bind(this)}>
+              { isRequesting && 'Sending...' || 'Submit' }
+            </a>
+            <a className="button-wb button-larger cancel"  onClick={this.onClickCancel.bind(this)}>Cancel</a>
           </div>
-          <div className={classNames('editPad-errorMsg', {'dn': ! message.length})} ref="errorMsg">
+          <div className={classNames('editPad-errorMsg', {'dn': ! message.length || isRequesting})} ref="errorMsg">
             <span>{ message }</span>
           </div>
         </div>
