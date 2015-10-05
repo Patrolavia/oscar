@@ -11,6 +11,7 @@ export default (
     <IndexRoute component={Pads} />
     <Route path="/show/:pid" component={Pad} />
     <Route path="/edit/:pid" component={Editor} />
+    <Route path="/create" component={Editor} />
     <Route path="*" component={NoMatch}/>
   </Route>
 );
