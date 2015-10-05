@@ -2,6 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 export default class Toolbar extends Component {
+
+  static contextTypes = {
+      history: PropTypes.object
+  };
+
+  onClickHomeHandler() {
+    this.context.history.pushState(null, '/');
+  }
+
   render() {
     return (
       <div className="toolbar">
@@ -9,7 +18,7 @@ export default class Toolbar extends Component {
           <i className="icon-plus"></i>
           <i className="icon-search"></i>
         </div>
-        <i className="icon-home"></i>
+        <i className="icon-home" onClick={this.onClickHomeHandler.bind(this)}></i>
         <div className="toolbar-form dn" data-type="createForm">
           <div className="toolbar-create">
             <span className="toolbar-formTitle">Create a new pad</span>
