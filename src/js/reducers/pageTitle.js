@@ -13,15 +13,12 @@ const errorOccurred = {
   title: 'Error!'
 }
 
-const REQUEST_TYPES = FETCH_PAD_REQUEST || FETCH_PADS_REQUEST;
-const FAILURE_TYPES = FETCH_PAD_FAILURE || FETCH_PADS_FAILURE;
-
 export default function PageTitle(state = initialState, action) {
   switch (action.type) {
-    case REQUEST_TYPES:
+    case FETCH_PAD_REQUEST: case FETCH_PADS_REQUEST:
       return initialState;
 
-    case FAILURE_TYPES:
+    case FETCH_PAD_FAILURE: case FETCH_PADS_FAILURE:
       return errorOccurred;
 
     case FETCH_PAD_SUCCESS:

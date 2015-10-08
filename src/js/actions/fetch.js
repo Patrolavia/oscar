@@ -30,6 +30,7 @@ export function fetchPads() {
 export const FETCH_PAD_REQUEST = 'FETCH_PAD_REQUEST';
 export const FETCH_PAD_SUCCESS = 'FETCH_PAD_SUCCESS';
 export const FETCH_PAD_FAILURE = 'FETCH_PAD_FAILURE';
+export const PAD_RESET = 'PAD_RESET';
 
 export function fetchPad(param) {
   const APIUrl = (param.pid) ? getBaseUrl() + APIs.pad + param.pid : getBaseUrl() + APIs.whale;
@@ -40,6 +41,14 @@ export function fetchPad(param) {
       dispatch,
       APIUrl
     );
+  };
+}
+
+export function resetPadState() {
+  return dispatch => {
+    dispatch({
+      type: PAD_RESET
+    })
   };
 }
 
