@@ -12,8 +12,20 @@ export default class Header extends Component {
   }
 
   render() {
-    const { title, router: { location } } = this.props;
-    const currentTitle = (location.pathname === '/') ? 'Padlist' : title;
+    const { title, router: { location: { pathname } } } = this.props;
+
+    let currentTitle;
+    switch(true) {
+      case pathname === '/':
+        currentTitle = 'Padlist';
+        break;
+      case pathname.match(/create/) !== null:
+        currentTitle = 'Create pad';
+        break;
+      default:
+        currentTitle = title;
+    }
+
     return (
       <div className="header">
         <h1>

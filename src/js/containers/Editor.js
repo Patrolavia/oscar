@@ -21,19 +21,28 @@ export default class Editor extends Component {
     this.state = {
       cooperator: [],
       tags: [],
-      isLogged: false
+      isLogged: false,
+      isEditMode: false
     }
   }
 
   componentDidMount() {
-    const { fetchPad, fetchUser, editReset, params } = this.props;
+    const { fetchPad, editReset, params, location: { pathname } } = this.props;
+    this.setState({
+      isEditMode: (pathname.match(/edit/)) ? true : false
+    })
     fetchPad(params);
     editReset();
   }
 
   componentWillReceiveProps(nextProps) {
     const { isFetching, fetchPad, editReset, location: { pathname } } = this.props;
-    if (pathname !== nextProps.location.pathname) {
+    const { location: { pathname: nextPathname } } = nextProps;
+
+    if (pathname !== nextPathname) {
+      this.setState({
+        isEditMode: (nextPathname.match(/edit/)) ? true : false
+      })
       fetchPad(nextProps.params);
       editReset();
     }
@@ -108,24 +117,21 @@ export default class Editor extends Component {
     }
   }
 
-  render() {
-    const { isLogged } = this.state;
-    const { result: fetchResult, isFetching, auth, padData, padData: { user: ownerId, cooperator }, fetchUsers, fetchPads, edit } = this.props;
-    const data = (edit.requestData) ? assign(padData, edit.requestData) : padData;
-
-    const authorityCheck = () => {
-      if (auth.result) {
-        const userId = auth.data.id;
-        return intersection([userId], union([ownerId], cooperator)).length > 0;
+  getCurrentPadData(isEditMode) {
+    const { padData, edit } = this.props;
+    let data = {};
+    if (edit.requestData) {
+      data = assign(padData, edit.requestData)
+    } else {
+      if (isEditMode) {
+        data = padData;
       }
-      return false;
     }
+    return data;
+  }
 
-    const isUneditable = ! isLogged || ! fetchResult || ! authorityCheck();
-    const isAuthorized = isLogged && fetchResult && authorityCheck();
-    const isRequesting = edit.isRequesting;
-    const errorOccurred = ! isRequesting && edit.requestData && ! edit.result;
-
+  getMessage(...params) {
+    const [ isLogged, isAuthorized, fetchResult, isEditMode, isFetching, edit ] = params;
     let message = '';
     switch(true) {
       case ! isLogged:
@@ -134,12 +140,36 @@ export default class Editor extends Component {
       case ! isAuthorized && fetchResult:
         message = 'Not cooperator.';
         break;
-      case ! fetchResult && ! isFetching:
+      case (isEditMode && ! fetchResult) && ! isFetching:
         message = 'No such pad.';
         break;
       default:
         message = edit.message || '';
     }
+    return message;
+  }
+
+  render() {
+    const { isLogged, isEditMode } = this.state;
+    const { result: fetchResult, isFetching, auth, padData: { user: ownerId, cooperator }, fetchUsers, fetchPads, edit } = this.props;
+
+    const authorityCheck = () => {
+      if (! isEditMode) { return true };
+      if (auth.result) {
+        const userId = auth.data.id;
+        return intersection([userId], union([ownerId], cooperator)).length > 0;
+      }
+      return false;
+    }
+
+    const isUneditable = ! isLogged || (isEditMode && ! fetchResult) || ! authorityCheck();
+    const isAuthorized = isLogged && ((isEditMode && fetchResult) || ! isEditMode) && authorityCheck();
+    const isRequesting = edit.isRequesting;
+    const isOwner = (isAuthorized) && ownerId === auth.data.id;
+    const errorOccurred = ! isRequesting && edit.requestData && ! edit.result;
+
+    const data = this.getCurrentPadData(isEditMode);
+    const message = this.getMessage(isLogged, isAuthorized, fetchResult, isEditMode, isFetching, edit);
 
     return (
       <div className={classNames('editPad', {'is-disable': isUneditable})} ref="editPad">
@@ -149,7 +179,7 @@ export default class Editor extends Component {
             ref="EditorTitle"
             data={ data }
             { ...this.props }
-            authority={ isAuthorized }/>
+            authority={ isAuthorized } />
         </div>
         <div className="editPad-content">
           <span className="editPad-optionTitle">Content</span>
@@ -168,7 +198,7 @@ export default class Editor extends Component {
               { ...this.props }
               fetchUsers={ fetchUsers }
               cooperator={ this.state.cooperator }
-              authority={ isLogged && fetchResult } />
+              authority={ isOwner || ! isEditMode } />
           </div>
           <div className="editPad-tags">
             <span className="editPad-optionTitle">Tags</span>

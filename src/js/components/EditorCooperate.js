@@ -124,10 +124,9 @@ export default class EditorCooperate extends Component {
   render() {
     // Only pad owner can edit cooperate field.
     const { completion } = this.state;
-    const { auth, data: { user: ownerId }, authority } = this.props;
-    const isOwner = (authority) ? ownerId === auth.data.id : false;
+    const { authority } = this.props;
     return (
-      <div className={classNames({'is-disable': ! isOwner})}>
+      <div className={classNames({'is-disable': ! authority})}>
         <TagsInput
           addOnBlur={false}
           ref='cooperateInput'
