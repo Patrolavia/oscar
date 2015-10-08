@@ -102,7 +102,6 @@
   input
     @extend .form-input
 
-.toolbar-create,
 .toolbar-search
   padding: $b-space-s
   padding-top: 0
@@ -121,7 +120,7 @@
   width: 160px
   font-size: $b-fontSize-s
   +breakpoint($middle)
-    @extend .bucket
+    display: table
     position: relative
     width: 100%
     right: 0
@@ -132,7 +131,7 @@
       display: block
 
 .toolbar-searchType
-  @extend .bucket-content
+  display: table-cell
   color: MDcolor(blue-grey, 200)
   cursor: pointer
   &.is-active,

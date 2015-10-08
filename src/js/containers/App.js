@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 
 import Header from 'containers/Header';
-import Toolbar from 'components/Toolbar';
+import Toolbar from 'containers/Toolbar';
 import Toc from 'components/Toc';
 import LoadingDots from 'components/LoadingDots';
 import { fadeIn } from 'untils/animation';
