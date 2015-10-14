@@ -1,4 +1,4 @@
-import { FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE } from 'actions';
+import { FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE, PAD_RESET } from 'actions';
 import { merge } from 'lodash';
 
 const initialState = {
@@ -27,6 +27,9 @@ export default function Pad(state = initialState, action) {
         isFetching: false,
         result: false
       });
+
+    case PAD_RESET:
+      return initialState;
 
     default:
       return state;

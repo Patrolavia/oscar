@@ -23,7 +23,7 @@ export function editPad(padId, parameter) {
   };
 }
 
-export function editReset() {
+export function resetEditState() {
   return dispatch => {
     dispatch({
       type: EDIT_RESET
