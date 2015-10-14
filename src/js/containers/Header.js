@@ -13,7 +13,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { title, router: { location: { pathname } }, padState: { data: { user: ownerId, cooperator } }, authState } = this.props;
+    const { title, router: { location: { pathname } }, padState: { data: { id: padId, user: ownerId, cooperator } }, authState } = this.props;
 
     let authorityInfo = {
       ownerId: [],
@@ -39,6 +39,7 @@ export default class Header extends Component {
         <h1>
           <span>{ currentTitle }</span>
           <PadOptions isHeaderOption={true}
+            padId={padId}
             authState={authState}
             authorityInfo={authorityInfo} />
         </h1>

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each, findWhere } from 'lodash';
 import { fadeIn } from 'untils/animation';
+import { indexOf } from 'lodash';
 
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
@@ -25,9 +26,11 @@ export default class Pads extends Component {
     fadeIn($contentNode);
   }
 
-  onClickPad(padId) {
-    const path = '/show/' + padId;
-    this.context.history.pushState(null, path);
+  onClickPad(padId, e) {
+    if (indexOf(e.target.classList, 'padList-tag') < 0) {
+      const path = '/show/' + padId;
+      this.context.history.pushState(null, path);
+    }
   }
 
   renderTags(tags) {
@@ -68,20 +71,23 @@ export default class Pads extends Component {
       }
 
       padRows.push(
-        <div className="padList-item" key={ padId } onClick={ this.onClickPad.bind(this, padId) }>
-          <span className="padList-title">{ title }</span>
-          { tags.length > 0 &&
-            <div className="padList-tags">
-              <i className="icon-tags"></i>
-              <ul>
-                { this.renderTags(tags) }
-              </ul>
-            </div>
-          }
+        <div className="padList-item" key={ padId }>
+          <div className="padList-info" onClick={ this.onClickPad.bind(this, padId) }>
+            <span className="padList-title">{ title }</span>
+            { tags.length > 0 &&
+              <div className="padList-tags">
+                <i className="icon-tags"></i>
+                <ul>
+                  { this.renderTags(tags) }
+                </ul>
+              </div>
+            }
+          </div>
           <div className="padList-detail">
             { this.renderUser(ownerId) }
             <PadOptions
               isHeaderOption={false}
+              padId={padId}
               authState={authState}
               authorityInfo={authorityInfo} />
           </div>

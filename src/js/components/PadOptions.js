@@ -1,8 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { indexOf, union } from 'lodash';
+import classNames from 'classnames';
 
 export default class PadOptions extends Component {
+  static contextTypes = {
+      history: PropTypes.object
+  };
+
   constructor() {
     super();
     this.state = {
@@ -21,20 +26,27 @@ export default class PadOptions extends Component {
     this.setState(newState);
   }
 
+  onClickEdit(e) {
+    const { padId } = this.props;
+    const path = '/edit/' + padId;
+    this.context.history.pushState(null, path);
+  }
+
   render() {
     const currentClass = (this.props.isHeaderOption) ? 'header-options' : 'padList-control';
     const { editPad, deletePad } = this.state;
     return (
       <div className={currentClass}>
-        { editPad && <i className="icon-pencil"></i> }
-        { deletePad && <i className="icon-trash"></i> }
+        <i className={classNames('icon-pencil', {'dn': ! editPad})} onClick={this.onClickEdit.bind(this)}></i>
+        <i className={classNames('icon-trash', {'dn': ! deletePad})}></i>
       </div>
     );
   }
 }
 
 PadOptions.PropTypes = {
-  isHeaderOption: PropTypes.bool,
-  authState: PropTypes.object,
-  authorityInfo: PropTypes.object
+  isHeaderOption: PropTypes.bool.isRequired,
+  padId: PropTypes.number,
+  authState: PropTypes.object.isRequired,
+  authorityInfo: PropTypes.object.isRequired
 }
