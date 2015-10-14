@@ -3,9 +3,11 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each, findWhere } from 'lodash';
+import { fadeIn } from 'untils/animation';
+
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
-import { fadeIn } from 'untils/animation';
+import PadOptions from 'components/PadOptions';
 
 export default class Pads extends Component {
 
@@ -54,11 +56,17 @@ export default class Pads extends Component {
   }
 
   renderPads() {
-    const { padsData } = this.props;
+    const { padsData, authState } = this.props;
     const padRows = [];
 
     each(padsData, (value, key) => {
-      const { user: userId, id: padId, title, tags } = value;
+      const { user: ownerId, id: padId, title, tags } = value;
+
+      const authorityInfo = {
+        ownerId: ownerId,
+        cooperatorList: value.cooperator
+      }
+
       padRows.push(
         <div className="padList-item" key={ padId } onClick={ this.onClickPad.bind(this, padId) }>
           <span className="padList-title">{ title }</span>
@@ -71,11 +79,11 @@ export default class Pads extends Component {
             </div>
           }
           <div className="padList-detail">
-            { this.renderUser(userId) }
-            <div className="padList-control">
-              <i className="icon-pencil"></i>
-              <i className="icon-trash"></i>
-            </div>
+            { this.renderUser(ownerId) }
+            <PadOptions
+              isHeaderOption={false}
+              authState={authState}
+              authorityInfo={authorityInfo} />
           </div>
         </div>
       );
@@ -118,14 +126,13 @@ function mapStateToProps(state) {
     isFetching
   } = state.pads;
 
-  const { data: usersData } = state.users;
-
   return {
     isFetching: isFetching,
     padsFetchResult: padsFetchResult,
     padsFetchMessage: padsFetchMessage,
     padsData: padsData,
-    usersData: usersData
+    usersData: state.users.data,
+    authState: state.auth
   };
 }
 

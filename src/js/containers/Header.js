@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchMe, fetchPaths } from 'actions';
 
 import Auth from 'components/Auth';
+import PadOptions from 'components/PadOptions';
 
 export default class Header extends Component {
 
@@ -12,7 +13,12 @@ export default class Header extends Component {
   }
 
   render() {
-    const { title, router: { location: { pathname } } } = this.props;
+    const { title, router: { location: { pathname } }, padState: { data: { user: ownerId, cooperator } }, authState } = this.props;
+
+    let authorityInfo = {
+      ownerId: [],
+      cooperatorList: []
+    }
 
     let currentTitle;
     switch(true) {
@@ -24,12 +30,17 @@ export default class Header extends Component {
         break;
       default:
         currentTitle = title;
+        authorityInfo['ownerId'] = ownerId;
+        authorityInfo['cooperatorList'] = cooperator;
     }
 
     return (
       <div className="header">
         <h1>
           <span>{ currentTitle }</span>
+          <PadOptions isHeaderOption={true}
+            authState={authState}
+            authorityInfo={authorityInfo} />
         </h1>
         <Auth { ...this.props }/>
       </div>
@@ -41,8 +52,9 @@ function mapStateToProps(state) {
   const { title } = state.pageTitle;
   return {
     title: title,
-    auth: state.auth,
-    router: state.router
+    router: state.router,
+    authState: state.auth,
+    padState: state.pad
   };
 }
 
