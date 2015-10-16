@@ -8,7 +8,14 @@ export default class ToolbarSearchForm extends Component {
 
   constructor() {
     super();
-    this.defaultState = {}
+    this.defaultState = {
+      searchBy: {
+        title: true,
+        user: false,
+        tag: false
+      },
+      own: false
+    }
     this.state = this.defaultState;
   }
 
@@ -53,23 +60,28 @@ export default class ToolbarSearchForm extends Component {
     this.props.toggleState('searchModeActive');
   }
 
+  onInputChanged() {
+    // TODO
+  }
+
   render() {
     const { isActive } = this.props;
+    const { searchBy: { title, user, tag } } = this.state;
     return (
       <div className="toolbar-form" data-type="searchForm">
         <div className="toolbar-search">
           <span className="toolbar-formTitle">Search pad</span>
-          <input type="text" />
+          <input type="text" onChange={this.onInputChanged.bind(this)}/>
           <dl className="toolbar-searchTypes">
-            <dt className="toolbar-searchType">
+            <dt className={classNames('toolbar-searchType', {'is-active': title})}>
               <i className="icon-doc-inv"></i>
               <span>Title</span>
             </dt>
-            <dt className="toolbar-searchType">
+            <dt className={classNames('toolbar-searchType', {'is-active': user})}>
               <i className="icon-user"></i>
               <span>User</span>
             </dt>
-            <dt className="toolbar-searchType">
+            <dt className={classNames('toolbar-searchType', {'is-active': tag})}>
               <i className="icon-tags"></i>
               <span>Tag</span>
             </dt>
@@ -90,7 +102,6 @@ export default class ToolbarSearchForm extends Component {
 }
 
 ToolbarSearchForm.propTypes = {
-  toggleState: PropTypes.func.isRequired
+  toggleState: PropTypes.func.isRequired,
+  searchPad: PropTypes.func.isRequired
 };
-
-// ReactMixin(EditorContent.prototype, linkState)

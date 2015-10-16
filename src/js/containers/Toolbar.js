@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { clone } from 'lodash';
+import { searchPad } from 'actions';
 import classNames from 'classnames';
 import gsap from 'gsap';
 
@@ -22,15 +23,15 @@ class Toolbar extends Component {
   }
 
   componentDidMount() {
-    this.checkRouterType(this.props.router);
+    this.checkRouterType(this.props.routerState);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.checkRouterType(nextProps.router);
+    this.checkRouterType(nextProps.routerState);
   }
 
-  checkRouterType(router) {
-    const isCreatePage = router.location.pathname.match(/create/);
+  checkRouterType(routerState) {
+    const isCreatePage = routerState.location.pathname.match(/create/);
     const ret = {};
     ret['createModeActive'] = (isCreatePage) ? true : false;
     this.setState(ret);
@@ -48,7 +49,7 @@ class Toolbar extends Component {
       ret[formType] = ! this.state[formType];
     }
 
-    if (this.props.router.location.pathname.match(/create/)) {
+    if (this.props.routerState.location.pathname.match(/create/)) {
       ret['createModeActive'] = true;
     }
     this.setState(ret);
@@ -65,7 +66,8 @@ class Toolbar extends Component {
         <i className="icon-home" onClick={this.onClickHomeHandler.bind(this)}></i>
         <ToolbarSearchForm
           isActive={ searchModeActive }
-          toggleState={this.onClickToolbarButton.bind(this)} />
+          searchPad={ this.props.searchPad }
+          toggleState={ this.onClickToolbarButton.bind(this) } />
       </div>
     );
   }
@@ -73,10 +75,11 @@ class Toolbar extends Component {
 
 function mapStateToProps(state) {
   return {
-    router: state.router
+    routerState: state.router
   }
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  { searchPad }
 )(Toolbar);
