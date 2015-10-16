@@ -44,7 +44,7 @@ export default class EditorCooperate extends Component {
   onChangeInputHandler(keyword) {
     clearTimeout(this.keyupTimeout);
 
-    const { fetchUsers, users: { data: usersData } } = this.props;
+    const { fetchUsers, usersState: { data: usersData } } = this.props;
     if (keyword.length) {
       if (! this.hasFetchedUsers) {
         fetchUsers();
@@ -62,7 +62,7 @@ export default class EditorCooperate extends Component {
 
   getCompletion(keyword) {
     // get filter result
-    const { cooperator, users: { data: usersData }, data: { user: ownerId } } = this.props;
+    const { cooperator, usersState: { data: usersData }, data: { user: ownerId } } = this.props;
     const output = filter(usersData, function(user) {
       var input = keyword.toLowerCase();
       // `~` with `indexOf` means "contains"
