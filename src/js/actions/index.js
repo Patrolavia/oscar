@@ -1,5 +1,6 @@
 export * from './fetch';
 export * from './edit';
+export * from './delete';
 export * from './create';
 
 import request from 'superagent';

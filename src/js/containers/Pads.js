@@ -3,9 +3,12 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each, findWhere } from 'lodash';
+import { fadeIn } from 'untils/animation';
+import { indexOf, isEqual } from 'lodash';
+
+import PadOptions from 'containers/PadOptions';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
-import { fadeIn } from 'untils/animation';
 
 export default class Pads extends Component {
 
@@ -23,9 +26,11 @@ export default class Pads extends Component {
     fadeIn($contentNode);
   }
 
-  onClickPad(padId) {
-    const path = '/show/' + padId;
-    this.context.history.pushState(null, path);
+  onClickPad(padId, e) {
+    if (indexOf(e.target.classList, 'padList-tag') < 0) {
+      const path = '/show/' + padId;
+      this.context.history.pushState(null, path);
+    }
   }
 
   renderTags(tags) {
@@ -37,6 +42,10 @@ export default class Pads extends Component {
     });
 
     return tagRows;
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return isEqual(this.props.deleteState, nextProps.deleteState);
   }
 
   renderUser(userId) {
@@ -58,24 +67,32 @@ export default class Pads extends Component {
     const padRows = [];
 
     each(padsData, (value, key) => {
-      const { user: userId, id: padId, title, tags } = value;
+      const { user: ownerId, id: padId, title, tags } = value;
+
+      const authorityInfo = {
+        ownerId: ownerId,
+        cooperatorList: value.cooperator
+      }
+
       padRows.push(
-        <div className="padList-item" key={ padId } onClick={ this.onClickPad.bind(this, padId) }>
-          <span className="padList-title">{ title }</span>
-          { tags.length > 0 &&
-            <div className="padList-tags">
-              <i className="icon-tags"></i>
-              <ul>
-                { this.renderTags(tags) }
-              </ul>
-            </div>
-          }
+        <div className="padList-item" key={ padId }>
+          <div className="padList-info" onClick={ this.onClickPad.bind(this, padId) }>
+            <span className="padList-title">{ title }</span>
+            { tags.length > 0 &&
+              <div className="padList-tags">
+                <i className="icon-tags"></i>
+                <ul>
+                  { this.renderTags(tags) }
+                </ul>
+              </div>
+            }
+          </div>
           <div className="padList-detail">
-            { this.renderUser(userId) }
-            <div className="padList-control">
-              <i className="icon-pencil"></i>
-              <i className="icon-trash"></i>
-            </div>
+            { this.renderUser(ownerId) }
+            <PadOptions
+              isHeaderOption={false}
+              padData={value}
+              authorityInfo={authorityInfo} />
           </div>
         </div>
       );
@@ -105,6 +122,7 @@ Pads.propTypes = {
   padsFetchMessage: PropTypes.string,
   padsData: PropTypes.array,
   usersData: PropTypes.array,
+  deleteState: PropTypes.object.isRequired,
 
   fetchPads: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired
@@ -118,14 +136,13 @@ function mapStateToProps(state) {
     isFetching
   } = state.pads;
 
-  const { data: usersData } = state.users;
-
   return {
     isFetching: isFetching,
     padsFetchResult: padsFetchResult,
     padsFetchMessage: padsFetchMessage,
     padsData: padsData,
-    usersData: usersData
+    usersData: state.users.data,
+    deleteState: state.del
   };
 }
 

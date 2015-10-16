@@ -1,12 +1,13 @@
 import React, { Component, PropTypes, cloneElement } from 'react';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
+import { fadeIn } from 'untils/animation';
 
 import Header from 'containers/Header';
 import Toolbar from 'containers/Toolbar';
+import DeleteConfirm from 'containers/DeleteConfirm';
 import Toc from 'components/Toc';
 import LoadingDots from 'components/LoadingDots';
-import { fadeIn } from 'untils/animation';
 
 class App extends Component {
   componentDidUpdate() {
@@ -19,6 +20,7 @@ class App extends Component {
     return (
       <div>
         <div className="container">
+          <DeleteConfirm />
           <div className="aside">
             <Toolbar />
             <Toc />

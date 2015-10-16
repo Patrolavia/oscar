@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPad, fetchUser, fetchUsers, fetchPads, editPad, createPad, resetEditState, resetPadState } from 'actions';
-import { each, findWhere, union, intersection, assign, size } from 'lodash';
+import { each, findWhere, union, intersection, assign, size, isEqual } from 'lodash';
 import classNames from 'classnames';
 
 import EditorTitle from 'components/EditorTitle';
@@ -44,6 +43,10 @@ export default class Editor extends Component {
 
   componentWillUnmount() {
     this.isRequesting = false;
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return isEqual(this.props.deleteState, nextProps.deleteState);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -268,6 +271,7 @@ Editor.propTypes = {
   usersState: PropTypes.object.isRequired,
   editorState: PropTypes.object.isRequired,
   padsState: PropTypes.object.isRequired,
+  deleteState: PropTypes.object.isRequired,
 
   fetchPad: PropTypes.func.isRequired,
   fetchUser: PropTypes.func.isRequired,
@@ -290,7 +294,8 @@ function mapStateToProps(state) {
     authState: state.auth,
     usersState: state.users,
     editorState: state.editor,
-    padsState: state.pads
+    padsState: state.pads,
+    deleteState: state.del
   };
 }
 

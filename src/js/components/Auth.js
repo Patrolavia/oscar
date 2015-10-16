@@ -50,7 +50,7 @@ export default class Auth extends Component {
   }
 
   renderPaths() {
-    const { paths } = this.props.auth;
+    const { paths } = this.props.authState;
     const pathRows = [];
     each(paths, (value, index) => {
       const authUrl = '/auth/' + value;
@@ -65,7 +65,7 @@ export default class Auth extends Component {
   }
 
   render() {
-    const { result, data: { name, image }, paths } = this.props.auth;
+    const { result, data: { name, image }, paths } = this.props.authState;
     return (
       <div className="userInfo"
         onMouseEnter={this.onMouseEnterHandler.bind(this)}
@@ -93,7 +93,7 @@ export default class Auth extends Component {
 }
 
 Auth.propTypes = {
-  auth: PropTypes.shape({
+  authState: PropTypes.shape({
     result: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       name: PropTypes.string.isRequired,
