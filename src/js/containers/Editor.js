@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPad, fetchUser, fetchUsers, fetchPads, editPad, editReset } from 'actions';
-import { each, findWhere, union, intersection, assign } from 'lodash';
+import { each, findWhere, union, intersection, assign, isEqual } from 'lodash';
 import classNames from 'classnames';
 
 import EditorTitle from 'components/EditorTitle';
@@ -33,6 +32,12 @@ export default class Editor extends Component {
     })
     fetchPad(params);
     editReset();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return ! isEqual(this.props.padData, nextProps.padData)
+        || ! isEqual(this.props.users, nextProps.users)
+        || ! isEqual(this.props.pads, nextProps.pads);
   }
 
   componentWillReceiveProps(nextProps) {

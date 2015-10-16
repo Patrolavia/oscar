@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each, findWhere } from 'lodash';
 import { fadeIn } from 'untils/animation';
-import { indexOf } from 'lodash';
+import { indexOf, isEqual } from 'lodash';
 
+import PadOptions from 'containers/PadOptions';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
-import PadOptions from 'components/PadOptions';
 
 export default class Pads extends Component {
 
@@ -44,6 +44,10 @@ export default class Pads extends Component {
     return tagRows;
   }
 
+  shouldComponentUpdate(nextProps) {
+    return isEqual(this.props.deleteState, nextProps.deleteState);
+  }
+
   renderUser(userId) {
     const { usersData } = this.props;
     const currentUser = findWhere(usersData, {id: userId});
@@ -59,7 +63,7 @@ export default class Pads extends Component {
   }
 
   renderPads() {
-    const { padsData, authState } = this.props;
+    const { padsData } = this.props;
     const padRows = [];
 
     each(padsData, (value, key) => {
@@ -87,8 +91,7 @@ export default class Pads extends Component {
             { this.renderUser(ownerId) }
             <PadOptions
               isHeaderOption={false}
-              padId={padId}
-              authState={authState}
+              padData={value}
               authorityInfo={authorityInfo} />
           </div>
         </div>
@@ -119,6 +122,7 @@ Pads.propTypes = {
   padsFetchMessage: PropTypes.string,
   padsData: PropTypes.array,
   usersData: PropTypes.array,
+  deleteState: PropTypes.object.isRequired,
 
   fetchPads: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired
@@ -138,7 +142,7 @@ function mapStateToProps(state) {
     padsFetchMessage: padsFetchMessage,
     padsData: padsData,
     usersData: state.users.data,
-    authState: state.auth
+    deleteState: state.del
   };
 }
 

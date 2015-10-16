@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { fetchPad } from 'actions';
-import { each } from 'lodash';
+import { each, isEqual } from 'lodash';
 import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
@@ -25,6 +25,10 @@ export default class Pad extends Component {
     if (pathname !== nextProps.location.pathname) {
       fetchPad(nextProps.params);
     }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return ! isEqual(this.props.data, nextProps.data);
   }
 
   renderTags(tags) {

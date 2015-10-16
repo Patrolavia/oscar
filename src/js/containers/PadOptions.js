@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { indexOf, union } from 'lodash';
 import classNames from 'classnames';
+import { initDeleteForm } from 'actions';
 
 export default class PadOptions extends Component {
   static contextTypes = {
@@ -26,10 +27,18 @@ export default class PadOptions extends Component {
     this.setState(newState);
   }
 
-  onClickEdit(e) {
-    const { padId } = this.props;
-    const path = '/edit/' + padId;
+  onClickEdit() {
+    const { padData } = this.props;
+    const path = '/edit/' + padData.id;
     this.context.history.pushState(null, path);
+  }
+
+  onClickDelete() {
+    const { padData: { id, title }, initDeleteForm } = this.props;
+    initDeleteForm({
+      padId: id,
+      padTitle: title
+    })
   }
 
   render() {
@@ -38,7 +47,7 @@ export default class PadOptions extends Component {
     return (
       <div className={currentClass}>
         <i className={classNames('icon-pencil', {'dn': ! editPad})} onClick={this.onClickEdit.bind(this)}></i>
-        <i className={classNames('icon-trash', {'dn': ! deletePad})}></i>
+        <i className={classNames('icon-trash', {'dn': ! deletePad})} onClick={this.onClickDelete.bind(this)}></i>
       </div>
     );
   }
@@ -46,7 +55,22 @@ export default class PadOptions extends Component {
 
 PadOptions.PropTypes = {
   isHeaderOption: PropTypes.bool.isRequired,
-  padId: PropTypes.number,
+  padData: PropTypes.shape({
+    id: PropTypes.number
+  }),
+  authorityInfo: PropTypes.object.isRequired,
   authState: PropTypes.object.isRequired,
-  authorityInfo: PropTypes.object.isRequired
+  initDeleteForm: PropTypes.func.isRequired
 }
+
+
+function mapStateToProps(state) {
+  return {
+    authState: state.auth
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { initDeleteForm }
+)(PadOptions);

@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchMe, fetchPaths } from 'actions';
 
+import PadOptions from 'containers/PadOptions';
 import Auth from 'components/Auth';
-import PadOptions from 'components/PadOptions';
 
 export default class Header extends Component {
 
@@ -13,7 +13,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { title, router: { location: { pathname } }, padState: { data: { id: padId, user: ownerId, cooperator } }, authState } = this.props;
+    const { title, routerState: { location: { pathname } }, padState, authState } = this.props;
 
     let authorityInfo = {
       ownerId: [],
@@ -30,17 +30,17 @@ export default class Header extends Component {
         break;
       default:
         currentTitle = title;
-        authorityInfo['ownerId'] = ownerId;
-        authorityInfo['cooperatorList'] = cooperator;
+        authorityInfo['ownerId'] = padState.data.user;
+        authorityInfo['cooperatorList'] = padState.data.cooperator;
     }
 
     return (
       <div className="header">
         <h1>
           <span>{ currentTitle }</span>
-          <PadOptions isHeaderOption={true}
-            padId={padId}
-            authState={authState}
+          <PadOptions
+            isHeaderOption={true}
+            padData={padState.data}
             authorityInfo={authorityInfo} />
         </h1>
         <Auth { ...this.props }/>
@@ -49,13 +49,20 @@ export default class Header extends Component {
   }
 }
 
+Header.propTypes = {
+  title: PropTypes.string,
+  routerState: PropTypes.object.isRequired,
+  padState: PropTypes.object.isRequired,
+  authState: PropTypes.object.isRequired
+}
+
 function mapStateToProps(state) {
   const { title } = state.pageTitle;
   return {
     title: title,
-    router: state.router,
-    authState: state.auth,
-    padState: state.pad
+    routerState: state.router,
+    padState: state.pad,
+    authState: state.auth
   };
 }
 

@@ -50,4 +50,15 @@ router.post('/api/edit/:padId', function(req, res) {
   res.json(data);
 });
 
+router.post('/api/delete/:padId', function(req, res) {
+  // status code:
+  // 0: Success.
+  // 1: Not logged in.
+  // 2: No such pad.
+  // 3: Not owner.
+  // 4: Unknown error.
+  var data = apis.del(0);
+  res.json(data);
+});
+
 module.exports = router;
