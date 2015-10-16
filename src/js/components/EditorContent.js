@@ -14,11 +14,11 @@ export default class EditorContent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { result, message, data } = nextProps;
+    const { fetchPadResult, message, data } = nextProps;
     if (nextProps.isFetching) {
       this.setState(this.defaultState);
     } else {
-      if (result) {
+      if (fetchPadResult) {
         this.setState({
           content: data.content
         })
@@ -51,7 +51,7 @@ export default class EditorContent extends Component {
 }
 
 EditorContent.propTypes = {
-  result: PropTypes.bool.isRequired,
+  fetchPadResult: PropTypes.bool.isRequired,
   data: PropTypes.shape({
     content: PropTypes.string
   }),

@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 
 import auth from './auth';
 import del from './delete';
-import edit from './edit';
+import editor from './editor';
 import pad from './pad';
 import pads from './pads';
 import pageTitle from './pageTitle';
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   router,
   auth,
   del,
-  edit,
+  editor,
   pad,
   pads,
   pageTitle,

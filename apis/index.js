@@ -1,5 +1,6 @@
 module.exports = {
   del: require('./delete'),
+  create: require('./create'),
   edit: require('./edit'),
   me: require('./me'),
   pad: require('./pad'),

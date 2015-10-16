@@ -13,11 +13,11 @@ export default class EditorTitle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { result, data } = nextProps;
+    const { fetchPadResult, data } = nextProps;
     if (nextProps.isFetching) {
       this.setState(this.defaultState);
     } else {
-      if (result) {
+      if (fetchPadResult) {
         this.setState({
           title: data.title
         })
@@ -54,6 +54,7 @@ export default class EditorTitle extends Component {
 }
 
 EditorTitle.propTypes = {
+  fetchPadResult: PropTypes.bool.isRequired,
   data: PropTypes.object,
   authority: PropTypes.bool.isRequired
 };

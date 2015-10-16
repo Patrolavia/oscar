@@ -56,7 +56,7 @@ export default class EditorTags extends Component {
   }
 
   getTagList() {
-    const { pads: { data: padsData } } = this.props;
+    const { padsState: { data: padsData } } = this.props;
     let ret = [];
     each(padsData, (pad) => {
       ret = union(ret, pad.tags);
