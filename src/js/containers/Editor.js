@@ -267,6 +267,7 @@ Editor.propTypes = {
   authState: PropTypes.object.isRequired,
   usersState: PropTypes.object.isRequired,
   editorState: PropTypes.object.isRequired,
+  padsState: PropTypes.object.isRequired,
 
   fetchPad: PropTypes.func.isRequired,
   fetchUser: PropTypes.func.isRequired,
@@ -288,7 +289,8 @@ function mapStateToProps(state) {
     padData: padData,
     authState: state.auth,
     usersState: state.users,
-    editorState: state.editor
+    editorState: state.editor,
+    padsState: state.pads
   };
 }
 
