@@ -1,8 +1,8 @@
 import {
   FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE,
-  SEARCH_PADS_BY_TITLE, SEARCH_PADS_BY_USER, SEARCH_PADS_BY_TAG
+  SEARCH_PADS_BY_TITLE, SEARCH_PADS_BY_USER, SEARCH_PADS_BY_TAG, SEARCH_CANCEL
 } from 'actions';
-import { merge, assign } from 'lodash';
+import { merge, assign, pluck, uniq, union } from 'lodash';
 
 const initialState = {
   isFetching: false,
@@ -30,14 +30,24 @@ export default function Pads(state = initialState, action) {
       });
 
     case SEARCH_PADS_BY_TITLE:
-      console.log('SEARCH_PADS_BY_TITLE');
-      return
+      return merge({}, state, {
+        isSearching: true
+      });
 
     case SEARCH_PADS_BY_USER:
-      return
+      return merge({}, state, {
+        isSearching: true
+      });
 
     case SEARCH_PADS_BY_TAG:
-      return
+      return merge({}, state, {
+        isSearching: true
+      });
+
+    case SEARCH_CANCEL:
+      return merge({}, state, {
+        isSearching: false
+      });
 
     default:
       return state;

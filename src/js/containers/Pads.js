@@ -121,6 +121,7 @@ Pads.propTypes = {
   padsFetchResult: PropTypes.bool,
   padsFetchMessage: PropTypes.string,
   padsData: PropTypes.array,
+  isSearching: PropTypes.bool,
   usersData: PropTypes.array,
   deleteState: PropTypes.object.isRequired,
 
@@ -133,6 +134,7 @@ function mapStateToProps(state) {
     result: padsFetchResult,
     message: padsFetchMessage,
     data: padsData,
+    isSearching,
     isFetching
   } = state.pads;
 
@@ -141,8 +143,10 @@ function mapStateToProps(state) {
     padsFetchResult: padsFetchResult,
     padsFetchMessage: padsFetchMessage,
     padsData: padsData,
+    isSearching: isSearching,
     usersData: state.users.data,
-    deleteState: state.del
+    deleteState: state.del,
+    padsState: state.pads
   };
 }
 

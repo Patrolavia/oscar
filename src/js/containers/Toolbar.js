@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { clone } from 'lodash';
-import { searchPad } from 'actions';
+import { searchPad, searchCancel } from 'actions';
 import classNames from 'classnames';
 import gsap from 'gsap';
 
@@ -57,6 +57,7 @@ class Toolbar extends Component {
 
   render() {
     const { createModeActive, searchModeActive } = this.state;
+    const { searchPad, searchCancel, usersState } = this.props;
     return (
       <div className="toolbar">
         <div className="toolbar-action">
@@ -66,7 +67,9 @@ class Toolbar extends Component {
         <i className="icon-home" onClick={this.onClickHomeHandler.bind(this)}></i>
         <ToolbarSearchForm
           isActive={ searchModeActive }
-          searchPad={ this.props.searchPad }
+          searchPad={ searchPad }
+          searchCancel={ searchCancel }
+          usersState={ usersState }
           toggleState={ this.onClickToolbarButton.bind(this) } />
       </div>
     );
@@ -75,11 +78,12 @@ class Toolbar extends Component {
 
 function mapStateToProps(state) {
   return {
-    routerState: state.router
+    routerState: state.router,
+    usersState: state.users
   }
 }
 
 export default connect(
   mapStateToProps,
-  { searchPad }
+  { searchPad, searchCancel }
 )(Toolbar);
