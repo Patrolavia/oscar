@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
-import { assign, forEach, filter, pluck } from 'lodash';
+import { assign, forEach, filter, pluck, isEqual } from 'lodash';
 
 export default class ToolbarSearchForm extends Component {
 
@@ -56,23 +56,35 @@ export default class ToolbarSearchForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     (nextProps.isActive) ? this.animationController.play() : this.animationController.reverse();
+
+    // when user click tag
+    if (! isEqual(nextProps.searchParams, this.props.searchParams)) {
+      this.context.history.pushState(null, '/');
+      const { type, inputed } = nextProps.searchParams;
+      const newState = assign({}, this.defaultState, {
+        searchBy: {
+          [type]: true
+        }
+      })
+
+      this.setState(newState);
+      if (! this.props.isActive) {
+        this.props.toggleState('searchModeActive');
+      }
+      findDOMNode(this.refs.inputer).value = inputed;
+    }
   }
 
   onClickCloseHandler() {
-    const { toggleState, searchAll, searchCancel } = this.props;
+    const { toggleState, searchCancel } = this.props;
 
     toggleState('searchModeActive');
-    searchAll();
     searchCancel();
     this.setState(assign({}, this.defaultState, {own: false}));
-
-    const inputer = findDOMNode(this.refs.inputer);
-    inputer.value = '';
   }
 
   onInputChanged(e, type) {
     const { searchPad, searchCancel } = this.props;
-    this.context.history.pushState(null, '/');
 
     if (e.target.value.length) {
       if (! type && this.state.searchBy.user || type && type === 'user') {
@@ -84,8 +96,10 @@ export default class ToolbarSearchForm extends Component {
 
         searchPad({
           type: 'user',
+          inputed: e.target.value,
           usersId: matchedUsersId
         });
+
       } else {
         let currentType = type;
         if (! type) {
@@ -98,6 +112,7 @@ export default class ToolbarSearchForm extends Component {
           type: currentType,
           inputed: e.target.value
         });
+
       }
     } else {
       searchCancel();
@@ -174,5 +189,6 @@ ToolbarSearchForm.propTypes = {
   searchCancel: PropTypes.func.isRequired,
   searchOwn: PropTypes.func.isRequired,
   searchAll: PropTypes.func.isRequired,
-  usersState: PropTypes.object.isRequired
+  usersState: PropTypes.object.isRequired,
+  searchParams: PropTypes.object
 };

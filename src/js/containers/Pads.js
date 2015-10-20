@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
-import { fetchPads, fetchUsers } from 'actions';
+import { fetchPads, fetchUsers, searchPad } from 'actions';
 import { each, findWhere } from 'lodash';
 import { fadeIn } from 'untils/animation';
 import { indexOf, isEqual, filter } from 'lodash';
@@ -33,15 +33,29 @@ export default class Pads extends Component {
     }
   }
 
+  onClickTag(value) {
+    this.props.searchPad({
+      type: 'tag',
+      inputed: value
+    })
+  }
+
   renderTags(tags) {
     const tagRows = [];
     each(tags, (value, index) => {
       tagRows.push(
-        <li className="padList-tag" key={ index }>{ value }</li>
+        <li className="padList-tag" key={ index } onClick={ this.onClickTag.bind(this, value) }>{ value }</li>
       )
     });
 
     return tagRows;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { padsState: { isSearching, result: padsFetchResult, searchParams }, searchPad, usersData } = this.props;
+    if (! padsFetchResult && nextProps.padsState.result && isSearching) {
+      searchPad(searchParams);
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -63,7 +77,7 @@ export default class Pads extends Component {
   }
 
   renderPads() {
-    const { padsData, isSearching, isSearchOwn, searchResult, authState } = this.props;
+    const { padsState: { data: padsData, isSearching, isSearchOwn, searchResult }, authState } = this.props;
     const padRows = [];
 
     let currentData = (isSearching) ? searchResult : padsData;
@@ -111,7 +125,7 @@ export default class Pads extends Component {
   }
 
   render() {
-    const { padsData, isFetching, padsFetchResult } = this.props;
+    const { isFetching, data: padsData, result: padsFetchResult } = this.props.padsState;
 
     return (
       <div ref="contentWrapper">
@@ -126,41 +140,15 @@ export default class Pads extends Component {
 }
 
 Pads.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  padsFetchResult: PropTypes.bool,
-  padsFetchMessage: PropTypes.string,
-  padsData: PropTypes.array,
-  isSearching: PropTypes.bool,
-  isSearchOwn: PropTypes.bool,
-  searchResult: PropTypes.array,
   usersData: PropTypes.array,
   deleteState: PropTypes.object.isRequired,
-
   fetchPads: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-  const {
-    result: padsFetchResult,
-    message: padsFetchMessage,
-    data: padsData,
-    isSearching,
-    isSearchOwn,
-    searchResult,
-    isFetching
-  } = state.pads;
 
   return {
-    isFetching: isFetching,
-    padsFetchResult: padsFetchResult,
-    padsFetchMessage: padsFetchMessage,
-    padsData: padsData,
-
-    isSearching: isSearching,
-    isSearchOwn: isSearchOwn,
-    searchResult: searchResult,
-
     usersData: state.users.data,
     deleteState: state.del,
     padsState: state.pads,
@@ -170,5 +158,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchPads, fetchUsers }
+  { fetchPads, fetchUsers, searchPad }
 )(Pads);

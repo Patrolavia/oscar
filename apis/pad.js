@@ -5,7 +5,7 @@ const data = [
     'html': '<h1>PadContent 1</h1>',
     'user': 1,
     'cooperator': [],
-    'tags': ['Tag'],
+    'tags': [],
     'version': 0,
     'id': 1
   },

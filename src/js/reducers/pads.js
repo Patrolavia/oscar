@@ -31,7 +31,9 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_PADS_BY_TITLE:
       return assign({}, state, {
+        searchRequest: false,
         isSearching: true,
+        searchParams: action.params,
         searchResult: filter(state.data, (data) => {
           var inputed = action.params.inputed.toLowerCase();
           return ~ data.title.toLowerCase().indexOf(inputed);
@@ -40,7 +42,9 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_PADS_BY_USER:
       return assign({}, state, {
+        searchRequest: false,
         isSearching: true,
+        searchParams: action.params,
         searchResult: filter(state.data, (data) => {
           var usersId = action.params.usersId;
           return ~ indexOf(usersId, data.user);
@@ -49,7 +53,9 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_PADS_BY_TAG:
       return assign({}, state, {
+        searchRequest: false,
         isSearching: true,
+        searchParams: action.params,
         searchResult: filter(state.data, (data) => {
           var inputed = action.params.inputed.toLowerCase();
           return ~ data.tags.toString().toLowerCase().indexOf(inputed)
@@ -58,17 +64,25 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_OWN:
       return merge({}, state, {
+        searchRequest: false,
         isSearchOwn: true
       });
 
     case SEARCH_ALL:
       return merge({}, state, {
+        searchRequest: false,
         isSearchOwn: false
       });
 
     case SEARCH_CANCEL:
       return merge({}, state, {
-        isSearching: false
+        searchRequest: false,
+        isSearching: false,
+        isSearchOwn: false,
+        searchParams: {
+          type: 'title',
+          inputed: ''
+        }
       });
 
     default:
