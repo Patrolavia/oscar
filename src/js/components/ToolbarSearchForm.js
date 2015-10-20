@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import linkState from 'react-addons-linked-state-mixin';
-import ReactMixin from 'react-mixin';
 import classNames from 'classnames';
-import { assign, forEach } from 'lodash';
+import { assign, forEach, filter, pluck } from 'lodash';
 
 export default class ToolbarSearchForm extends Component {
+
+  static contextTypes = {
+      history: PropTypes.object
+  };
 
   constructor() {
     super();
@@ -14,8 +16,7 @@ export default class ToolbarSearchForm extends Component {
         title: true,
         user: false,
         tag: false
-      },
-      own: false
+      }
     }
     this.state = this.defaultState;
   }
@@ -58,15 +59,32 @@ export default class ToolbarSearchForm extends Component {
   }
 
   onClickCloseHandler() {
-    this.props.toggleState('searchModeActive');
+    const { toggleState, searchAll, searchCancel } = this.props;
+
+    toggleState('searchModeActive');
+    searchAll();
+    searchCancel();
+    this.setState(assign({}, this.defaultState, {own: false}));
+
+    const inputer = findDOMNode(this.refs.inputer);
+    inputer.value = '';
   }
 
   onInputChanged(e, type) {
+    const { searchPad, searchCancel } = this.props;
+    this.context.history.pushState(null, '/');
+
     if (e.target.value.length) {
       if (! type && this.state.searchBy.user || type && type === 'user') {
-        this.props.searchPad({
+        const { data: usersData } = this.props.usersState;
+        const matchedUsersId = pluck(filter(usersData, function(data) {
+          var inputed = e.target.value.toLowerCase();
+          return ~ data.name.toLowerCase().indexOf(inputed);
+        }), 'id');
+
+        searchPad({
           type: 'user',
-          users: [0, 1]
+          usersId: matchedUsersId
         });
       } else {
         let currentType = type;
@@ -76,13 +94,13 @@ export default class ToolbarSearchForm extends Component {
           })
         }
 
-        this.props.searchPad({
+        searchPad({
           type: currentType,
-          keyword: e.target.value
+          inputed: e.target.value
         });
       }
     } else {
-      this.props.searchCancel();
+      searchCancel();
     }
   }
 
@@ -96,13 +114,26 @@ export default class ToolbarSearchForm extends Component {
     this.setState(newState);
 
     if (inputer.value.length) {
-      this.onInputChanged({target: findDOMNode(this.refs.inputer)}, type);
+      this.onInputChanged({target: inputer}, type);
+    }
+  }
+
+  onChangeCheckbox(e) {
+    const { searchOwn, searchAll } = this.props;
+    const isChecked = e.target.checked;
+
+    this.setState({own: isChecked});
+    if (e.target.checked) {
+      searchOwn();
+    } else {
+      searchAll();
     }
   }
 
   render() {
     const { isActive } = this.props;
     const { searchBy: { title, user, tag } } = this.state;
+
     return (
       <div className="toolbar-form" data-type="searchForm">
         <div className="toolbar-search">
@@ -126,7 +157,7 @@ export default class ToolbarSearchForm extends Component {
         <div className="toolbar-searchOptions">
           <span className="toolbar-toggleSearchOptions">Options</span>
           <label className="toolbar-searchOption" htmlFor="searchMine">
-            <input id="searchMine" type="checkbox" />
+            <input id="searchMine" type="checkbox" checked={this.state.own} onChange={ this.onChangeCheckbox.bind(this) }/>
             <span>Only mine</span>
           </label>
         </div>
@@ -141,5 +172,7 @@ ToolbarSearchForm.propTypes = {
   toggleState: PropTypes.func.isRequired,
   searchPad: PropTypes.func.isRequired,
   searchCancel: PropTypes.func.isRequired,
+  searchOwn: PropTypes.func.isRequired,
+  searchAll: PropTypes.func.isRequired,
   usersState: PropTypes.object.isRequired
 };

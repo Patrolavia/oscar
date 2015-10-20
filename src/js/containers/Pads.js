@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fetchPads, fetchUsers } from 'actions';
 import { each, findWhere } from 'lodash';
 import { fadeIn } from 'untils/animation';
-import { indexOf, isEqual } from 'lodash';
+import { indexOf, isEqual, filter } from 'lodash';
 
 import PadOptions from 'containers/PadOptions';
 import LoadingDots from 'components/LoadingDots';
@@ -63,10 +63,19 @@ export default class Pads extends Component {
   }
 
   renderPads() {
-    const { padsData } = this.props;
+    const { padsData, isSearching, isSearchOwn, searchResult, authState } = this.props;
     const padRows = [];
 
-    each(padsData, (value, key) => {
+    let currentData = (isSearching) ? searchResult : padsData;
+
+    if (isSearchOwn) {
+      const userId = authState.data.id;
+      currentData = filter(currentData, (data) => {
+        return data.user === userId
+      })
+    }
+
+    each(currentData, (value, key) => {
       const { user: ownerId, id: padId, title, tags } = value;
 
       const authorityInfo = {
@@ -75,7 +84,7 @@ export default class Pads extends Component {
       }
 
       padRows.push(
-        <div className="padList-item" key={ padId }>
+        <div className="padList-item" key={ key }>
           <div className="padList-info" onClick={ this.onClickPad.bind(this, padId) }>
             <span className="padList-title">{ title }</span>
             { tags.length > 0 &&
@@ -122,6 +131,8 @@ Pads.propTypes = {
   padsFetchMessage: PropTypes.string,
   padsData: PropTypes.array,
   isSearching: PropTypes.bool,
+  isSearchOwn: PropTypes.bool,
+  searchResult: PropTypes.array,
   usersData: PropTypes.array,
   deleteState: PropTypes.object.isRequired,
 
@@ -135,6 +146,8 @@ function mapStateToProps(state) {
     message: padsFetchMessage,
     data: padsData,
     isSearching,
+    isSearchOwn,
+    searchResult,
     isFetching
   } = state.pads;
 
@@ -143,10 +156,15 @@ function mapStateToProps(state) {
     padsFetchResult: padsFetchResult,
     padsFetchMessage: padsFetchMessage,
     padsData: padsData,
+
     isSearching: isSearching,
+    isSearchOwn: isSearchOwn,
+    searchResult: searchResult,
+
     usersData: state.users.data,
     deleteState: state.del,
-    padsState: state.pads
+    padsState: state.pads,
+    authState: state.auth
   };
 }
 
