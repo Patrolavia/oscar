@@ -81,9 +81,9 @@ export default class Pads extends Component {
     const ownerPic = (currentUser) ? <img src={currentUser.image} /> : '';
 
     return (
-      <div className="padList-ownerInfo" onClick={ this.onClickUser.bind(this, ownerName) }>
+      <div className="padList-ownerInfo">
         <span className="padList-ownerPic">{ ownerPic }</span>
-        <span className="padList-owner">{ ownerName }</span>
+        <span className="padList-owner" onClick={ this.onClickUser.bind(this, ownerName) }>{ ownerName }</span>
       </div>
     )
   }
