@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
-import { fetchPads, fetchUsers } from 'actions';
+import { fetchPads, fetchUsers, searchPad } from 'actions';
 import { each, findWhere } from 'lodash';
 import { fadeIn } from 'untils/animation';
-import { indexOf, isEqual } from 'lodash';
+import { indexOf, isEqual, pluck, filter } from 'lodash';
 
 import PadOptions from 'containers/PadOptions';
 import LoadingDots from 'components/LoadingDots';
@@ -33,15 +33,41 @@ export default class Pads extends Component {
     }
   }
 
+  onClickTag(value) {
+    this.props.searchPad({
+      type: 'tag',
+      inputed: value
+    })
+  }
+
+  onClickUser(userName) {
+    const matchedUsersId = pluck(filter(this.props.usersData, function(data) {
+      var inputed = userName.toLowerCase();
+      return ~ data.name.toLowerCase().indexOf(inputed);
+    }), 'id');
+    this.props.searchPad({
+      type: 'user',
+      inputed: userName,
+      usersId: matchedUsersId
+    })
+  }
+
   renderTags(tags) {
     const tagRows = [];
     each(tags, (value, index) => {
       tagRows.push(
-        <li className="padList-tag" key={ index }>{ value }</li>
+        <li className="padList-tag" key={ index } onClick={ this.onClickTag.bind(this, value) }>{ value }</li>
       )
     });
 
     return tagRows;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { padsState: { isSearching, result: padsFetchResult, searchParams }, searchPad, usersData } = this.props;
+    if (! padsFetchResult && nextProps.padsState.result && isSearching) {
+      searchPad(searchParams);
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -57,16 +83,25 @@ export default class Pads extends Component {
     return (
       <div className="padList-ownerInfo">
         <span className="padList-ownerPic">{ ownerPic }</span>
-        <span className="padList-owner">{ ownerName }</span>
+        <span className="padList-owner" onClick={ this.onClickUser.bind(this, ownerName) }>{ ownerName }</span>
       </div>
     )
   }
 
   renderPads() {
-    const { padsData } = this.props;
+    const { padsState: { data: padsData, isSearching, isSearchOwn, searchResult }, authState } = this.props;
     const padRows = [];
 
-    each(padsData, (value, key) => {
+    let currentData = (isSearching) ? searchResult : padsData;
+
+    if (isSearchOwn) {
+      const userId = authState.data.id;
+      currentData = filter(currentData, (data) => {
+        return data.user === userId
+      })
+    }
+
+    each(currentData, (value, key) => {
       const { user: ownerId, id: padId, title, tags } = value;
 
       const authorityInfo = {
@@ -75,7 +110,7 @@ export default class Pads extends Component {
       }
 
       padRows.push(
-        <div className="padList-item" key={ padId }>
+        <div className="padList-item" key={ key }>
           <div className="padList-info" onClick={ this.onClickPad.bind(this, padId) }>
             <span className="padList-title">{ title }</span>
             { tags.length > 0 &&
@@ -102,7 +137,7 @@ export default class Pads extends Component {
   }
 
   render() {
-    const { padsData, isFetching, padsFetchResult } = this.props;
+    const { isFetching, data: padsData, result: padsFetchResult } = this.props.padsState;
 
     return (
       <div ref="contentWrapper">
@@ -117,36 +152,23 @@ export default class Pads extends Component {
 }
 
 Pads.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  padsFetchResult: PropTypes.bool,
-  padsFetchMessage: PropTypes.string,
-  padsData: PropTypes.array,
   usersData: PropTypes.array,
   deleteState: PropTypes.object.isRequired,
-
   fetchPads: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-  const {
-    result: padsFetchResult,
-    message: padsFetchMessage,
-    data: padsData,
-    isFetching
-  } = state.pads;
 
   return {
-    isFetching: isFetching,
-    padsFetchResult: padsFetchResult,
-    padsFetchMessage: padsFetchMessage,
-    padsData: padsData,
     usersData: state.users.data,
-    deleteState: state.del
+    deleteState: state.del,
+    padsState: state.pads,
+    authState: state.auth
   };
 }
 
 export default connect(
   mapStateToProps,
-  { fetchPads, fetchUsers }
+  { fetchPads, fetchUsers, searchPad }
 )(Pads);

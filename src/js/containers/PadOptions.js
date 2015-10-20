@@ -17,8 +17,16 @@ export default class PadOptions extends Component {
     }
   }
 
+  componentDidMount() {
+    this.checkAthority(this.props);
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { authState: { result: isLogged, data: { id: userId } }, authorityInfo: { ownerId, cooperatorList } } = nextProps;
+    this.checkAthority(nextProps);
+  }
+
+  checkAthority(props) {
+    const { authState: { result: isLogged, data: { id: userId } }, authorityInfo: { ownerId, cooperatorList } } = props;
     let newState = {};
     if (isLogged) {
       newState['editPad'] = indexOf(union([ownerId], cooperatorList), userId) >= 0;

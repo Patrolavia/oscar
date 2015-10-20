@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import { fetchPad } from 'actions';
+import { fetchPad, searchPad } from 'actions';
 import { each, isEqual } from 'lodash';
 import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
@@ -9,6 +9,10 @@ import { fadeIn } from 'untils/animation';
 import 'vendor/prettify/prettify';
 
 export default class Pad extends Component {
+  static contextTypes = {
+      history: PropTypes.object
+  };
+
   componentWillMount() {
     const { fetchPad, params } = this.props;
     fetchPad(params);
@@ -31,11 +35,19 @@ export default class Pad extends Component {
     return ! isEqual(this.props.data, nextProps.data);
   }
 
+  onClickTag(value) {
+    this.context.history.pushState(null, '/');
+    this.props.searchPad({
+      type: 'tag',
+      inputed: value
+    })
+  }
+
   renderTags(tags) {
     const tagRows = [];
     each(tags, (value, index) => {
       tagRows.push(
-        <span className="content-tag" key={index}>{ value }</span>
+        <span className="content-tag" key={index} onClick={ this.onClickTag.bind(this, value) }>{ value }</span>
       )
     });
 
@@ -46,7 +58,7 @@ export default class Pad extends Component {
     const { data: { html, tags, version } } = this.props;
     return (
       <div>
-        { tags.length &&
+        { ! tags.length ? '' :
           <div className="content-tags">
             <i className="icon-tags"></i>
             { this.renderTags(tags)}
@@ -99,5 +111,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchPad }
+  { fetchPad, searchPad }
 )(Pad);
