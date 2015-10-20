@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fetchPads, fetchUsers, searchPad } from 'actions';
 import { each, findWhere } from 'lodash';
 import { fadeIn } from 'untils/animation';
-import { indexOf, isEqual, filter } from 'lodash';
+import { indexOf, isEqual, pluck, filter } from 'lodash';
 
 import PadOptions from 'containers/PadOptions';
 import LoadingDots from 'components/LoadingDots';
@@ -40,6 +40,18 @@ export default class Pads extends Component {
     })
   }
 
+  onClickUser(userName) {
+    const matchedUsersId = pluck(filter(this.props.usersData, function(data) {
+      var inputed = userName.toLowerCase();
+      return ~ data.name.toLowerCase().indexOf(inputed);
+    }), 'id');
+    this.props.searchPad({
+      type: 'user',
+      inputed: userName,
+      usersId: matchedUsersId
+    })
+  }
+
   renderTags(tags) {
     const tagRows = [];
     each(tags, (value, index) => {
@@ -69,7 +81,7 @@ export default class Pads extends Component {
     const ownerPic = (currentUser) ? <img src={currentUser.image} /> : '';
 
     return (
-      <div className="padList-ownerInfo">
+      <div className="padList-ownerInfo" onClick={ this.onClickUser.bind(this, ownerName) }>
         <span className="padList-ownerPic">{ ownerPic }</span>
         <span className="padList-owner">{ ownerName }</span>
       </div>
