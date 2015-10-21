@@ -43,6 +43,7 @@ export default class Editor extends Component {
 
   componentWillUnmount() {
     this.isRequesting = false;
+    this.props.resetEditState();
   }
 
   shouldComponentUpdate(nextProps) {

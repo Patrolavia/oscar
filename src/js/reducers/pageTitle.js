@@ -15,7 +15,7 @@ const errorOccurred = {
 
 export default function PageTitle(state = initialState, action) {
   switch (action.type) {
-    case FETCH_PAD_REQUEST: case FETCH_PADS_REQUEST:
+    case FETCH_PAD_REQUEST:
       return initialState;
 
     case FETCH_PAD_FAILURE: case FETCH_PADS_FAILURE:
