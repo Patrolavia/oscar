@@ -30,6 +30,7 @@ export function fetchPads() {
 export const FETCH_PAD_REQUEST = 'FETCH_PAD_REQUEST';
 export const FETCH_PAD_SUCCESS = 'FETCH_PAD_SUCCESS';
 export const FETCH_PAD_FAILURE = 'FETCH_PAD_FAILURE';
+export const INIT_TOC = 'INIT_TOC';
 export const PAD_RESET = 'PAD_RESET';
 
 export function fetchPad(param) {
@@ -41,6 +42,15 @@ export function fetchPad(param) {
       dispatch,
       APIUrl
     );
+  };
+}
+
+export function initToc(param) {
+  return dispatch => {
+    dispatch({
+      type: INIT_TOC,
+      param
+    })
   };
 }
 

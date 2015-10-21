@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import { fetchPad, searchPad } from 'actions';
-import { each, isEqual } from 'lodash';
+import { fetchPad, searchPad, initToc, resetPadState } from 'actions';
+import { each, isEqual, forEach } from 'lodash';
 import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
@@ -22,6 +22,21 @@ export default class Pad extends Component {
     const $contentNode = findDOMNode(this.refs.contentWrapper);
     fadeIn($contentNode);
     prettyPrint();
+
+    const contentFirstElement = findDOMNode(this.refs.innerContent);
+    if (contentFirstElement) {
+      const contentFirstElementTag = contentFirstElement.firstChild.tagName;
+      if (contentFirstElementTag.match(/H[1-6]/)) {
+        contentFirstElement.firstChild.setAttribute('class', 'is-topHeading');
+      }
+
+      const contentHeadingElements = contentFirstElement.querySelectorAll('h1, h2, h3');
+      forEach(contentHeadingElements, (el) => {
+        const idAttribute = el.innerHTML.replace(/ /g, '_');
+        el.id = idAttribute;
+      })
+      this.props.initToc({headings: contentHeadingElements});
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -29,6 +44,10 @@ export default class Pad extends Component {
     if (pathname !== nextProps.location.pathname) {
       fetchPad(nextProps.params);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetPadState();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -64,7 +83,7 @@ export default class Pad extends Component {
             { this.renderTags(tags)}
           </div>
         }
-        <div id="innerContent" dangerouslySetInnerHTML={{__html: html}}></div>
+        <div id="innerContent" ref="innerContent" dangerouslySetInnerHTML={{__html: html}}></div>
       </div>
     )
   }
@@ -90,7 +109,10 @@ Pad.propTypes = {
   result: PropTypes.bool,
   data: PropTypes.object,
   errorStatus: PropTypes.number,
-  fetchPad: PropTypes.func.isRequired
+  fetchPad: PropTypes.func.isRequired,
+  searchPad: PropTypes.func.isRequired,
+  initToc: PropTypes.func.isRequired,
+  resetPadState: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -111,5 +133,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchPad, searchPad }
+  { fetchPad, searchPad, initToc, resetPadState }
 )(Pad);

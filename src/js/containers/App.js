@@ -6,7 +6,7 @@ import { fadeIn } from 'untils/animation';
 import Header from 'containers/Header';
 import Toolbar from 'containers/Toolbar';
 import DeleteConfirm from 'containers/DeleteConfirm';
-import Toc from 'components/Toc';
+import Toc from 'containers/Toc';
 import LoadingDots from 'components/LoadingDots';
 
 class App extends Component {
