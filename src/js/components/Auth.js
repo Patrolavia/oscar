@@ -6,6 +6,10 @@ import classNames from 'classnames';
 import 'gsap';
 
 export default class Auth extends Component {
+  static contextTypes = {
+      history: PropTypes.object
+  };
+
   constructor() {
     super();
     this.state = {
@@ -43,6 +47,15 @@ export default class Auth extends Component {
     this.setState({
       isPathsActive: ! isPathsActive
     })
+
+    // TODO: Logout
+    if (this.props.authState.result) {
+      this.props.logout();
+    }
+  }
+
+  onClickLoginPath(path) {
+    this.props.login(path);
   }
 
   eventPreventPropagation(e) {
@@ -56,7 +69,7 @@ export default class Auth extends Component {
       const authUrl = '/auth/' + value;
       pathRows.push(
         <li key={ index }>
-          <a href={ authUrl }>Login with { value }</a>
+          <a href={ authUrl } onClick={this.onClickLoginPath.bind(this.value)}>Login with { value }</a>
         </li>
       )
     });
@@ -100,5 +113,7 @@ Auth.propTypes = {
       image: PropTypes.string
     }),
     paths: PropTypes.array
-  })
+  }),
+  login: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired
 };

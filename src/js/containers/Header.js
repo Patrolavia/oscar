@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchMe, fetchPaths } from 'actions';
+import { fetchMe, fetchPaths, login, logout } from 'actions';
 
 import PadOptions from 'containers/PadOptions';
 import Auth from 'components/Auth';
@@ -13,7 +13,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { title, routerState: { location: { pathname } }, padState, authState } = this.props;
+    const { title, routerState: { location: { pathname } }, padState, authState, login, logout } = this.props;
 
     let authorityInfo = {
       ownerId: [],
@@ -43,7 +43,7 @@ export default class Header extends Component {
             padData={padState.data}
             authorityInfo={authorityInfo} />
         </h1>
-        <Auth { ...this.props }/>
+        <Auth { ...this.props } login={login} logout={logout} />
       </div>
     );
   }
@@ -53,7 +53,9 @@ Header.propTypes = {
   title: PropTypes.string,
   routerState: PropTypes.object.isRequired,
   padState: PropTypes.object.isRequired,
-  authState: PropTypes.object.isRequired
+  authState: PropTypes.object.isRequired,
+  login: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
@@ -68,5 +70,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchMe, fetchPaths }
+  { fetchMe, fetchPaths, login, logout }
 )(Header);
