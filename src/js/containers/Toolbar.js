@@ -57,7 +57,7 @@ class Toolbar extends Component {
 
   render() {
     const { createModeActive, searchModeActive } = this.state;
-    const { searchPad, searchCancel, searchOwn, searchAll, usersState, padsState } = this.props;
+    const { isLogged, searchPad, searchCancel, searchOwn, searchAll, usersState, padsState } = this.props;
     return (
       <div className="toolbar">
         <div className="toolbar-action">
@@ -67,6 +67,7 @@ class Toolbar extends Component {
         <i className="icon-home" onClick={this.onClickHomeHandler.bind(this)}></i>
         <ToolbarSearchForm
           isActive={ searchModeActive }
+          isLogged={ isLogged }
           searchPad={ searchPad }
           searchCancel={ searchCancel }
           searchOwn={ searchOwn }
@@ -83,7 +84,8 @@ function mapStateToProps(state) {
   return {
     routerState: state.router,
     usersState: state.users,
-    padsState: state.pads
+    padsState: state.pads,
+    isLogged: state.auth.result
   }
 }
 

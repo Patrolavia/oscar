@@ -13,8 +13,7 @@ export default function Pad(state = initialState, action) {
     case FETCH_PAD_REQUEST:
       return merge({}, initialState, {
         message: 'Fetching pad...',
-        isFetching: true,
-        result: false
+        isFetching: true
       });
 
     case FETCH_PAD_SUCCESS:

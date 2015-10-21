@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
 import { fadeIn } from 'untils/animation';
+import classNames from 'classnames';
 import 'vendor/prettify/prettify';
 
 export default class Pad extends Component {
@@ -51,7 +52,7 @@ export default class Pad extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return ! isEqual(this.props.data, nextProps.data);
+    return ! isEqual(this.props.data, nextProps.data) || nextProps.isFetching;
   }
 
   onClickTag(value) {
@@ -77,12 +78,10 @@ export default class Pad extends Component {
     const { data: { html, tags, version } } = this.props;
     return (
       <div>
-        { ! tags.length ? '' :
-          <div className="content-tags">
-            <i className="icon-tags"></i>
-            { this.renderTags(tags)}
-          </div>
-        }
+        <div className={classNames('content-tags', {'dn': ! tags.length})}>
+          <i className="icon-tags"></i>
+          { this.renderTags(tags)}
+        </div>
         <div id="innerContent" ref="innerContent" dangerouslySetInnerHTML={{__html: html}}></div>
       </div>
     )
@@ -109,6 +108,7 @@ Pad.propTypes = {
   result: PropTypes.bool,
   data: PropTypes.object,
   errorStatus: PropTypes.number,
+
   fetchPad: PropTypes.func.isRequired,
   searchPad: PropTypes.func.isRequired,
   initToc: PropTypes.func.isRequired,

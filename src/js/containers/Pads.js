@@ -5,6 +5,7 @@ import { fetchPads, fetchUsers, searchPad } from 'actions';
 import { each, findWhere } from 'lodash';
 import { fadeIn } from 'untils/animation';
 import { indexOf, isEqual, pluck, filter } from 'lodash';
+import classNames from 'classnames';
 
 import PadOptions from 'containers/PadOptions';
 import LoadingDots from 'components/LoadingDots';
@@ -113,14 +114,12 @@ export default class Pads extends Component {
         <div className="padList-item" key={ key }>
           <div className="padList-info" onClick={ this.onClickPad.bind(this, padId) }>
             <span className="padList-title">{ title }</span>
-            { tags.length > 0 &&
-              <div className="padList-tags">
-                <i className="icon-tags"></i>
-                <ul>
-                  { this.renderTags(tags) }
-                </ul>
-              </div>
-            }
+            <div className={classNames('padList-tags', {'dn': ! tags.length})}>
+              <i className="icon-tags"></i>
+              <ul>
+                { this.renderTags(tags) }
+              </ul>
+            </div>
           </div>
           <div className="padList-detail">
             { this.renderUser(ownerId) }

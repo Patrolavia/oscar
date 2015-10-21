@@ -146,7 +146,7 @@ export default class ToolbarSearchForm extends Component {
   }
 
   render() {
-    const { isActive } = this.props;
+    const { isActive, isLogged } = this.props;
     const { searchBy: { title, user, tag } } = this.state;
 
     return (
@@ -169,7 +169,7 @@ export default class ToolbarSearchForm extends Component {
             </dt>
           </dl>
         </div>
-        <div className="toolbar-searchOptions">
+        <div className={classNames('toolbar-searchOptions', {'dn': ! isLogged})}>
           <span className="toolbar-toggleSearchOptions">Options</span>
           <label className="toolbar-searchOption" htmlFor="searchMine">
             <input id="searchMine" type="checkbox" checked={this.state.own} onChange={ this.onChangeCheckbox.bind(this) }/>
@@ -184,6 +184,7 @@ export default class ToolbarSearchForm extends Component {
 }
 
 ToolbarSearchForm.propTypes = {
+  isLogged: PropTypes.bool.isRequired,
   toggleState: PropTypes.func.isRequired,
   searchPad: PropTypes.func.isRequired,
   searchCancel: PropTypes.func.isRequired,
