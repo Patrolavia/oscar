@@ -38,11 +38,15 @@ export default class ToolbarSearchForm extends Component {
       rotationX: 0,
       top: 65,
       ease: "Back.easeOut",
+      onStart: function() {
+        document.querySelector('.aside').classList.add('is-active');
+      },
       onComplete: function() {
         this.target.classList.add('is-active');
       },
       onReverseComplete: function() {
         this.target.classList.remove('is-active');
+        document.querySelector('.aside').classList.remove('is-active');
       }
     }
 
