@@ -118,8 +118,6 @@ export default class ToolbarSearchForm extends Component {
         });
 
       }
-    } else {
-      searchCancel();
     }
   }
 
