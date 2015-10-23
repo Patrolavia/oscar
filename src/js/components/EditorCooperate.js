@@ -62,7 +62,7 @@ export default class EditorCooperate extends Component {
 
   getCompletion(keyword) {
     // get filter result
-    const { cooperator, usersState: { data: usersData }, data: { user: ownerId } } = this.props;
+    const { cooperator, usersState: { data: usersData }, data: { user: ownerId }, authState } = this.props;
     const output = filter(usersData, function(user) {
       var input = keyword.toLowerCase();
       // `~` with `indexOf` means "contains"
@@ -73,7 +73,7 @@ export default class EditorCooperate extends Component {
     const completionList = [];
     each(output, (item) => {
       const { cooperatorName } = this.state;
-      if (indexOf(cooperatorName, item.name) < 0 && item.id !== ownerId) {
+      if (indexOf(cooperatorName, item.name) < 0 && item.id !== ownerId && item.id !== authState.data.id) {
         completionList.push(item);
       };
     })
@@ -151,7 +151,8 @@ EditorCooperate.propTypes = {
   isFetching: PropTypes.bool,
   fetchUsers: PropTypes.func.isRequired,
   cooperatorName: PropTypes.array,
-  fetchUsers: PropTypes.func.isRequired
+  fetchUsers: PropTypes.func.isRequired,
+  authState: PropTypes.object.isRequired
 };
 
 ReactMixin(EditorCooperate.prototype, linkState);

@@ -111,22 +111,29 @@ export default class Editor extends Component {
     const cooperatorState = this.refs.EditorCooperate.getState();
     const tagsState = this.refs.EditorTags.getState();
 
-    let parameter = {}
+    const contents = {
+      title: (titleState.title) ? titleState.title : 'Untitled',
+      content: (contentState.content) ? contentState.content : '',
+      tags: tagsState.tags,
+      cooperator: cooperatorState.cooperatorId
+    }
+
+    let parameter = {};
     if (this.isEditMode) {
       parameter = {
         padid: padId,
-        version: version
+        version: version,
+        title: contents.title,
+        content: contents.content,
+        tags: contents.tags,
+        cooperator: contents.cooperator
       }
     }
 
-    if (titleState.isChanged || ! titleState.title) {
-      parameter['title'] = (titleState.title) ? titleState.title : 'Untitled';
-    }
-    if (contentState.isChanged || ! contentState.content) {
-      parameter['content'] = (contentState.content) ? contentState.content : '';
-    }
-    if (tagsState.isChanged) { parameter['tags'] = tagsState.tags }
-    if (cooperatorState.isChanged) { parameter['cooperator'] = cooperatorState.cooperatorId }
+    if (titleState.isChanged || ! titleState.title) { parameter['title'] = contents.title; }
+    if (contentState.isChanged || ! contentState.content) { parameter['content'] = contents.content; }
+    if (tagsState.isChanged) { parameter['tags'] = contents.tags }
+    if (cooperatorState.isChanged) { parameter['cooperator'] = contents.cooperator }
 
     if (this.isEditMode) {
       editPad(padId, JSON.stringify(parameter));
@@ -157,7 +164,8 @@ export default class Editor extends Component {
     };
 
     if (editorState.requestData) {
-      data = assign(padData, editorState.requestData)
+      console.log(editorState.isRequesting);
+      data = (editorState.isRequesting) ? editorState.requestData : padData;
     } else {
       if (this.isEditMode && size(padData) > 0) {
         data = padData;

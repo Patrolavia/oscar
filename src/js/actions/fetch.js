@@ -3,8 +3,8 @@ import { getBaseUrl } from 'untils/config';
 
 const APIs = {
   pad: '/api/pad/',
-  pads: '/api/pads/',
-  users: '/api/users/',
+  pads: '/api/pads',
+  users: '/api/users',
   user: '/api/user',
   whale: '/api/whale',
   me: '/api/me',

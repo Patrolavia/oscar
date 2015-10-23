@@ -31,11 +31,9 @@ export const sendRequest = (
       }
 
       const currentType = (err) ? FAILURE_TYPE : SUCCESS_TYPE;
-      setTimeout(() => {
       dispatch({
         type: currentType,
         json
       });
-      }, 1000)
     });
 }

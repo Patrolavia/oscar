@@ -1,5 +1,5 @@
 import { DELETE_INIT, DELETE_REQUEST, DELETE_SUCCESS, DELETE_FAILURE, DELETE_CANCEL } from 'actions';
-import { merge } from 'lodash';
+import { merge, assign } from 'lodash';
 
 const initialState = {
   isRequesting: false,
@@ -9,14 +9,14 @@ const initialState = {
 export default function Delete(state = initialState, action) {
   switch (action.type) {
     case DELETE_INIT:
-      return merge({}, initialState, {
+      return assign({}, initialState, {
         isRequesting: false,
         isActive: true,
         padInfo: action.params
       });
 
     case DELETE_REQUEST:
-      return merge({}, state, {
+      return assign({}, state, {
         message: 'Sending delete request...',
         isRequesting: true,
         result: false

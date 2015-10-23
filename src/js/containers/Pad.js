@@ -25,7 +25,7 @@ export default class Pad extends Component {
     prettyPrint();
 
     const contentFirstElement = findDOMNode(this.refs.innerContent);
-    if (contentFirstElement) {
+    if (contentFirstElement && contentFirstElement.firstChild) {
       const contentFirstElementTag = contentFirstElement.firstChild.tagName;
       if (contentFirstElementTag.match(/H[1-6]/)) {
         contentFirstElement.firstChild.setAttribute('class', 'is-topHeading');
@@ -52,7 +52,7 @@ export default class Pad extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return ! isEqual(this.props.data, nextProps.data) || nextProps.isFetching;
+    return ! isEqual(this.props.data, nextProps.data) || this.props.isFetching !== nextProps.isFetching;
   }
 
   onClickTag(value) {

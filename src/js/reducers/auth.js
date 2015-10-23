@@ -2,7 +2,7 @@ import {
   FETCH_ME_REQUEST, FETCH_ME_SUCCESS, FETCH_ME_FAILURE,
   FETCH_PATHS_REQUEST, FETCH_PATHS_SUCCESS, FETCH_PATHS_FAILURE
  } from 'actions';
-import { merge } from 'lodash';
+import { merge, assign } from 'lodash';
 
 const initialState = {
   result: false,
@@ -17,12 +17,12 @@ const FAILURE_TYPES = FETCH_ME_FAILURE || FETCH_PATHS_FAILURE;
 export default function Auth(state = initialState, action) {
   switch (action.type) {
     case REQUEST_TYPES:
-      return merge({}, state, {
+      return assign({}, state, {
         result: false
       });
 
     case FETCH_ME_SUCCESS:
-      return merge({}, state, action.json);
+      return assign({}, state, action.json);
 
     case FETCH_PATHS_SUCCESS:
       return merge({}, state, {

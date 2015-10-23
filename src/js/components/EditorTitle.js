@@ -6,8 +6,8 @@ export default class EditorTitle extends Component {
   constructor() {
     super();
     this.defaultState = {
-      title: '',
-      isChanged: false
+      isChanged: false,
+      title: ''
     }
     this.state = this.defaultState;
   }
@@ -17,16 +17,12 @@ export default class EditorTitle extends Component {
     if (nextProps.isFetching) {
       this.setState(this.defaultState);
     } else {
-      if (fetchPadResult) {
+      if (fetchPadResult && this.props.data.title !== data.title) {
         this.setState({
           title: data.title
         })
       }
     }
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.state.title !== nextProps.title;
   }
 
   onChangeInputHandler() {

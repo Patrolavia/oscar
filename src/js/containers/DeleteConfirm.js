@@ -69,7 +69,11 @@ export default class DeleteConfirm extends Component {
               ref="titleInput"/>
           </div>
           <div className="deleteConfirm-submit">
-            <a className="button-wb button delete" onClick={this.onClickDelete.bind(this)}>{ this.state.isRequesting && 'Deleting...' || 'Delete this pad' }</a>
+            <a className={classNames('button-wb', 'button', {'delete': ! this.state.isRequesting})}
+              disabled={this.state.isRequesting}
+              onClick={this.onClickDelete.bind(this)}>
+              { this.state.isRequesting && 'Deleting...' || 'Delete this pad' }
+            </a>
             <a className="button-wb button cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
           </div>
           <div className={classNames('deleteConfirm-errorMsg', {'dn': ! this.state.message})}>

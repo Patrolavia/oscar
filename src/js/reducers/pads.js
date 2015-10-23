@@ -12,14 +12,14 @@ const initialState = {
 export default function Pads(state = initialState, action) {
   switch (action.type) {
     case FETCH_PADS_REQUEST:
-      return merge({}, state, {
+      return assign({}, state, {
         message: 'Fetching pads...',
         isFetching: true,
         result: false
       });
 
     case FETCH_PADS_SUCCESS:
-      return merge({}, state, action.json, {
+      return assign({}, state, action.json, {
         errorStatus: null,
         isFetching: false
       });

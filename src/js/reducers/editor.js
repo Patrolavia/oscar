@@ -2,7 +2,7 @@ import {
   EDIT_REQUEST, EDIT_SUCCESS, EDIT_FAILURE, EDIT_RESET,
   CREATE_REQUEST, CREATE_SUCCESS, CREATE_FAILURE
   } from 'actions';
-import { merge } from 'lodash';
+import { merge, assign } from 'lodash';
 
 const initialState = {
   isRequesting: false,
@@ -12,7 +12,7 @@ const initialState = {
 export default function Edit(state = initialState, action) {
   switch (action.type) {
     case EDIT_REQUEST: case CREATE_REQUEST:
-      return merge({}, initialState, {
+      return assign({}, initialState, {
         message: 'Sending request...',
         isRequesting: true,
         result: false,
@@ -20,7 +20,7 @@ export default function Edit(state = initialState, action) {
       });
 
     case EDIT_SUCCESS: case CREATE_SUCCESS:
-      return merge({}, state, action.json, {
+      return assign({}, state, action.json, {
         code: action.json.data.code,
         errorStatus: null,
         isRequesting: false

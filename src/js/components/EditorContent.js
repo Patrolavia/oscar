@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import linkState from 'react-addons-linked-state-mixin';
 import ReactMixin from 'react-mixin';
+import { isEqual } from 'lodash';
 
 export default class EditorContent extends Component {
 
   constructor() {
     super();
     this.defaultState = {
-      content: '',
-      isChanged: false
+      content: ''
     }
     this.state = this.defaultState;
   }
@@ -18,7 +18,7 @@ export default class EditorContent extends Component {
     if (nextProps.isFetching) {
       this.setState(this.defaultState);
     } else {
-      if (fetchPadResult) {
+      if (fetchPadResult && this.props.data.content !== data.content) {
         this.setState({
           content: data.content
         })
