@@ -2,6 +2,7 @@ import React, { Component, PropTypes, cloneElement } from 'react';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { fadeIn } from 'untils/animation';
+import StickyDiv from 'react-stickydiv';
 
 import Header from 'containers/Header';
 import Toolbar from 'containers/Toolbar';
@@ -25,7 +26,9 @@ class App extends Component {
           <DeleteConfirm />
           <div className="aside">
             <Toolbar />
+            <StickyDiv>
             <Toc />
+            </StickyDiv>
           </div>
           <div className="main">
             <Header />
