@@ -13,15 +13,15 @@ export default class Header extends Component {
   }
 
   render() {
-    const { title, routerState: { location: { pathname } }, padState, authState, login, logout } = this.props;
+    const { title, routerState: { location: { pathname } }, padState } = this.props;
 
-    let authorityInfo = {
+    const authorityInfo = {
       ownerId: [],
       cooperatorList: []
-    }
+    };
 
     let currentTitle;
-    switch(true) {
+    switch (true) {
       case pathname === '/':
         currentTitle = 'Padlist';
         break;
@@ -30,8 +30,8 @@ export default class Header extends Component {
         break;
       default:
         currentTitle = title;
-        authorityInfo['ownerId'] = padState.data.user;
-        authorityInfo['cooperatorList'] = padState.data.cooperator;
+        authorityInfo.ownerId = padState.data.user;
+        authorityInfo.cooperatorList = padState.data.cooperator;
     }
 
     return (
@@ -43,7 +43,7 @@ export default class Header extends Component {
             padData={padState.data}
             authorityInfo={authorityInfo} />
         </h1>
-        <Auth { ...this.props } login={login} logout={logout} />
+        <Auth { ...this.props } />
       </div>
     );
   }
@@ -54,9 +54,12 @@ Header.propTypes = {
   routerState: PropTypes.object.isRequired,
   padState: PropTypes.object.isRequired,
   authState: PropTypes.object.isRequired,
+
   login: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired
-}
+  logout: PropTypes.func.isRequired,
+  fetchMe: PropTypes.func.isRequired,
+  fetchPaths: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
   const { title } = state.pageTitle;

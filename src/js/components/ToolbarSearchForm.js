@@ -2,6 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import { assign, forEach, filter, pluck, isEqual } from 'lodash';
+import 'gsap';
+
+const TimelineLite = window.TimelineLite;
+const TweenMax = window.TweenMax;
 
 export default class ToolbarSearchForm extends Component {
 
@@ -17,7 +21,7 @@ export default class ToolbarSearchForm extends Component {
         user: false,
         tag: false
       }
-    }
+    };
     this.state = this.defaultState;
   }
 
@@ -25,54 +29,25 @@ export default class ToolbarSearchForm extends Component {
     this.createAnimationController();
   }
 
-  createAnimationController() {
-    const animationTimeline = new TimelineLite();
-
-    var TMinitConfig = {
-      rotationX: 90,
-      top: -40,
-      ease: "Power2.easeInOut"
-    }
-
-    var TMTimelineConfig = {
-      rotationX: 0,
-      top: 65,
-      ease: "Back.easeOut",
-      onStart: function() {
-        document.querySelector('.aside').classList.add('is-active');
-      },
-      onComplete: function() {
-        this.target.classList.add('is-active');
-      },
-      onReverseComplete: function() {
-        this.target.classList.remove('is-active');
-        document.querySelector('.aside').classList.remove('is-active');
-      }
-    }
-
-    const targetNode = findDOMNode(this);
-    TweenMax.to(targetNode, 0, TMinitConfig);
-    animationTimeline.to(targetNode, 0.5, TMTimelineConfig);
-    animationTimeline.pause();
-
-    this.animationController = animationTimeline;
-  }
-
   componentWillReceiveProps(nextProps) {
-    (nextProps.isActive) ? this.animationController.play() : this.animationController.reverse();
+    if (nextProps.isActive) {
+      this.animationController.play();
+    } else {
+      this.animationController.reverse();
+    }
 
     // when user click tag
-    if (! isEqual(nextProps.searchParams, this.props.searchParams)) {
+    if (!isEqual(nextProps.searchParams, this.props.searchParams)) {
       this.context.history.pushState(null, '/');
       const { type, inputed } = nextProps.searchParams;
       const newState = assign({}, this.defaultState, {
         searchBy: {
           [type]: true
         }
-      })
+      });
 
       this.setState(newState);
-      if (! this.props.isActive) {
+      if (!this.props.isActive) {
         this.props.toggleState('searchModeActive');
       }
       findDOMNode(this.refs.inputer).value = inputed;
@@ -88,14 +63,14 @@ export default class ToolbarSearchForm extends Component {
   }
 
   onInputChanged(e, type) {
-    const { searchPad, searchCancel } = this.props;
+    const { searchPad } = this.props;
 
     if (e.target.value.length) {
-      if (! type && this.state.searchBy.user || type && type === 'user') {
+      if (!type && this.state.searchBy.user || type && type === 'user') {
         const { data: usersData } = this.props.usersState;
-        const matchedUsersId = pluck(filter(usersData, function(data) {
+        const matchedUsersId = pluck(filter(usersData, (data) => {
           var inputed = e.target.value.toLowerCase();
-          return ~ data.name.toLowerCase().indexOf(inputed);
+          return ~data.name.toLowerCase().indexOf(inputed);
         }), 'id');
 
         searchPad({
@@ -103,20 +78,18 @@ export default class ToolbarSearchForm extends Component {
           inputed: e.target.value,
           usersId: matchedUsersId
         });
-
       } else {
         let currentType = type;
-        if (! type) {
+        if (!type) {
           forEach(this.state.searchBy, (value, key) => {
             if (value) currentType = key;
-          })
+          });
         }
 
         searchPad({
           type: currentType,
           inputed: e.target.value
         });
-
       }
     }
   }
@@ -127,7 +100,7 @@ export default class ToolbarSearchForm extends Component {
       searchBy: {
         [type]: true
       }
-    })
+    });
     this.setState(newState);
 
     if (inputer.value.length) {
@@ -147,8 +120,41 @@ export default class ToolbarSearchForm extends Component {
     }
   }
 
+  createAnimationController() {
+    const animationTimeline = new TimelineLite();
+
+    var TMinitConfig = {
+      rotationX: 90,
+      top: -40,
+      ease: 'Power2.easeInOut'
+    };
+
+    var TMTimelineConfig = {
+      rotationX: 0,
+      top: 65,
+      ease: 'Back.easeOut',
+      onStart: () => {
+        document.querySelector('.aside').classList.add('is-active');
+      },
+      onComplete: () => {
+        findDOMNode(this).classList.add('is-active');
+      },
+      onReverseComplete: () => {
+        findDOMNode(this).classList.remove('is-active');
+        document.querySelector('.aside').classList.remove('is-active');
+      }
+    };
+
+    const targetNode = findDOMNode(this);
+    TweenMax.to(targetNode, 0, TMinitConfig);
+    animationTimeline.to(targetNode, 0.5, TMTimelineConfig);
+    animationTimeline.pause();
+
+    this.animationController = animationTimeline;
+  }
+
   render() {
-    const { isActive, isLogged } = this.props;
+    const { isLogged } = this.props;
     const { searchBy: { title, user, tag } } = this.state;
 
     return (
@@ -171,7 +177,7 @@ export default class ToolbarSearchForm extends Component {
             </dt>
           </dl>
         </div>
-        <div className={classNames('toolbar-searchOptions', {'dn': ! isLogged})}>
+        <div className={classNames('toolbar-searchOptions', {'dn': !isLogged})}>
           <span className="toolbar-toggleSearchOptions">Options</span>
           <label className="toolbar-searchOption" htmlFor="searchMine">
             <input id="searchMine" type="checkbox" checked={this.state.own} onChange={ this.onChangeCheckbox.bind(this) }/>
@@ -187,6 +193,7 @@ export default class ToolbarSearchForm extends Component {
 
 ToolbarSearchForm.propTypes = {
   isLogged: PropTypes.bool.isRequired,
+  isActive: PropTypes.bool.isRequired,
   toggleState: PropTypes.func.isRequired,
   searchPad: PropTypes.func.isRequired,
   searchCancel: PropTypes.func.isRequired,

@@ -15,6 +15,6 @@ export default class FloatSearchButton extends Component {
       <div className="container-floatBtn--search" onClick={this.onClickHandler.bind(this)}>
         <i className="icon-search"></i>
       </div>
-    )
+    );
   }
 }

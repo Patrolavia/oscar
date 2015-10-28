@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { fetchPad } from 'actions';
 import MsgBox from 'components/MsgBox';
 import { fadeIn } from 'untils/animation';
@@ -17,20 +16,20 @@ export default class NoMatch extends Component {
   }
 
   renderWhale() {
-    const { data: { html, title } } = this.props;
+    const { html } = this.props.data;
     return (
       <div ref="contentWrapper">
         <div className="content-whale" dangerouslySetInnerHTML={{__html: html}}></div>
         <MsgBox state="pageNotFound" />
       </div>
-    )
+    );
   }
 
   render() {
     const { isFetching, result } = this.props;
     return (
       <div id="innerContent">
-        { ! isFetching && result && this.renderWhale() }
+        { !isFetching && result && this.renderWhale() }
       </div>
     );
   }

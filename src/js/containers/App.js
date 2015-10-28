@@ -1,4 +1,4 @@
-import React, { Component, PropTypes, cloneElement } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { fadeIn } from 'untils/animation';
@@ -10,7 +10,6 @@ import DeleteConfirm from 'containers/DeleteConfirm';
 import Toc from 'containers/Toc';
 import FloatToolButton from 'containers/FloatToolButton';
 import FloatSearchButton from 'containers/FloatSearchButton';
-import LoadingDots from 'components/LoadingDots';
 
 class App extends Component {
   componentDidUpdate() {
@@ -27,7 +26,7 @@ class App extends Component {
           <div className="aside">
             <Toolbar />
             <StickyDiv>
-            <Toc />
+              <Toc />
             </StickyDiv>
           </div>
           <div className="main">
@@ -52,7 +51,7 @@ App.propTypes = {
   children: PropTypes.node
 };
 
-function mapStateToProps(state) {
+function mapStateToProps() {
   return {};
 }
 

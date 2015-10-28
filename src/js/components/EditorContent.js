@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import linkState from 'react-addons-linked-state-mixin';
-import ReactMixin from 'react-mixin';
-import { isEqual } from 'lodash';
+import reactMixin from 'react-mixin';
 
 export default class EditorContent extends Component {
 
@@ -9,28 +8,28 @@ export default class EditorContent extends Component {
     super();
     this.defaultState = {
       content: ''
-    }
+    };
     this.state = this.defaultState;
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fetchPadResult, message, data } = nextProps;
+    const { fetchPadResult, data } = nextProps;
     if (nextProps.isFetching) {
       this.setState(this.defaultState);
     } else {
       if (fetchPadResult && this.props.data.content !== data.content) {
         this.setState({
           content: data.content
-        })
+        });
       }
     }
   }
 
   onChangeInputHandler() {
-    if (! this.state.isChanged) {
+    if (!this.state.isChanged) {
       this.setState({
         isChanged: true
-      })
+      });
     }
   }
 
@@ -39,11 +38,10 @@ export default class EditorContent extends Component {
   }
 
   render() {
-    const { authority } = this.props;
     return (
       <textarea
         type="text"
-        readOnly={! this.props.authority}
+        readOnly={!this.props.authority}
         valueLink={this.linkState('content')}
         onInput={this.onChangeInputHandler.bind(this)} />
     );
@@ -58,4 +56,4 @@ EditorContent.propTypes = {
   authority: PropTypes.bool.isRequired
 };
 
-ReactMixin(EditorContent.prototype, linkState)
+reactMixin(EditorContent.prototype, linkState);

@@ -9,7 +9,7 @@ const searchTypes = {
   'title': SEARCH_PADS_BY_TITLE,
   'user': SEARCH_PADS_BY_USER,
   'tag': SEARCH_PADS_BY_TAG
-}
+};
 
 export function searchPad(params) {
   return dispatch => {

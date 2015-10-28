@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchPad, fetchUser, fetchUsers, fetchPads, editPad, createPad, resetEditState, resetPadState } from 'actions';
-import { each, findWhere, union, intersection, assign, size, isEqual } from 'lodash';
+import { each, findWhere, union, intersection, size, isEqual } from 'lodash';
 import classNames from 'classnames';
 
 import EditorTitle from 'components/EditorTitle';
@@ -17,7 +17,7 @@ export default class Editor extends Component {
 
   constructor() {
     super();
-    this.state =  {
+    this.state = {
       cooperator: [],
       tags: []
     };
@@ -26,33 +26,18 @@ export default class Editor extends Component {
     this.isRequesting = false;
   }
 
-  fetchCurrentPad(props) {
-    const { location: { pathname }, params } = props;
-    const { fetchPad, resetEditState, resetPadState } = this.props;
-    resetPadState();
-    resetEditState();
-    if (pathname.match(/edit/)) {
-      fetchPad(params);
-    }
-    this.isEditMode = (pathname.match(/edit/)) ? true : false
+  componentWillMount() {
+    const {authState: { result: isLogged } } = this.props;
+    this.isLogged = isLogged;
   }
 
   componentDidMount() {
     this.fetchCurrentPad(this.props);
   }
 
-  componentWillUnmount() {
-    this.isRequesting = false;
-    this.props.resetEditState();
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return isEqual(this.props.deleteState, nextProps.deleteState);
-  }
-
   componentWillReceiveProps(nextProps) {
-    const { isFetching, location: { pathname } } = this.props;
-    const { location: { pathname: nextPathname }, params } = nextProps;
+    const { location: { pathname } } = this.props;
+    const { location: { pathname: nextPathname } } = nextProps;
     this.isEditMode = nextPathname.match(/edit/);
 
     // 網址切換時
@@ -70,7 +55,6 @@ export default class Editor extends Component {
       this.context.history.pushState(null, path);
     }
 
-    const { fetchUser } = this.props;
     const cooperatorList = [];
     const fetchQueue = [];
 
@@ -89,23 +73,32 @@ export default class Editor extends Component {
         } else {
           fetchQueue.push(value);
         }
-      })
+      });
 
       if (fetchQueue.length) {
-        fetchUser(fetchQueue);
+        this.props.fetchUser(fetchQueue);
       }
 
       this.setState({
         cooperator: cooperatorList,
         tags: (tags) ? tags : []
-      })
+      });
     }
 
     this.isLogged = isLogged;
   }
 
+  shouldComponentUpdate(nextProps) {
+    return isEqual(this.props.deleteState, nextProps.deleteState);
+  }
+
+  componentWillUnmount() {
+    this.isRequesting = false;
+    this.props.resetEditState();
+  }
+
   onClickSubmit() {
-    const { editPad, padData: { id: padId, version }, createPad } = this.props;
+    const { padData: { id: padId, version } } = this.props;
     const titleState = this.refs.EditorTitle.getState();
     const contentState = this.refs.EditorContent.getState();
     const cooperatorState = this.refs.EditorCooperate.getState();
@@ -116,7 +109,7 @@ export default class Editor extends Component {
       content: (contentState.content) ? contentState.content : '',
       tags: tagsState.tags,
       cooperator: cooperatorState.cooperatorId
-    }
+    };
 
     let parameter = {};
     if (this.isEditMode) {
@@ -127,18 +120,18 @@ export default class Editor extends Component {
         content: contents.content,
         tags: contents.tags,
         cooperator: contents.cooperator
-      }
+      };
     }
 
-    if (titleState.isChanged || ! titleState.title) { parameter['title'] = contents.title; }
-    if (contentState.isChanged || ! contentState.content) { parameter['content'] = contents.content; }
-    if (tagsState.isChanged) { parameter['tags'] = contents.tags }
-    if (cooperatorState.isChanged) { parameter['cooperator'] = contents.cooperator }
+    if (titleState.isChanged || !titleState.title) { parameter.title = contents.title; }
+    if (contentState.isChanged || !contentState.content) { parameter.content = contents.content; }
+    if (tagsState.isChanged) { parameter.tags = contents.tags; }
+    if (cooperatorState.isChanged) { parameter.cooperator = contents.cooperator; }
 
     if (this.isEditMode) {
-      editPad(padId, JSON.stringify(parameter));
+      this.props.editPad(padId, JSON.stringify(parameter));
     } else {
-      createPad(JSON.stringify(parameter))
+      this.props.createPad(JSON.stringify(parameter));
     }
 
     this.isRequesting = true;
@@ -164,7 +157,6 @@ export default class Editor extends Component {
     };
 
     if (editorState.requestData) {
-      console.log(editorState.isRequesting);
       data = (editorState.isRequesting) ? editorState.requestData : padData;
     } else {
       if (this.isEditMode && size(padData) > 0) {
@@ -178,14 +170,14 @@ export default class Editor extends Component {
   getMessage(...params) {
     const [ isAuthorized, fetchResult, isFetching, editorState ] = params;
     let message = '';
-    switch(true) {
-      case ! this.isLogged:
+    switch (true) {
+      case !this.isLogged:
         message = 'Not logged in.';
         break;
-      case ! isAuthorized && fetchResult:
+      case !isAuthorized && fetchResult:
         message = 'Not cooperator.';
         break;
-      case (this.isEditMode && ! fetchResult) && ! isFetching:
+      case (this.isEditMode && !fetchResult) && !isFetching:
         message = 'No such pad.';
         break;
       case (editorState.code === 0):
@@ -197,24 +189,33 @@ export default class Editor extends Component {
     return message;
   }
 
+  fetchCurrentPad(props) {
+    const { location: { pathname }, params } = props;
+    this.props.resetPadState();
+    this.props.resetEditState();
+    if (pathname.match(/edit/)) {
+      this.props.fetchPad(params);
+    }
+    this.isEditMode = (pathname.match(/edit/)) ? true : false;
+  }
+
   render() {
-    const { fetchPadResult, isFetching, authState, padData: { user: ownerId, cooperator }, fetchUsers, fetchPads, editorState } = this.props;
+    const { fetchPadResult, isFetching, authState, padData: { user: ownerId, cooperator }, editorState } = this.props;
 
     const authorityCheck = () => {
-      if (! this.isEditMode) { return true };
+      if (!this.isEditMode) { return true; }
       if (authState.result) {
         const userId = authState.data.id;
         return intersection([userId], union([ownerId], cooperator)).length > 0;
       }
       return false;
-    }
+    };
 
     // 沒有編輯權限 = 沒登入，是編輯模式＆沒有fetch成功，非合法編輯者
-    const isUneditable = ! this.isLogged || (this.isEditMode && ! fetchPadResult) || ! authorityCheck();
-    const isAuthorized = this.isLogged && ((this.isEditMode && fetchPadResult) || ! this.isEditMode) && authorityCheck();
+    const isUneditable = !this.isLogged || (this.isEditMode && !fetchPadResult) || !authorityCheck();
+    const isAuthorized = this.isLogged && ((this.isEditMode && fetchPadResult) || !this.isEditMode) && authorityCheck();
     const isRequesting = editorState.isRequesting;
     const isOwner = (isAuthorized) && ownerId === authState.data.id;
-    const errorOccurred = ! isRequesting && editorState.requestData && ! editorState.result;
 
     const data = this.getCurrentPadData(this.props);
     const message = this.getMessage(isAuthorized, fetchPadResult, isFetching, editorState);
@@ -244,9 +245,8 @@ export default class Editor extends Component {
               ref="EditorCooperate"
               data={ data }
               { ...this.props }
-              fetchUsers={ fetchUsers }
               cooperator={ this.state.cooperator }
-              authority={ isOwner || ! this.isEditMode } />
+              authority={ isOwner || !this.isEditMode } />
           </div>
           <div className="editPad-tags">
             <span className="editPad-optionTitle">Tags</span>
@@ -254,16 +254,15 @@ export default class Editor extends Component {
               ref="EditorTags"
               data={ data }
               { ...this.props }
-              fetchPads={ fetchPads }
               tags={ this.state.tags } />
           </div>
           <div className="editPad-submit">
             <a className="button-wb button-larger" disabled={ isUneditable || isRequesting } onClick={this.onClickSubmit.bind(this)}>
               { isRequesting && 'Sending...' || 'Submit' }
             </a>
-            <a className="button-wb button-larger cancel"  onClick={this.onClickCancel.bind(this)}>Cancel</a>
+            <a className="button-wb button-larger cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
           </div>
-          <div className={classNames('editPad-errorMsg', {'dn': ! message.length || isRequesting})} ref="errorMsg">
+          <div className={classNames('editPad-errorMsg', {'dn': !message.length || isRequesting})} ref="errorMsg">
             <span>{ message }</span>
           </div>
         </div>
@@ -275,6 +274,7 @@ export default class Editor extends Component {
 Editor.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   fetchPadResult: PropTypes.bool,
+  location: PropTypes.object.isRequired,
   padData: PropTypes.object.isRequired,
   authState: PropTypes.object.isRequired,
   usersState: PropTypes.object.isRequired,
@@ -284,9 +284,12 @@ Editor.propTypes = {
 
   fetchPad: PropTypes.func.isRequired,
   fetchUser: PropTypes.func.isRequired,
+  fetchUsers: PropTypes.func.isRequired,
   fetchPads: PropTypes.func.isRequired,
   editPad: PropTypes.func.isRequired,
-  createPad: PropTypes.func.isRequired
+  createPad: PropTypes.func.isRequired,
+  resetPadState: PropTypes.func.isRequired,
+  resetEditState: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

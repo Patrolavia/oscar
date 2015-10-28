@@ -4,3 +4,4 @@ api.js
 karma.conf.js
 server.js
 webpack.config.js
+src/js/vendor/

@@ -25,7 +25,7 @@ export default function Delete(state = initialState, action) {
     case DELETE_SUCCESS:
       return merge({}, state, action.json, {
         errorStatus: null,
-        isActive: ! action.json.result,
+        isActive: !action.json.result,
         isRequesting: false
       });
 

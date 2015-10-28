@@ -1,6 +1,6 @@
 import {
   FETCH_PAD_REQUEST, FETCH_PAD_SUCCESS, FETCH_PAD_FAILURE,
-  FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE
+  FETCH_PADS_FAILURE
 } from 'actions';
 
 import { merge } from 'lodash';
@@ -11,7 +11,7 @@ const initialState = {
 
 const errorOccurred = {
   title: 'Error!'
-}
+};
 
 export default function PageTitle(state = initialState, action) {
   switch (action.type) {
@@ -26,7 +26,6 @@ export default function PageTitle(state = initialState, action) {
       return merge({}, state, {
         title: (padData) ? padData.title : 'No such pad.'
       });
-      break;
 
     default:
       return state;

@@ -9,14 +9,27 @@ import { fadeIn } from 'untils/animation';
 import classNames from 'classnames';
 import 'vendor/prettify/prettify';
 
+const prettyPrint = window.prettyPrint;
+
 export default class Pad extends Component {
   static contextTypes = {
       history: PropTypes.object
   };
 
   componentWillMount() {
-    const { fetchPad, params } = this.props;
-    fetchPad(params);
+    const { params } = this.props;
+    this.props.fetchPad(params);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { pathname } = this.props.location;
+    if (pathname !== nextProps.location.pathname) {
+      this.props.fetchPad(nextProps.params);
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(this.props.data, nextProps.data) || this.props.isFetching !== nextProps.isFetching;
   }
 
   componentDidUpdate() {
@@ -35,15 +48,8 @@ export default class Pad extends Component {
       forEach(contentHeadingElements, (el) => {
         const idAttribute = el.innerHTML.replace(/ /g, '_');
         el.id = idAttribute;
-      })
+      });
       this.props.initToc({headings: contentHeadingElements});
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { fetchPad, location: { pathname } } = this.props;
-    if (pathname !== nextProps.location.pathname) {
-      fetchPad(nextProps.params);
     }
   }
 
@@ -51,16 +57,12 @@ export default class Pad extends Component {
     this.props.resetPadState();
   }
 
-  shouldComponentUpdate(nextProps) {
-    return ! isEqual(this.props.data, nextProps.data) || this.props.isFetching !== nextProps.isFetching;
-  }
-
   onClickTag(value) {
     this.context.history.pushState(null, '/');
     this.props.searchPad({
       type: 'tag',
       inputed: value
-    })
+    });
   }
 
   renderTags(tags) {
@@ -68,46 +70,45 @@ export default class Pad extends Component {
     each(tags, (value, index) => {
       tagRows.push(
         <span className="content-tag" key={index} onClick={ this.onClickTag.bind(this, value) }>{ value }</span>
-      )
+      );
     });
 
     return tagRows;
   }
 
   renderPad() {
-    const { data: { html, tags, version } } = this.props;
+    const { data: { html, tags } } = this.props;
     return (
       <div>
-        <div className={classNames('content-tags', {'dn': ! tags.length})}>
+        <div className={classNames('content-tags', {'dn': !tags.length})}>
           <i className="icon-tags"></i>
           { this.renderTags(tags)}
         </div>
         <div id="innerContent" ref="innerContent" dangerouslySetInnerHTML={{__html: html}}></div>
       </div>
-    )
+    );
   }
 
   render() {
     const { isFetching, result, errorStatus } = this.props;
     const currentMsgState = (errorStatus) ? 'unknownError' : 'noSuchPad';
+    const msgContent = (isFetching) ? <LoadingDots /> : <MsgBox state={ currentMsgState } />;
 
     return (
       <div ref="contentWrapper">
-        { result ?
-          this.renderPad()
-        :
-          isFetching ? <LoadingDots /> : <MsgBox state={ currentMsgState } />
-        }
+        { result ? this.renderPad() : msgContent }
       </div>
     );
   }
 }
 
 Pad.propTypes = {
+  location: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   result: PropTypes.bool,
   data: PropTypes.object,
   errorStatus: PropTypes.number,
+  params: PropTypes.object,
 
   fetchPad: PropTypes.func.isRequired,
   searchPad: PropTypes.func.isRequired,

@@ -2,7 +2,7 @@ import {
   FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE,
   SEARCH_PADS_BY_TITLE, SEARCH_PADS_BY_USER, SEARCH_PADS_BY_TAG, SEARCH_OWN, SEARCH_ALL, SEARCH_CANCEL
 } from 'actions';
-import { merge, assign, pluck, uniq, union, filter, indexOf } from 'lodash';
+import { merge, assign, filter, indexOf } from 'lodash';
 
 const initialState = {
   isFetching: false,
@@ -36,7 +36,7 @@ export default function Pads(state = initialState, action) {
         searchParams: action.params,
         searchResult: filter(state.data, (data) => {
           var inputed = action.params.inputed.toLowerCase();
-          return ~ data.title.toLowerCase().indexOf(inputed);
+          return ~data.title.toLowerCase().indexOf(inputed);
         })
       });
 
@@ -47,7 +47,7 @@ export default function Pads(state = initialState, action) {
         searchParams: action.params,
         searchResult: filter(state.data, (data) => {
           var usersId = action.params.usersId;
-          return ~ indexOf(usersId, data.user);
+          return ~indexOf(usersId, data.user);
         })
       });
 
@@ -58,7 +58,7 @@ export default function Pads(state = initialState, action) {
         searchParams: action.params,
         searchResult: filter(state.data, (data) => {
           var inputed = action.params.inputed.toLowerCase();
-          return ~ data.tags.toString().toLowerCase().indexOf(inputed)
+          return ~data.tags.toString().toLowerCase().indexOf(inputed);
         })
       });
 

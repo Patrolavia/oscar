@@ -12,3 +12,7 @@ export default class MsgBox extends Component {
     );
   }
 }
+
+MsgBox.propTypes = {
+  state: PropTypes.string.isRequired
+};

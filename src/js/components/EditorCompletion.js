@@ -8,7 +8,7 @@ export default class EditorCompletion extends Component {
     super();
     this.defaultState = {
       completion: []
-    }
+    };
     this.state = this.defaultState;
   }
 
@@ -16,12 +16,12 @@ export default class EditorCompletion extends Component {
     if (this.props !== nextProps) {
       this.setState({
         completion: nextProps.completion
-      })
+      });
     }
   }
 
   onClickHandler(completion) {
-    this.props.onClickCompletion(completion);
+    this.props.onClickCompletion(completion[0]);
   }
 
   renderCompletions() {
@@ -31,14 +31,14 @@ export default class EditorCompletion extends Component {
 
     each(completion, (value, index) => {
       const isCooperatorType = type === 'cooperator';
-      const completion = (isCooperatorType) ? { name: value.name, id: value.id } : value;
+      const completionObject = (isCooperatorType) ? { name: value.name, id: value.id } : value;
       completionRow.push(
         <span key={ index } className="editPad-completion" onClick={ this.onClickHandler.bind(this, completion) }>
           { isCooperatorType && <img src={ value.image } /> }
-          <span>{ isCooperatorType && completion.name || completion }</span>
+          <span>{ isCooperatorType && completionObject.name || completionObject }</span>
         </span>
-      )
-    }, this)
+      );
+    }, this);
 
     return completionRow;
   }

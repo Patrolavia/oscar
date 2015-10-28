@@ -9,7 +9,7 @@ const APIs = {
   whale: '/api/whale',
   me: '/api/me',
   paths: '/api/paths'
-}
+};
 
 export const FETCH_PADS_REQUEST = 'FETCH_PADS_REQUEST';
 export const FETCH_PADS_SUCCESS = 'FETCH_PADS_SUCCESS';
@@ -50,7 +50,7 @@ export function initToc(param) {
     dispatch({
       type: INIT_TOC,
       param
-    })
+    });
   };
 }
 
@@ -58,7 +58,7 @@ export function resetPadState() {
   return dispatch => {
     dispatch({
       type: PAD_RESET
-    })
+    });
   };
 }
 

@@ -3,7 +3,7 @@ import { getBaseUrl } from 'untils/config';
 
 const APIs = {
   create: '/api/create'
-}
+};
 
 export const CREATE_REQUEST = 'CREATE_REQUEST';
 export const CREATE_SUCCESS = 'CREATE_SUCCESS';

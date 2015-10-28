@@ -11,15 +11,10 @@ export default class FloatToolButton extends Component {
     super();
     this.state = {
       isActive: false
-    }
+    };
   }
 
-  onClickHandler() {
-    const path = (this.state.isActive) ? '/create' : '/';
-    this.context.history.pushState(null, path);
-  }
-
-  componentDidMount() {
+  componentWillMount() {
     const { pathname } = this.props.location;
     this.setState({isActive: pathname === '/'});
   }
@@ -29,13 +24,18 @@ export default class FloatToolButton extends Component {
     this.setState({isActive: pathname === '/'});
   }
 
+  onClickHandler() {
+    const path = (this.state.isActive) ? '/create' : '/';
+    this.context.history.pushState(null, path);
+  }
+
   render() {
     const { isActive } = this.state;
     return (
       <a className="container-floatBtn" onClick={this.onClickHandler.bind(this)}>
-        <i className={classNames({'icon-home': ! isActive}, {'icon-plus': isActive})}></i>
+        <i className={classNames({'icon-home': !isActive}, {'icon-plus': isActive})}></i>
       </a>
-    )
+    );
   }
 }
 

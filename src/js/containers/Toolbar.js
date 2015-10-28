@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { clone } from 'lodash';
 import { searchPad, searchCancel, searchOwn, searchAll } from 'actions';
 import classNames from 'classnames';
-import gsap from 'gsap';
 
 import ToolbarSearchForm from 'components/ToolbarSearchForm';
 
@@ -18,7 +17,7 @@ class Toolbar extends Component {
     this.defaultState = {
       createModeActive: false,
       searchModeActive: false
-    }
+    };
     this.state = this.defaultState;
   }
 
@@ -30,34 +29,33 @@ class Toolbar extends Component {
     this.checkRouterType(nextProps.routerState);
   }
 
-  checkRouterType(routerState) {
-    const isCreatePage = routerState.location.pathname.match(/create/);
-    const ret = {};
-    ret['createModeActive'] = (isCreatePage) ? true : false;
-    this.setState(ret);
-  }
-
   onClickHomeHandler() {
     this.context.history.pushState(null, '/');
   }
 
   onClickToolbarButton(formType) {
-    let ret = clone(this.defaultState);
+    const ret = clone(this.defaultState);
     if (formType.match(/create/)) {
-      if (! this.state.createModeActive) { this.context.history.pushState(null, '/create') };
+      if (!this.state.createModeActive) { this.context.history.pushState(null, '/create'); }
     } else {
-      ret[formType] = ! this.state[formType];
+      ret[formType] = !this.state[formType];
     }
 
     if (this.props.routerState.location.pathname.match(/create/)) {
-      ret['createModeActive'] = true;
+      ret.createModeActive = true;
     }
+    this.setState(ret);
+  }
+
+  checkRouterType(routerState) {
+    const isCreatePage = routerState.location.pathname.match(/create/);
+    const ret = {};
+    ret.createModeActive = (isCreatePage) ? true : false;
     this.setState(ret);
   }
 
   render() {
     const { createModeActive, searchModeActive } = this.state;
-    const { isLogged, searchPad, searchCancel, searchOwn, searchAll, usersState, padsState } = this.props;
     return (
       <div className="toolbar">
         <div className="toolbar-action">
@@ -66,19 +64,26 @@ class Toolbar extends Component {
         </div>
         <i className="icon-home" onClick={this.onClickHomeHandler.bind(this)}></i>
         <ToolbarSearchForm
+          { ...this.props }
           isActive={ searchModeActive }
-          isLogged={ isLogged }
-          searchPad={ searchPad }
-          searchCancel={ searchCancel }
-          searchOwn={ searchOwn }
-          searchAll={ searchAll }
-          usersState={ usersState }
-          searchParams={ padsState.searchParams }
+          searchParams={ this.props.padsState.searchParams }
           toggleState={ this.onClickToolbarButton.bind(this) } />
       </div>
     );
   }
 }
+
+Toolbar.propTypes = {
+  routerState: PropTypes.object.isRequired,
+  usersState: PropTypes.object.isRequired,
+  padsState: PropTypes.object.isRequired,
+  isLogged: PropTypes.bool.isRequired,
+
+  searchPad: PropTypes.func.isRequired,
+  searchCancel: PropTypes.func.isRequired,
+  searchOwn: PropTypes.func.isRequired,
+  searchAll: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
   return {
@@ -86,7 +91,7 @@ function mapStateToProps(state) {
     usersState: state.users,
     padsState: state.pads,
     isLogged: state.auth.result
-  }
+  };
 }
 
 export default connect(

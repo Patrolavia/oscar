@@ -2,7 +2,7 @@ require('../index.jade');
 require('../css/application.sass');
 require('untils/g11n');
 
-import React, { Component } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ReduxRouter } from 'redux-router';

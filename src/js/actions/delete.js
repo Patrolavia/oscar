@@ -3,7 +3,7 @@ import { getBaseUrl } from 'untils/config';
 
 const APIs = {
   delete: '/api/delete/'
-}
+};
 
 export const DELETE_INIT = 'DELETE_INIT';
 export const DELETE_REQUEST = 'DELETE_REQUEST';
@@ -16,8 +16,8 @@ export function initDeleteForm(params) {
     dispatch({
       type: DELETE_INIT,
       params
-    })
-  }
+    });
+  };
 }
 
 export function deletePad(params) {

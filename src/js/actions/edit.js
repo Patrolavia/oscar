@@ -3,7 +3,7 @@ import { getBaseUrl } from 'untils/config';
 
 const APIs = {
   edit: '/api/edit/'
-}
+};
 
 export const EDIT_REQUEST = 'EDIT_REQUEST';
 export const EDIT_SUCCESS = 'EDIT_SUCCESS';

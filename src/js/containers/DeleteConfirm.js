@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { fetchPads, initDeleteForm, deletePad, deleteCancel } from 'actions';
+import { fetchPads, deletePad, deleteCancel } from 'actions';
 
 export default class DeleteConfirm extends Component {
 
@@ -16,7 +16,7 @@ export default class DeleteConfirm extends Component {
       isRequesting: false,
       isActive: false,
       message: null
-    }
+    };
     this.state = this.defaultState;
   }
 
@@ -24,7 +24,7 @@ export default class DeleteConfirm extends Component {
     const { isActive, result, message, isRequesting } = nextProps.deleteState;
     this.setState({
       isActive: isActive
-    })
+    });
 
     if (result) {
       this.context.history.pushState(null, '/');
@@ -34,8 +34,8 @@ export default class DeleteConfirm extends Component {
       const newState = {
         isRequesting: isRequesting
       };
-      if (! isRequesting) {
-        newState.message = message
+      if (!isRequesting) {
+        newState.message = message;
       }
       this.setState(newState);
     }
@@ -43,9 +43,9 @@ export default class DeleteConfirm extends Component {
 
   onClickDelete() {
     this.setState({message: ''});
-    const { deleteState: { padInfo }, deletePad } = this.props;
+    const { deleteState: { padInfo } } = this.props;
     if (padInfo.padTitle === findDOMNode(this.refs.titleInput).value) {
-      deletePad({ padId: padInfo.padId });
+      this.props.deletePad({ padId: padInfo.padId });
     } else {
       this.setState({message: 'value invalid.'});
     }
@@ -59,7 +59,7 @@ export default class DeleteConfirm extends Component {
 
   render() {
     return (
-      <div className={classNames('deleteConfirm', {'dn': ! this.state.isActive})}>
+      <div className={classNames('deleteConfirm', {'dn': !this.state.isActive})}>
         <div className="deleteConfirm-wrapper">
           <div className="deleteConfirm-content">
             <span className="deleteConfirm-title">Are you sure?</span>
@@ -69,14 +69,14 @@ export default class DeleteConfirm extends Component {
               ref="titleInput"/>
           </div>
           <div className="deleteConfirm-submit">
-            <a className={classNames('button-wb', 'button', {'delete': ! this.state.isRequesting})}
+            <a className={classNames('button-wb', 'button', {'delete': !this.state.isRequesting})}
               disabled={this.state.isRequesting}
               onClick={this.onClickDelete.bind(this)}>
               { this.state.isRequesting && 'Deleting...' || 'Delete this pad' }
             </a>
             <a className="button-wb button cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
           </div>
-          <div className={classNames('deleteConfirm-errorMsg', {'dn': ! this.state.message})}>
+          <div className={classNames('deleteConfirm-errorMsg', {'dn': !this.state.message})}>
             <span>{ this.state.message }</span>
           </div>
         </div>
@@ -89,7 +89,6 @@ DeleteConfirm.propTypes = {
   deleteState: PropTypes.object.isRequired,
 
   fetchPads: PropTypes.func.isRequired,
-  initDeleteForm: PropTypes.func.isRequired,
   deletePad: PropTypes.func.isRequired,
   deleteCancel: PropTypes.func.isRequired
 };
@@ -102,5 +101,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { fetchPads, initDeleteForm, deletePad, deleteCancel }
+  { fetchPads, deletePad, deleteCancel }
 )(DeleteConfirm);

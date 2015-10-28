@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import { connect } from 'react-redux';
 import { each } from 'lodash';
 import classNames from 'classnames';
 import 'gsap';
+
+const TweenLite = window.TweenLite;
 
 export default class Auth extends Component {
   static contextTypes = {
@@ -14,7 +15,7 @@ export default class Auth extends Component {
     super();
     this.state = {
       isPathsActive: false
-    }
+    };
   }
 
   componentDidMount() {
@@ -22,14 +23,14 @@ export default class Auth extends Component {
     document.body.addEventListener('click', this.onClickBodyHandler.bind(this));
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     document.body.removeEventListener('click', this.onClickBodyHandler.bind(this));
   }
 
-  onClickBodyHandler(e) {
+  onClickBodyHandler() {
     this.setState({
       isPathsActive: false
-    })
+    });
   }
 
   onMouseEnterHandler() {
@@ -45,8 +46,8 @@ export default class Auth extends Component {
   onClickHandler() {
     const { isPathsActive } = this.state;
     this.setState({
-      isPathsActive: ! isPathsActive
-    })
+      isPathsActive: !isPathsActive
+    });
 
     // TODO: Logout
     if (this.props.authState.result) {
@@ -59,7 +60,7 @@ export default class Auth extends Component {
   }
 
   eventPreventPropagation(e) {
-    e.preventPropagation;
+    e.stopPropagation();
   }
 
   renderPaths() {
@@ -71,7 +72,7 @@ export default class Auth extends Component {
         <li key={ index }>
           <a href={ authUrl } onClick={this.onClickLoginPath.bind(this.value)}>Login with { value }</a>
         </li>
-      )
+      );
     });
 
     return pathRows;
@@ -79,6 +80,7 @@ export default class Auth extends Component {
 
   render() {
     const { result, data: { name, image }, paths } = this.props.authState;
+
     return (
       <div className="userInfo"
         onMouseEnter={this.onMouseEnterHandler.bind(this)}
@@ -87,13 +89,13 @@ export default class Auth extends Component {
         <span className="userInfo-name">{ name }</span>
         <div className="userInfo-image">
           <div className="userInfo-logout" ref="overlay">
-            <i className={classNames({'icon-logout': result, 'icon-login': ! result})}></i>
+            <i className={classNames({'icon-logout': result, 'icon-login': !result})}></i>
             <div className="userInfo-logoutOverlay"></div>
           </div>
           { image && <img src={image} /> }
         </div>
-        { ! result && paths &&
-          <div className={classNames('userInfo-auth', {'dn': ! this.state.isPathsActive})}
+        { !result && paths &&
+          <div className={classNames('userInfo-auth', {'dn': !this.state.isPathsActive})}
             onClick={this.eventPreventPropagation}>
             <ul>
               { this.renderPaths() }

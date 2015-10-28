@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import linkState from 'react-addons-linked-state-mixin';
-import ReactMixin from 'react-mixin';
+import reactMixin from 'react-mixin';
 
 export default class EditorTitle extends Component {
   constructor() {
@@ -8,7 +8,7 @@ export default class EditorTitle extends Component {
     this.defaultState = {
       isChanged: false,
       title: ''
-    }
+    };
     this.state = this.defaultState;
   }
 
@@ -20,16 +20,16 @@ export default class EditorTitle extends Component {
       if (fetchPadResult && this.props.data.title !== data.title) {
         this.setState({
           title: data.title
-        })
+        });
       }
     }
   }
 
   onChangeInputHandler() {
-    if (! this.state.isChanged) {
+    if (!this.state.isChanged) {
       this.setState({
         isChanged: true
-      })
+      });
     }
   }
 
@@ -42,7 +42,7 @@ export default class EditorTitle extends Component {
     return (
       <input
         type="text"
-        readOnly={! this.props.authority}
+        readOnly={!authority}
         valueLink={this.linkState('title')}
         onInput={this.onChangeInputHandler.bind(this)} />
     );
@@ -55,4 +55,4 @@ EditorTitle.propTypes = {
   authority: PropTypes.bool.isRequired
 };
 
-ReactMixin(EditorTitle.prototype, linkState)
+reactMixin(EditorTitle.prototype, linkState);

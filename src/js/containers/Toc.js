@@ -19,8 +19,8 @@ export default class Toc extends Component {
       const tierClass = 'tier' + el.tagName.match(/H([1-3])/)[1];
       tocNodes.push(
         <a key={index} className={classNames('toc-listItem', tierClass)} href={href}>{ el.innerHTML }</a>
-      )
-    })
+      );
+    });
 
     return tocNodes;
   }
@@ -39,7 +39,7 @@ export default class Toc extends Component {
 Toc.propTypes = {
   toc: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
-}
+};
 
 function mapStateToProps(state) {
   return {
