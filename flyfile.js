@@ -111,6 +111,20 @@ export function* webpackBuild() {
     .webpack(webpackConfig)
 }
 
+
+export function* replacePath() {
+  fs.readFile('build/index.html', 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    var result = data.replace(/(\w+-[^utf\-8][^=]*)"/g, '{{.}}$&');
+
+    fs.writeFile('build/index.html', result, 'utf8', function (err) {
+       if (err) return console.log(err);
+    });
+  });
+}
+
 export function* release() {
   ghPages.publish(paths.build, config.deploy)
 }
@@ -156,6 +170,6 @@ export function* prebuild() {
 
 export function* build() {
   yield this
-    .start(['clear', 'compile', 'webpackBuild', 'mock', 'view'])
+    .start(['clear', 'compile', 'webpackBuild', 'replacePath'])
 }
 
