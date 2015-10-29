@@ -1,3 +1,14 @@
+### 2.1.1 (2015-09-22)
+
+- `fly` removes `build` by default
+- Bump dependencies
+
+### 2.1.0 (2015-09-21)
+
+- Remove fly commands: `image`, `sprite`
+- Bump dependencies
+- Fix misc
+
 ### 2.0.6 (2015-08-26)
 
 - `css-sprite` => `sprity`
