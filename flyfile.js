@@ -9,20 +9,17 @@ import browserSync from 'browser-sync'
 import spa from 'browser-sync-spa'
 import ghPages from 'gh-pages'
 import git from 'git-rev-sync'
-import sprity from 'sprity'
-import Imagemin from 'imagemin'
 import jsonminify from 'jsonminify'
 
 const paths = {
-  build: path.resolve('build'),
+  build: path.resolve('build')
 }
 
 const config = {
   deploy: {
-    branch: 'release',
     message: git.short() + ' - Update ' + (new Date()).toISOString(),
-    logger: (message) => console.log(message),
-  },
+    logger: (message) => console.log(message)
+  }
 }
 
 let Mock
@@ -42,7 +39,7 @@ export function* lint() {
 export function* test() {
   new Server({
     configFile: path.resolve(__dirname, 'karma.conf.js'),
-    singleRun: true,
+    singleRun: true
   }).start()
 }
 
@@ -67,43 +64,23 @@ export function* mock() {
   Mock = (function startup() {
     isMockStart = true
     return cp.fork('./mock.js', {
-      env: Object.assign({NODE_ENV: 'development'}, process.env),
+      env: Object.assign({NODE_ENV: 'development'}, process.env)
     })
   })()
 
   process.on('exit', () => Mock.kill('SIGTERM'))
 }
 
-export function* sprite() {
-  sprity.create({
-    src: ['src/img/sprites/**/*'],
-    out: 'src/img',
-    cssPath: '../img',
-    name: 'sprites',
-    processor: 'sass',
-    'style-type': 'sass',
-    style: '../css/_sprites.sass',
-    orientation: 'binary-tree',
-    split: true,
-  })
-}
-
-export function* image() {
-  new Imagemin()
-    .src('src/img/**/*.{gif,jpg,png,svg}')
-    .dest(paths.build + '/img-min')
-    .run()
-}
-
 export function* webpackBuild() {
   webpackConfig.plugins = webpackConfig.plugins.concat(
     new DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
-      },
+        'NODE_ENV': JSON.stringify('production')
+      }
     }),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin()
+    //new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false }})
   )
 
   yield this
@@ -112,6 +89,7 @@ export function* webpackBuild() {
 }
 
 export function* release() {
+  config.deploy.branch = 'release'
   ghPages.publish(paths.build, config.deploy)
 }
 
@@ -123,11 +101,11 @@ export function* master() {
 export function* view() {
   const options = {
     server: {
-      baseDir: paths.build,
+      baseDir: paths.build
     },
     port: 4000,
     logPrefix: 'Laima',
-    logConnections: true,
+    logConnections: true
   }
 
   browserSync(options)
@@ -136,15 +114,17 @@ export function* view() {
 
 export default function* () {
   yield this
+    .start(['clear'])
+  yield this
     .watch('src/**/*.+(md|json)', 'compile')
   yield this
     .watch(['./mock.js', './api.js'], 'mock')
 
   const server = (function startup() {
     return cp.fork('./server.js', {
-      env: Object.assign({NODE_ENV: 'development'}, process.env),
+      env: Object.assign({NODE_ENV: 'development'}, process.env)
     })
-  })()
+  })();
 
   process.on('exit', () => server.kill('SIGTERM'))
 }
@@ -158,4 +138,3 @@ export function* build() {
   yield this
     .start(['clear', 'compile', 'webpackBuild', 'mock', 'view'])
 }
-

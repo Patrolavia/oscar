@@ -1,5 +1,5 @@
 {
-  "extends": "eslint-config-airbnb",
+  "extends": "airbnb",
   "env": {
     "browser": true,
     "mocha": true,
@@ -10,6 +10,9 @@
 
     // Disable until Flow supports let and const
     "no-var": 0,
-    "vars-on-top": 0
+    "vars-on-top": 0,
+
+    // Disable comma-dangle unless need to support it
+    "comma-dangle": 0
   }
 }

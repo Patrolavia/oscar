@@ -1,21 +1,18 @@
-var webpack = require("webpack");
+var webpack = require('webpack');
+
 module.exports = function(config) {
   config.set({
 
     files: [
-      // all files ending in "test"
       './node_modules/phantomjs-polyfill/bind-polyfill.js',
-      'test/**/*.js'
-      // each file acts as entry point for the webpack configuration
+      'test/index.js'
     ],
 
     // frameworks to use
     frameworks: ['mocha'],
 
     preprocessors: {
-      // only specify one entry point
-      // and require all tests in there
-      'test/**/*.js': ['webpack']
+      'test/index.js': ['webpack']
     },
 
     reporters: ['mocha', 'coverage'],
@@ -32,12 +29,12 @@ module.exports = function(config) {
       // webpack configuration
       module: {
         loaders: [
-          {test: /\.js$/, loader: "babel"}
+          {test: /\.js$/, loader: 'babel'}
         ],
-        postLoaders: [{
-          test: /\.js/,
+        preLoaders: [{
+          test: /\.js$/,
           exclude: /(test|node_modules|bower_components)/,
-          loader: 'istanbul-instrumenter'
+          loader: 'isparta-instrumenter'
         }]
       }
     },

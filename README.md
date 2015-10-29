@@ -19,12 +19,6 @@ fly
 
 fly clear
 
-# sprite images
-fly sprite
-
-# imagemin, will generate files to `build/img-min`
-fly image
-
 # `lint` and `test`
 fly prebuild
 
@@ -57,7 +51,6 @@ fly view
     - `css/`
     - `font/`
     - `img/`
-       - `sprite/` - sprite files
     - `js/`
     - `locales/` - i18n files
     - `index.jade`
@@ -68,8 +61,9 @@ fly view
 ## Build Folder Structure
 
  - `build/` - build files
-    - `font/`
-    - `img/`
+    - `_/`
+        - `font/`
+        - `img/`
     - `locales/`
     - `application-[hash:7].css`
     - `application-[hash:7].css.map`
@@ -83,6 +77,11 @@ fly view
 
  - [slush-laima](https://github.com/IEMustDie/slush-laima)
  - [slush-laima-ie8](https://github.com/IEMustDie/slush-laima-ie8)
+
+## Tools
+
+ - [font-minify](https://github.com/indigofeather/font-minify)
+ - [image-tools](https://github.com/indigofeather/image-tools)
 
 ## License
 
