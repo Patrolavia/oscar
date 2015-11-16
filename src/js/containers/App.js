@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
-import { fadeIn } from 'untils/animation';
+import { fadeIn } from 'utils/animation';
 import StickyDiv from 'react-stickydiv';
 
 import Header from 'containers/Header';

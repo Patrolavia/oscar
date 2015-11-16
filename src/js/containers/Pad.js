@@ -5,7 +5,7 @@ import { each, isEqual, forEach } from 'lodash';
 import { connect } from 'react-redux';
 import LoadingDots from 'components/LoadingDots';
 import MsgBox from 'components/MsgBox';
-import { fadeIn } from 'untils/animation';
+import { fadeIn } from 'utils/animation';
 import classNames from 'classnames';
 import 'vendor/prettify/prettify';
 

@@ -1,5 +1,5 @@
 import { sendRequest } from 'actions';
-import { getBaseUrl } from 'untils/config';
+import { getBaseUrl } from 'utils/config';
 
 const APIs = {
   delete: '/api/delete/'

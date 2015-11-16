@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPads, fetchUsers, searchPad } from 'actions';
 import { each, findWhere } from 'lodash';
-import { fadeIn } from 'untils/animation';
+import { fadeIn } from 'utils/animation';
 import { indexOf, isEqual, pluck, filter } from 'lodash';
 import classNames from 'classnames';
 

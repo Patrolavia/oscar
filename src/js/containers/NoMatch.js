@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchPad } from 'actions';
 import MsgBox from 'components/MsgBox';
-import { fadeIn } from 'untils/animation';
+import { fadeIn } from 'utils/animation';
 
 export default class NoMatch extends Component {
   componentDidMount() {

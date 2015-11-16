@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import g11n from 'untils/g11n';
+import g11n from 'utils/g11n';
 
 export default class MsgBox extends Component {
   render() {
