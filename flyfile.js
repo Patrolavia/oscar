@@ -39,7 +39,6 @@ export function* lint() {
 export function* test() {
   new Server({
     configFile: path.resolve(__dirname, 'karma.conf.js'),
-    singleRun: true
   }).start()
 }
 

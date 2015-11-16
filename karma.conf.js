@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-
+var path = require('path');
+var webpack = require("webpack");
 module.exports = function(config) {
   config.set({
 
@@ -9,7 +9,7 @@ module.exports = function(config) {
     ],
 
     // frameworks to use
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'sinon'],
 
     preprocessors: {
       'test/index.js': ['webpack']
@@ -25,17 +25,30 @@ module.exports = function(config) {
       ]
     },
 
+    singleRun: false,
+
     webpack: {
       // webpack configuration
       module: {
         loaders: [
-          {test: /\.js$/, loader: 'babel'}
+          {test: /\.js$/, loader: 'babel', exclude: /node_modules|bower_components/},
+          {test: /\.json$/, loader: 'json'}
         ],
         preLoaders: [{
           test: /\.js$/,
           exclude: /(test|node_modules|bower_components)/,
           loader: 'isparta-instrumenter'
         }]
+      },
+      resolve: {
+        alias: {
+          'actions': path.resolve(__dirname, 'src', 'js', 'actions'),
+          'components': path.resolve(__dirname, 'src', 'js', 'components'),
+          'containers': path.resolve(__dirname, 'src', 'js', 'containers'),
+          'reducers': path.resolve(__dirname, 'src', 'js', 'reducers'),
+          'store': path.resolve(__dirname, 'src', 'js', 'store'),
+          'utils': path.resolve(__dirname, 'src', 'js', 'utils')
+        }
       }
     },
 
