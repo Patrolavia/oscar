@@ -8,6 +8,7 @@ import EditorTitle from 'components/EditorTitle';
 import EditorContent from 'components/EditorContent';
 import EditorCooperate from 'components/EditorCooperate';
 import EditorTags from 'components/EditorTags';
+import EditorPreview from 'components/EditorPreview';
 
 export default class Editor extends Component {
 
@@ -19,7 +20,8 @@ export default class Editor extends Component {
     super();
     this.state = {
       cooperator: [],
-      tags: []
+      tags: [],
+      content: ''
     };
     this.isEditMode = false;
     this.isLogged = false;
@@ -81,7 +83,8 @@ export default class Editor extends Component {
 
       this.setState({
         cooperator: cooperatorList,
-        tags: (tags) ? tags : []
+        tags: (tags) ? tags : [],
+        content: ''
       });
     }
 
@@ -135,6 +138,13 @@ export default class Editor extends Component {
     }
 
     this.isRequesting = true;
+  }
+
+  onClickPreview() {
+    const contentState = this.refs.EditorContent.getState();
+    this.setState({
+      content: contentState.content
+    })
   }
 
   onClickCancel() {
@@ -216,56 +226,61 @@ export default class Editor extends Component {
     const isAuthorized = this.isLogged && ((this.isEditMode && fetchPadResult) || !this.isEditMode) && authorityCheck();
     const isRequesting = editorState.isRequesting;
     const isOwner = (isAuthorized) && ownerId === authState.data.id;
+    const isPreviewActive = this.state.content.length > 0;
 
     const data = this.getCurrentPadData(this.props);
     const message = this.getMessage(isAuthorized, fetchPadResult, isFetching, editorState);
 
     return (
-      <div className={classNames('editPad', {'is-disable': isUneditable})} ref="editPad">
-        <div className="editPad-title">
-          <span className="editPad-optionTitle">Pad title</span>
-          <EditorTitle
-            ref="EditorTitle"
-            data={ data }
-            { ...this.props }
-            authority={ isAuthorized } />
-        </div>
-        <div className="editPad-content">
-          <span className="editPad-optionTitle">Content</span>
-          <EditorContent
-            ref="EditorContent"
-            data={ data }
-            { ...this.props }
-            authority={ isAuthorized } />
-        </div>
-        <div className="editPad-options">
-          <div className="editPad-cooperates">
-            <span className="editPad-optionTitle">Cooperate</span>
-            <EditorCooperate
-              ref="EditorCooperate"
+      <div>
+        <div className={classNames('editPad', {'is-disable': isUneditable})} ref="editPad">
+          <div className="editPad-title">
+            <span className="editPad-optionTitle">Pad title</span>
+            <EditorTitle
+              ref="EditorTitle"
               data={ data }
               { ...this.props }
-              cooperator={ this.state.cooperator }
-              authority={ isOwner || !this.isEditMode } />
+              authority={ isAuthorized } />
           </div>
-          <div className="editPad-tags">
-            <span className="editPad-optionTitle">Tags</span>
-            <EditorTags
-              ref="EditorTags"
+          <div className="editPad-content">
+            <span className="editPad-optionTitle">Content</span>
+            <EditorContent
+              ref="EditorContent"
               data={ data }
               { ...this.props }
-              tags={ this.state.tags } />
+              authority={ isAuthorized } />
           </div>
-          <div className="editPad-submit">
-            <a className="button-wb button-larger" disabled={ isUneditable || isRequesting } onClick={this.onClickSubmit.bind(this)}>
-              { isRequesting && 'Sending...' || 'Submit' }
-            </a>
-            <a className="button-wb button-larger cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
-          </div>
-          <div className={classNames('editPad-errorMsg', {'dn': !message.length || isRequesting})} ref="errorMsg">
-            <span>{ message }</span>
+          <div className="editPad-options">
+            <div className="editPad-cooperates">
+              <span className="editPad-optionTitle">Cooperate</span>
+              <EditorCooperate
+                ref="EditorCooperate"
+                data={ data }
+                { ...this.props }
+                cooperator={ this.state.cooperator }
+                authority={ isOwner || !this.isEditMode } />
+            </div>
+            <div className="editPad-tags">
+              <span className="editPad-optionTitle">Tags</span>
+              <EditorTags
+                ref="EditorTags"
+                data={ data }
+                { ...this.props }
+                tags={ this.state.tags } />
+            </div>
+            <div className="editPad-submit">
+              <a className="button-wb button-larger" disabled={ isUneditable || isRequesting } onClick={this.onClickSubmit.bind(this)}>
+                { isRequesting && 'Sending...' || 'Submit' }
+              </a>
+              <a className="button-wb button-larger" onClick={this.onClickPreview.bind(this)}>Preview</a>
+              <a className="button-wb button-larger cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
+            </div>
+            <div className={classNames('editPad-errorMsg', {'dn': !message.length || isRequesting})} ref="errorMsg">
+              <span>{ message }</span>
+            </div>
           </div>
         </div>
+        { isPreviewActive && <EditorPreview content={ this.state.content }/> }
       </div>
     );
   }
