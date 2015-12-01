@@ -25,7 +25,7 @@ export const sendRequest = (
   return request(type, APIUrl)
     .send(parameters)
     .end((err, res) => {
-      const json = res.body || {};
+      const json = JSON.parse(res.xhr.response) || {};
       if (err) {
         json.errorStatus = res.statusCode;
       }
