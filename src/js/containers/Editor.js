@@ -76,7 +76,7 @@ export default class Editor extends Component {
       });
 
       if (fetchQueue.length) {
-        this.props.fetchUser(fetchQueue);
+        this.props.fetchUser({useridArray: fetchQueue});
       }
 
       this.setState({
@@ -129,7 +129,7 @@ export default class Editor extends Component {
     if (cooperatorState.isChanged) { parameter.cooperator = contents.cooperator; }
 
     if (this.isEditMode) {
-      this.props.editPad(padId, JSON.stringify(parameter));
+      this.props.editPad({pid: padId, parameter: JSON.stringify(parameter)});
     } else {
       this.props.createPad(JSON.stringify(parameter));
     }
