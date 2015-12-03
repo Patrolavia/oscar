@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchPad, fetchUser, fetchUsers, fetchPads, editPad, createPad, resetEditState, resetPadState } from 'actions';
 import { each, findWhere, union, intersection, size, isEqual } from 'lodash';
 import classNames from 'classnames';
+import g11n from 'utils/g11n';
 
 import EditorTitle from 'components/EditorTitle';
 import EditorContent from 'components/EditorContent';
@@ -157,7 +158,7 @@ export default class Editor extends Component {
     };
 
     if (editorState.requestData) {
-      data = (editorState.isRequesting) ? editorState.requestData : padData;
+      data = JSON.parse(editorState.requestData);
     } else {
       if (this.isEditMode && size(padData) > 0) {
         data = padData;
@@ -172,19 +173,23 @@ export default class Editor extends Component {
     let message = '';
     switch (true) {
       case !this.isLogged:
-        message = 'Not logged in.';
-        break;
-      case !isAuthorized && fetchResult:
-        message = 'Not cooperator.';
+        message = g11n.t('editor.edit')[1];
         break;
       case (this.isEditMode && !fetchResult) && !isFetching:
-        message = 'No such pad.';
+        message = g11n.t('editor.edit')[2];
         break;
-      case (editorState.code === 0):
+      case !isAuthorized && fetchResult:
+        message = g11n.t('editor.edit')[3];
+        break;
+      case (editorState.data.code === 0):
         // Success
         break;
       default:
-        message = editorState.message || '';
+        if (editorState.errorStatus) {
+          message = g11n.t('error', {':errCode': editorState.errorStatus});
+        } else {
+          message = g11n.t('editor.edit')[editorState.data.code] || '';
+        }
     }
     return message;
   }

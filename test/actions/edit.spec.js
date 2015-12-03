@@ -6,7 +6,6 @@ import {
 } from 'actions/edit';
 
 describe('actions edit', () => {
-
   it('creates EDIT_SUCCESS when request successfully', (done) => {
     const successResponse = fakeServerSuccessRespond();
     const expectedActions = [
@@ -36,5 +35,4 @@ describe('actions edit', () => {
     const store = mockStore({result: false}, expectedActions, done);
     store.dispatch(resetEditState());
   });
-
 });

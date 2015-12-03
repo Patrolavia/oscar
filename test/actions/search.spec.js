@@ -7,7 +7,6 @@ import {
 } from 'actions/search';
 
 describe('actions search', () => {
-
   it('creates SEARCH_PADS_BY_TITLE when search by title', (done) => {
     const expectedActions = [
       { type: SEARCH_PADS_BY_TITLE, params: { type: 'title', inputed: 'apple' } }
@@ -55,5 +54,4 @@ describe('actions search', () => {
     const store = mockStore({result: false}, expectedActions, done);
     store.dispatch(searchAll());
   });
-
 });

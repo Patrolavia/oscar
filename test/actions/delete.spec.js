@@ -6,7 +6,6 @@ import {
 } from 'actions/delete';
 
 describe('actions delete', () => {
-
   it('creates DELETE_INIT when delete form has been initial', (done) => {
     const params = {
       test: 'Run the test'

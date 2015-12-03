@@ -1,7 +1,7 @@
 import {
   EDIT_REQUEST, EDIT_SUCCESS, EDIT_FAILURE, EDIT_RESET,
   CREATE_REQUEST, CREATE_SUCCESS, CREATE_FAILURE
-  } from 'actions';
+} from 'actions';
 import { merge, assign } from 'lodash';
 
 const initialState = {
@@ -13,15 +13,13 @@ export default function Edit(state = initialState, action) {
   switch (action.type) {
     case EDIT_REQUEST: case CREATE_REQUEST:
       return assign({}, initialState, {
-        message: 'Sending request...',
         isRequesting: true,
         result: false,
-        requestData: JSON.parse(action.parameters)
+        requestData: action.parameters
       });
 
     case EDIT_SUCCESS: case CREATE_SUCCESS:
-      return assign({}, state, action.json, {
-        code: action.json.data.code,
+      return merge({}, state, action.json, {
         errorStatus: null,
         isRequesting: false
       });

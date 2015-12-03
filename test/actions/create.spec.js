@@ -6,7 +6,6 @@ import {
 } from 'actions/create';
 
 describe('actions create', () => {
-
   it('creates CREATE_SUCCESS when request successfully', (done) => {
     const successResponse = fakeServerSuccessRespond();
     const expectedActions = [
@@ -28,5 +27,4 @@ describe('actions create', () => {
     const store = mockStore({result: false}, expectedActions, done);
     store.dispatch(createPad({ title: 'run the test' }));
   });
-
 });

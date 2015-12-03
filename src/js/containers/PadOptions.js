@@ -53,8 +53,8 @@ export default class PadOptions extends Component {
     const { editPad, deletePad } = this.state;
     return (
       <div className={currentClass}>
-        <i className={classNames('icon-pencil', {'dn': !editPad})} onClick={this.onClickEdit.bind(this)}></i>
         <i className={classNames('icon-trash', {'dn': !deletePad})} onClick={this.onClickDelete.bind(this)}></i>
+        <i className={classNames('icon-pencil', {'dn': !editPad})} onClick={this.onClickEdit.bind(this)}></i>
       </div>
     );
   }

@@ -16,5 +16,6 @@
       "title": "Oops!",
       "msg": "An unexpected error has occurred."
     }
-  }
+  },
+  "error": "An unexpected error has occurred, please contact the server administrator. [Code: :errCode]"
 }

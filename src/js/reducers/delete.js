@@ -17,7 +17,6 @@ export default function Delete(state = initialState, action) {
 
     case DELETE_REQUEST:
       return assign({}, state, {
-        message: 'Sending delete request...',
         isRequesting: true,
         result: false
       });

@@ -14,7 +14,6 @@ import {
 } from 'actions/fetch';
 
 describe('actions fetch', () => {
-
   it('creates FETCH_PADS_SUCCESS when request successfully', (done) => {
     const successResponse = fakeServerSuccessRespond();
     const expectedActions = [
@@ -154,5 +153,4 @@ describe('actions fetch', () => {
     const store = mockStore({result: false}, expectedActions, done);
     store.dispatch(fetchPaths());
   });
-
 });

@@ -55,7 +55,6 @@ router.post('/api/edit/:padId', function(req, res) {
   // 3: Not cooperator.
   // 4: Failed to save pad.
   // 5: Version not match.
-  var parameters = JSON.parse(_.keys(req.body)[0])
   var data = apis.edit(0);
   res.json(data);
 });

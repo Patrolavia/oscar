@@ -47,7 +47,8 @@ module.exports = function(config) {
           'containers': path.resolve(__dirname, 'src', 'js', 'containers'),
           'reducers': path.resolve(__dirname, 'src', 'js', 'reducers'),
           'store': path.resolve(__dirname, 'src', 'js', 'store'),
-          'utils': path.resolve(__dirname, 'src', 'js', 'utils')
+          'utils': path.resolve(__dirname, 'src', 'js', 'utils'),
+          'locales': path.resolve(__dirname, 'src', 'locales')
         }
       }
     },

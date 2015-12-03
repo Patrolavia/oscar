@@ -16,6 +16,7 @@ export const sendRequest = (
 ) => {
   const [ SUCCESS_TYPE, FAILURE_TYPE, REQUIRE_TYPE ] = actionTypes;
   if (REQUIRE_TYPE) {
+    // TODO: test
     dispatch({
       type: REQUIRE_TYPE,
       parameters
@@ -25,7 +26,7 @@ export const sendRequest = (
   return request(type, APIUrl)
     .send(parameters)
     .end((err, res) => {
-      const json = JSON.parse(res.xhr.response) || {};
+      const json = (res.ok) ? JSON.parse(res.xhr.response) : {};
       if (err) {
         json.errorStatus = res.statusCode;
       }

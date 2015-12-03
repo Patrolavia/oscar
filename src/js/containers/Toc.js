@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 export default class Toc extends Component {
   static contextTypes = {
-      history: PropTypes.object
+    history: PropTypes.object
   };
 
   shouldComponentUpdate(nextProps) {
