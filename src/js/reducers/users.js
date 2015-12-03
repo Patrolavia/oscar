@@ -2,7 +2,7 @@ import {
   FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE,
   FETCH_USER_SUCCESS
 } from 'actions';
-import { merge, uniq, union } from 'lodash';
+import { merge, assign, uniq, union } from 'lodash';
 
 const initialState = {
   data: []
