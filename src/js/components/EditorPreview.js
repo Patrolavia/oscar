@@ -1,12 +1,32 @@
 import React, { Component, PropTypes } from 'react';
-import Markdown from 'react-markdown-el';
+import { findDOMNode } from 'react-dom';
+import Markdown from 'react-remarkable';
+import { forEach } from 'lodash';
+import 'vendor/prettify/prettify';
 
 export default class EditorPreview extends Component {
+  componentDidMount() {
+    this.codePrettyPrint();
+  }
+
+  componentDidUpdate() {
+    this.codePrettyPrint();
+  }
+
+  codePrettyPrint() {
+    const previewContent = findDOMNode(this.refs.previewContent);
+    const preNode = previewContent.querySelectorAll('pre');
+    forEach(preNode, (el) => {
+      el.classList.add('prettyprint', 'linenums');
+    });
+    prettyPrint();
+  }
+
   render() {
     return (
-      <section className="editPad-preview">
+      <section className="editPad-preview" ref="previewContent">
         <h1 className="editPad-previewTitle">Preview</h1>
-        <Markdown text={ this.props.content } />
+        <Markdown source={ this.props.content } />
       </section>
     );
   }
