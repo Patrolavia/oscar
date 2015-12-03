@@ -43,7 +43,6 @@ router.post('/api/create', function(req, res) {
   // 1: Not logged in.
   // 2: Failed to save into database.
   // 3: Not permit to create pad.
-  var parameters = JSON.parse(_.keys(req.body)[0])
   var data = apis.create(0);
   res.json(data);
 });
@@ -56,7 +55,6 @@ router.post('/api/edit/:padId', function(req, res) {
   // 3: Not cooperator.
   // 4: Failed to save pad.
   // 5: Version not match.
-  var parameters = JSON.parse(_.keys(req.body)[0])
   var data = apis.edit(0);
   res.json(data);
 });

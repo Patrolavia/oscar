@@ -11,25 +11,25 @@ const initialState = {
   }
 };
 
-const REQUEST_TYPES = FETCH_ME_REQUEST || FETCH_PATHS_REQUEST;
-const FAILURE_TYPES = FETCH_ME_FAILURE || FETCH_PATHS_FAILURE;
-
 export default function Auth(state = initialState, action) {
   switch (action.type) {
-    case REQUEST_TYPES:
+    case FETCH_ME_REQUEST: case FETCH_PATHS_REQUEST:
       return assign({}, state, {
         result: false
       });
 
     case FETCH_ME_SUCCESS:
-      return assign({}, state, action.json);
+      return assign({}, state, action.json, {
+        errorStatus: null
+      });
 
     case FETCH_PATHS_SUCCESS:
       return merge({}, state, {
+        errorStatus: null,
         paths: action.json
       });
 
-    case FAILURE_TYPES:
+    case FETCH_ME_FAILURE: case FETCH_PATHS_FAILURE:
       return merge({}, state, action.json);
 
     default:

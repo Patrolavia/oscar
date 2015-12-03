@@ -18,14 +18,14 @@ export default function PageTitle(state = initialState, action) {
     case FETCH_PAD_REQUEST:
       return initialState;
 
-    case FETCH_PAD_FAILURE: case FETCH_PADS_FAILURE:
-      return errorOccurred;
-
     case FETCH_PAD_SUCCESS:
       const padData = action.json.data;
       return merge({}, state, {
         title: (padData) ? padData.title : 'No such pad.'
       });
+
+    case FETCH_PAD_FAILURE: case FETCH_PADS_FAILURE:
+      return errorOccurred;
 
     default:
       return state;

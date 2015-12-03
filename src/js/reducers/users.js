@@ -2,10 +2,9 @@ import {
   FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE,
   FETCH_USER_SUCCESS
 } from 'actions';
-import { merge, uniq, union } from 'lodash';
+import { merge, assign, uniq, union } from 'lodash';
 
 const initialState = {
-  isFetching: false,
   data: []
 };
 
@@ -18,7 +17,7 @@ export default function Users(state = initialState, action) {
       return merge({}, state, mergeUserData);
 
     case FETCH_USERS_SUCCESS:
-      return merge({}, state, action.json);
+      return assign({}, state, action.json);
 
     case FETCH_USERS_FAILURE:
       return merge({}, state, action.json);

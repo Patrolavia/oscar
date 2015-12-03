@@ -12,7 +12,6 @@ export default function Pad(state = initialState, action) {
   switch (action.type) {
     case FETCH_PAD_REQUEST:
       return assign({}, initialState, {
-        message: 'Fetching pad...',
         isFetching: true
       });
 

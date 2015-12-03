@@ -13,7 +13,6 @@ export default function Pads(state = initialState, action) {
   switch (action.type) {
     case FETCH_PADS_REQUEST:
       return assign({}, state, {
-        message: 'Fetching pads...',
         isFetching: true,
         result: false
       });
@@ -31,7 +30,6 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_PADS_BY_TITLE:
       return assign({}, state, {
-        searchRequest: false,
         isSearching: true,
         searchParams: action.params,
         searchResult: filter(state.data, (data) => {
@@ -42,7 +40,6 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_PADS_BY_USER:
       return assign({}, state, {
-        searchRequest: false,
         isSearching: true,
         searchParams: action.params,
         searchResult: filter(state.data, (data) => {
@@ -53,7 +50,6 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_PADS_BY_TAG:
       return assign({}, state, {
-        searchRequest: false,
         isSearching: true,
         searchParams: action.params,
         searchResult: filter(state.data, (data) => {
@@ -64,24 +60,22 @@ export default function Pads(state = initialState, action) {
 
     case SEARCH_OWN:
       return merge({}, state, {
-        searchRequest: false,
         isSearchOwn: true
       });
 
     case SEARCH_ALL:
       return merge({}, state, {
-        searchRequest: false,
         isSearchOwn: false
       });
 
     case SEARCH_CANCEL:
-      return merge({}, state, {
-        searchRequest: false,
+      return assign({}, state, {
         isSearching: false,
         isSearchOwn: false,
         searchParams: {
           type: 'title',
-          inputed: ''
+          inputed: '',
+          usersId: []
         }
       });
 

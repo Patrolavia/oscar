@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { fetchPads, deletePad, deleteCancel } from 'actions';
+import g11n from 'utils/g11n';
 
 export default class DeleteConfirm extends Component {
 
@@ -13,15 +14,16 @@ export default class DeleteConfirm extends Component {
   constructor() {
     super();
     this.defaultState = {
+      isClicked: false,
       isRequesting: false,
       isActive: false,
-      message: null
+      message: ''
     };
     this.state = this.defaultState;
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isActive, result, message, isRequesting } = nextProps.deleteState;
+    const { isActive, result, isRequesting, data } = nextProps.deleteState;
     this.setState({
       isActive: isActive
     });
@@ -34,20 +36,21 @@ export default class DeleteConfirm extends Component {
       const newState = {
         isRequesting: isRequesting
       };
-      if (!isRequesting) {
-        newState.message = message;
+      if (isRequesting) {
+        newState.message = g11n.t('delete.requesting');
+      } else {
+        newState.message = (data) ? g11n.t('delete.error')[data.code] : '' ;
       }
       this.setState(newState);
     }
   }
 
   onClickDelete() {
-    this.setState({message: ''});
     const { deleteState: { padInfo } } = this.props;
     if (padInfo.padTitle === findDOMNode(this.refs.titleInput).value) {
       this.props.deletePad({ padId: padInfo.padId });
     } else {
-      this.setState({message: 'value invalid.'});
+      this.setState({message: g11n.t('delete.valueInvaild')})
     }
   }
 
@@ -57,7 +60,12 @@ export default class DeleteConfirm extends Component {
     findDOMNode(this.refs.titleInput).value = '';
   }
 
+  onChangeInput() {
+    this.setState({message: ''});
+  }
+
   render() {
+    const { result, errorStatus } = this.props.deleteState;
     return (
       <div className={classNames('deleteConfirm', {'dn': !this.state.isActive})}>
         <div className="deleteConfirm-wrapper">
@@ -65,6 +73,7 @@ export default class DeleteConfirm extends Component {
             <span className="deleteConfirm-title">Are you sure?</span>
             <p className="deleteConfirm-discribe">To contiune, please type in the name of the pad to confirm. </p>
             <input className="deleteConfirm-input"
+              onChange={this.onChangeInput.bind(this)}
               type="text"
               ref="titleInput"/>
           </div>
@@ -76,7 +85,7 @@ export default class DeleteConfirm extends Component {
             </a>
             <a className="button-wb button cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
           </div>
-          <div className={classNames('deleteConfirm-errorMsg', {'dn': !this.state.message})}>
+          <div className={classNames('deleteConfirm-errorMsg', {'dn': !this.state.message.length })}>
             <span>{ this.state.message }</span>
           </div>
         </div>

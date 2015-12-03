@@ -80,7 +80,7 @@ export function fetchUsers() {
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
 
-export function fetchUser(useridArray) {
+export function fetchUser(param) {
   const APIUrl = getBaseUrl() + APIs.user;
   return dispatch => {
     sendRequest(
@@ -88,7 +88,7 @@ export function fetchUser(useridArray) {
       [FETCH_USER_SUCCESS, FETCH_USER_FAILURE],
       dispatch,
       APIUrl,
-      JSON.stringify({userid: useridArray})
+      JSON.stringify({userid: param.useridArray})
     );
   };
 }

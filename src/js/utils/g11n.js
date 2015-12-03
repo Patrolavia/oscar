@@ -4,7 +4,9 @@ export default ((lang)=> {
   const g11n = new G11N();
 
   var data = [
-    'locales/:locale/msg'
+    'locales/:locale/msg',
+    'locales/:locale/editor',
+    'locales/:locale/delete'
   ];
 
   g11n.imports(data.map((url) => url.replace(/:locale/, lang)));
