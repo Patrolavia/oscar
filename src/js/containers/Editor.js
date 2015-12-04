@@ -183,13 +183,13 @@ export default class Editor extends Component {
     let message = '';
     switch (true) {
       case !this.isLogged:
-        message = g11n.t('editor.edit')[1];
+        message = g11n.t('editor.responseResults')[1];
         break;
       case (this.isEditMode && !fetchResult) && !isFetching:
-        message = g11n.t('editor.edit')[2];
+        message = g11n.t('editor.responseResults')[2];
         break;
       case !isAuthorized && fetchResult:
-        message = g11n.t('editor.edit')[3];
+        message = g11n.t('editor.responseResults')[3];
         break;
       case (editorState.data.code === 0):
         // Success
@@ -198,7 +198,7 @@ export default class Editor extends Component {
         if (editorState.errorStatus) {
           message = g11n.t('error', {':errCode': editorState.errorStatus});
         } else {
-          message = g11n.t('editor.edit')[editorState.data.code] || '';
+          message = g11n.t('editor.responseResults')[editorState.data.code] || '';
         }
     }
     return message;
@@ -240,7 +240,7 @@ export default class Editor extends Component {
       <div>
         <div className={classNames('editPad', {'is-disable': isUneditable})} ref="editPad">
           <div className="editPad-title">
-            <span className="editPad-optionTitle">Pad title</span>
+            <span className="editPad-optionTitle">{ g11n.t('editor.form.title') }</span>
             <EditorTitle
               ref="EditorTitle"
               data={ data }
@@ -248,7 +248,7 @@ export default class Editor extends Component {
               authority={ isAuthorized } />
           </div>
           <div className="editPad-content">
-            <span className="editPad-optionTitle">Content</span>
+            <span className="editPad-optionTitle">{ g11n.t('editor.form.content') }</span>
             <EditorContent
               ref="EditorContent"
               data={ data }
@@ -257,7 +257,7 @@ export default class Editor extends Component {
           </div>
           <div className="editPad-options">
             <div className="editPad-cooperates">
-              <span className="editPad-optionTitle">Cooperate</span>
+              <span className="editPad-optionTitle">{ g11n.t('editor.form.cooperator') }</span>
               <EditorCooperate
                 ref="EditorCooperate"
                 data={ data }
@@ -266,7 +266,7 @@ export default class Editor extends Component {
                 authority={ isOwner || !this.isEditMode } />
             </div>
             <div className="editPad-tags">
-              <span className="editPad-optionTitle">Tags</span>
+              <span className="editPad-optionTitle">{ g11n.t('editor.form.tags') }</span>
               <EditorTags
                 ref="EditorTags"
                 data={ data }
@@ -275,10 +275,10 @@ export default class Editor extends Component {
             </div>
             <div className="editPad-submit">
               <a className="button-wb button-larger" disabled={ isUneditable || isRequesting } onClick={this.onClickSubmit.bind(this)}>
-                { isRequesting && 'Sending...' || 'Submit' }
+                { isRequesting && g11n.t('editor.button.sending') || g11n.t('editor.button.submit') }
               </a>
-              <a className="button-wb button-larger" onClick={this.onClickPreview.bind(this)}>Preview</a>
-              <a className="button-wb button-larger cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
+              <a className="button-wb button-larger" onClick={this.onClickPreview.bind(this)}>{ g11n.t('editor.button.preview') }</a>
+              <a className="button-wb button-larger cancel" onClick={this.onClickCancel.bind(this)}>{ g11n.t('general.button.cancel') }</a>
             </div>
             <div className={classNames('editPad-errorMsg', {'dn': !message.length || isRequesting})} ref="errorMsg">
               <span>{ message }</span>

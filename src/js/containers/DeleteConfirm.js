@@ -70,8 +70,8 @@ export default class DeleteConfirm extends Component {
       <div className={classNames('deleteConfirm', {'dn': !this.state.isActive})}>
         <div className="deleteConfirm-wrapper">
           <div className="deleteConfirm-content">
-            <span className="deleteConfirm-title">Are you sure?</span>
-            <p className="deleteConfirm-discribe">To contiune, please type in the name of the pad to confirm. </p>
+            <span className="deleteConfirm-title">{ g11n.t('delete.form.title') }</span>
+            <p className="deleteConfirm-discribe">{ g11n.t('delete.form.describe') }</p>
             <input className="deleteConfirm-input"
               onChange={this.onChangeInput.bind(this)}
               type="text"
@@ -81,9 +81,9 @@ export default class DeleteConfirm extends Component {
             <a className={classNames('button-wb', 'button', {'delete': !this.state.isRequesting})}
               disabled={this.state.isRequesting}
               onClick={this.onClickDelete.bind(this)}>
-              { this.state.isRequesting && 'Deleting...' || 'Delete this pad' }
+              { this.state.isRequesting && g11n.t('delete.button.deleting') || g11n.t('delete.button.delete') }
             </a>
-            <a className="button-wb button cancel" onClick={this.onClickCancel.bind(this)}>Cancel</a>
+            <a className="button-wb button cancel" onClick={this.onClickCancel.bind(this)}>{ g11n.t('general.button.cancel') }</a>
           </div>
           <div className={classNames('deleteConfirm-errorMsg', {'dn': !this.state.message.length })}>
             <span>{ this.state.message }</span>

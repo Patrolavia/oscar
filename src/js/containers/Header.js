@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchMe, fetchPaths, login, logout } from 'actions';
+import g11n from 'utils/g11n';
 
 import PadOptions from 'containers/PadOptions';
 import Auth from 'components/Auth';
@@ -23,10 +24,10 @@ export default class Header extends Component {
     let currentTitle;
     switch (true) {
       case pathname === '/':
-        currentTitle = 'Padlist';
+        currentTitle = g11n.t('pageTitle.padlist');
         break;
       case pathname.match(/create/) !== null:
-        currentTitle = 'Create pad';
+        currentTitle = g11n.t('pageTitle.create');
         break;
       default:
         currentTitle = title;
@@ -37,7 +38,7 @@ export default class Header extends Component {
     return (
       <div className="header">
         <h1>
-          <span>{ currentTitle }</span>
+          <span className="header-heading">{ currentTitle }</span>
           <PadOptions
             isHeaderOption={true}
             padData={padState.data}

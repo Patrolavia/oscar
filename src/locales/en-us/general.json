@@ -1,0 +1,9 @@
+{
+  "general": {
+    "button": {
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit"
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { indexOf, union } from 'lodash';
 import classNames from 'classnames';
 import { initDeleteForm } from 'actions';
+import g11n from 'utils/g11n';
 
 export default class PadOptions extends Component {
   static contextTypes = {
@@ -49,12 +50,16 @@ export default class PadOptions extends Component {
   }
 
   render() {
-    const currentClass = (this.props.isHeaderOption) ? 'header-options' : 'padList-control';
+    const currentClass = (this.props.isHeaderOption) ? 'header-control' : 'padList-control';
     const { editPad, deletePad } = this.state;
     return (
       <div className={currentClass}>
-        <i className={classNames('icon-trash', {'dn': !deletePad})} onClick={this.onClickDelete.bind(this)}></i>
-        <i className={classNames('icon-pencil', {'dn': !editPad})} onClick={this.onClickEdit.bind(this)}></i>
+        <i className={classNames('icon-trash', {'dn': !deletePad})} onClick={this.onClickDelete.bind(this)}>
+          { this.props.isHeaderOption && <span className="options-describe">{ g11n.t('general.button.delete') }</span> }
+        </i>
+        <i className={classNames('icon-pencil', {'dn': !editPad})} onClick={this.onClickEdit.bind(this)}>
+          { this.props.isHeaderOption && <span className="options-describe">{ g11n.t('general.button.edit') }</span> }
+        </i>
       </div>
     );
   }
