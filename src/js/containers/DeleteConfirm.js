@@ -36,9 +36,7 @@ export default class DeleteConfirm extends Component {
       const newState = {
         isRequesting: isRequesting
       };
-      if (isRequesting) {
-        newState.message = g11n.t('delete.requesting');
-      } else {
+      if (! isRequesting) {
         newState.message = (data) ? g11n.t('delete.error')[data.code] : '' ;
       }
       this.setState(newState);
@@ -65,7 +63,7 @@ export default class DeleteConfirm extends Component {
   }
 
   render() {
-    const { result, errorStatus } = this.props.deleteState;
+    const { result, errorStatus, isRequesting } = this.props.deleteState;
     return (
       <div className={classNames('deleteConfirm', {'dn': !this.state.isActive})}>
         <div className="deleteConfirm-wrapper">
@@ -85,7 +83,7 @@ export default class DeleteConfirm extends Component {
             </a>
             <a className="button-wb button cancel" onClick={this.onClickCancel.bind(this)}>{ g11n.t('general.button.cancel') }</a>
           </div>
-          <div className={classNames('deleteConfirm-errorMsg', {'dn': !this.state.message.length })}>
+          <div className={classNames('deleteConfirm-errorMsg', {'dn': !this.state.message.length || isRequesting})}>
             <span>{ this.state.message }</span>
           </div>
         </div>
