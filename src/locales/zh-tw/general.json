@@ -1,0 +1,9 @@
+{
+  "general": {
+    "button": {
+      "cancel": "取消",
+      "delete": "刪除",
+      "edit": "編輯"
+    }
+  }
+}

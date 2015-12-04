@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import { assign, forEach, filter, pluck, isEqual } from 'lodash';
+import g11n from 'utils/g11n';
 import 'gsap';
 
 const TimelineLite = window.TimelineLite;
@@ -160,32 +161,32 @@ export default class ToolbarSearchForm extends Component {
     return (
       <div className="toolbar-form" data-type="searchForm">
         <div className="toolbar-search">
-          <span className="toolbar-formTitle">Search pad</span>
+          <span className="toolbar-formTitle">{ g11n.t('search.form.title') }</span>
           <input type="text" onChange={this.onInputChanged.bind(this)} ref="inputer"/>
           <dl className="toolbar-searchTypes">
             <dt className={classNames('toolbar-searchType', {'is-active': title})} onClick={ this.onClickSearchType.bind(this, 'title') }>
               <i className="icon-doc-inv"></i>
-              <span>Title</span>
+              <span>{ g11n.t('search.type.title') }</span>
             </dt>
             <dt className={classNames('toolbar-searchType', {'is-active': user})} onClick={ this.onClickSearchType.bind(this, 'user') }>
               <i className="icon-user"></i>
-              <span>User</span>
+              <span>{ g11n.t('search.type.user') }</span>
             </dt>
             <dt className={classNames('toolbar-searchType', {'is-active': tag})} onClick={ this.onClickSearchType.bind(this, 'tag') }>
               <i className="icon-tags"></i>
-              <span>Tag</span>
+              <span>{ g11n.t('search.type.tag') }</span>
             </dt>
           </dl>
         </div>
         <div className={classNames('toolbar-searchOptions', {'dn': !isLogged})}>
-          <span className="toolbar-toggleSearchOptions">Options</span>
+          <span className="toolbar-toggleSearchOptions">{ g11n.t('search.options.title') }</span>
           <label className="toolbar-searchOption" htmlFor="searchMine">
             <input id="searchMine" type="checkbox" checked={this.state.own} onChange={ this.onChangeCheckbox.bind(this) }/>
-            <span>Only mine</span>
+            <span>{ g11n.t('search.options.onlyMine') }</span>
           </label>
         </div>
-        <a className="button toolbar-searchBtn">Reset</a>
-        <a className="button cancel toolbar-searchBtn" onClick={this.onClickCloseHandler.bind(this)}>Close</a>
+        <a className="button toolbar-searchBtn">{ g11n.t('search.button.reset') }</a>
+        <a className="button cancel toolbar-searchBtn" onClick={this.onClickCloseHandler.bind(this)}>{ g11n.t('search.button.close') }</a>
       </div>
     );
   }

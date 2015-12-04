@@ -1,0 +1,21 @@
+{
+  "msg": {
+    "noPads": {
+      "title": "目前沒有筆記。",
+      "msg": "新增一篇吧 ;)"
+    },
+    "noSuchPad": {
+      "title": "筆記不存在 :(",
+      "msg": "此筆記可能已被刪除或不存在。"
+    },
+    "pageNotFound": {
+      "title": "其實是...找不到你想去的頁面",
+      "msg": "迷路了嗎？建議您回到筆記列表。"
+    },
+    "unknownError": {
+      "title": "Oops!",
+      "msg": "發生未預期的錯誤。"
+    }
+  },
+  "error": "發生未預期的錯誤，請聯絡您的網站管理員。 [Code: :errCode]"
+}

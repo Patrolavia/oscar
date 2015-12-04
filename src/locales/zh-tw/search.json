@@ -1,0 +1,20 @@
+{
+  "search": {
+    "form": {
+      "title": "搜尋"
+    },
+    "type": {
+      "title": "標題",
+      "user": "作者",
+      "tag": "標籤"
+    },
+    "options": {
+      "title": "選項",
+      "onlyMine": "我的筆記"
+    },
+    "button": {
+      "close": "關閉",
+      "reset": "重置"
+    }
+  }
+}

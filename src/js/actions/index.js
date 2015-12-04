@@ -16,7 +16,6 @@ export const sendRequest = (
 ) => {
   const [ SUCCESS_TYPE, FAILURE_TYPE, REQUIRE_TYPE ] = actionTypes;
   if (REQUIRE_TYPE) {
-    // TODO: test
     dispatch({
       type: REQUIRE_TYPE,
       parameters
@@ -32,9 +31,11 @@ export const sendRequest = (
       }
 
       const currentType = (err) ? FAILURE_TYPE : SUCCESS_TYPE;
+      setTimeout(() => {
       dispatch({
         type: currentType,
         json
       });
+      }, 2000)
     });
 };
