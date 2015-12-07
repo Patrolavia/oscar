@@ -1,23 +1,37 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { reduxReactRouter } from 'redux-router';
 import { devTools } from 'redux-devtools';
-import createHistory from 'history/lib/createHashHistory';
 import routes from '../routes';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import rootReducer from '../reducers';
+import { isDevEnv } from 'utils/config';
 
-const logger = createLogger({
-  // predicate: (getState, action) => action.type !== AUTH_REMOVE_TOKEN,   // log all actions except AUTH_REMOVE_TOKEN
-  level: 'info',
-  collapsed: true
-});
+let createHistory, composeConfig;
+
+if (isDevEnv()) {
+  createHistory = require('history/lib/createHashHistory');
+  const logger = createLogger({
+    // predicate: (getState, action) => action.type !== AUTH_REMOVE_TOKEN,   // log all actions except AUTH_REMOVE_TOKEN
+    level: 'info',
+    collapsed: true
+  });
+  composeConfig = [
+    applyMiddleware(thunk),
+    reduxReactRouter({ routes, createHistory }),
+    applyMiddleware(logger),
+    devTools()
+  ]
+} else {
+  createHistory = require('history/lib/createBrowserHistory');
+  composeConfig = [
+    applyMiddleware(thunk),
+    reduxReactRouter({ routes, createHistory })
+  ]
+}
 
 const finalCreateStore = compose(
-  applyMiddleware(thunk),
-  reduxReactRouter({ routes, createHistory }),
-  applyMiddleware(logger),
-  devTools()
+  ...composeConfig
 )(createStore);
 
 export default function configureStore(initialState) {
