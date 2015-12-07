@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import Loader from 'halogen/ScaleLoader';
 
-export default class LoadingDots extends Component {
+export default class LoadingDot extends Component {
   render() {
     return (
-      <div className="loading">
-        <div className="loading-dot loading-0"></div>
-        <div className="loading-dot loading-1"></div>
-        <div className="loading-dot loading-2"></div>
+      <div className="LoadingDot">
+        <Loader color="#757575" size="10px" />
       </div>
     );
   }

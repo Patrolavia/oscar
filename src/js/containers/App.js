@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { fadeIn } from 'utils/animation';
-import StickyDiv from 'react-stickydiv';
+import StickyDiv from 'react-sticky';
 
 import Header from 'containers/Header';
 import Toolbar from 'containers/Toolbar';
@@ -25,7 +25,7 @@ class App extends Component {
           <DeleteConfirm />
           <div className="aside">
             <Toolbar />
-            <StickyDiv>
+            <StickyDiv stickyClass={'toc-sticky'} stickyStyle={{}}>
               <Toc />
             </StickyDiv>
           </div>

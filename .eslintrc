@@ -1,5 +1,4 @@
 {
-  "extends": "airbnb",
   "env": {
     "browser": true,
     "mocha": true,
@@ -13,7 +12,7 @@
     "block-scoped-var": 0,
     "no-var": 0,
     "vars-on-top": 0,
-    "react/jsx-boolean-value": 0
+    "react/jsx-boolean-value": 0,
 
     // Disable comma-dangle unless need to support it
     "comma-dangle": 0
