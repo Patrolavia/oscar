@@ -1,4 +1,4 @@
-# MDPAD
+# Oscar
 
 MDPAD's official front-end. Designed for simple, clean and responsive. Created by using:
 
