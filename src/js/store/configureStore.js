@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { reduxReactRouter } from 'redux-router';
-import { devTools } from 'redux-devtools';
 import routes from '../routes';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
@@ -19,8 +18,7 @@ if (isDevEnv()) {
   composeConfig = [
     applyMiddleware(thunk),
     reduxReactRouter({ routes, createHistory }),
-    applyMiddleware(logger),
-    devTools()
+    applyMiddleware(logger)
   ]
 } else {
   createHistory = require('history/lib/createBrowserHistory');
