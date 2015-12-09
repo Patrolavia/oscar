@@ -36,7 +36,7 @@ and it will open in your default browser automatically, or you can visit `http:/
 
 ## Oscar?
 
-Oscar is a teenage wandering albatross, the smallest one between siblings, also the latest one leaves the nest. He lives in an island in the Antarctic Ocean, and get ready to explore this world.
+Oscar is a teenage wandering albatross, smaller than other hatchling, also the latest one leaves the nest. He lives in an island in the Antarctic Ocean, and get ready to explore this world.
 
 ## LICENSE
 
