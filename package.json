@@ -73,7 +73,9 @@
   },
   "scripts": {
     "postinstall": "bower install",
-    "init": "git init;git add .;git commit -m 'first commit'"
+    "init": "git init;git add .;git commit -m 'first commit'",
+    "test": "./node_nodules/.bin/fly test",
+    "build": "./node_nodules/.bin/fly build"
   },
   "dependencies": {
     "breakpoint-sass": "^2.6.1",
