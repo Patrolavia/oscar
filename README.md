@@ -26,7 +26,7 @@ App:
 - [react-tagsinput](https://github.com/olahol/react-tagsinput) for add or remove pad's cooperators & tags in editor
 - [superagent](https://github.com/visionmedia/superagent) for create HTTP request
 
-## Example
+## Synopsis
 
 - clone repository
 - install dependencies: `$ npm install`
