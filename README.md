@@ -16,7 +16,7 @@ App:
 - [ReactJS](https://github.com/facebook/react)
 - [Redux](https://github.com/rackt/redux), [react-redux](https://github.com/rackt/react-redux), [redux-thunk](https://github.com/gaearon/redux-thunk)
 - [Susy](https://github.com/oddbird/susy) & [breakpoint-sass](https://github.com/at-import/breakpoint) for responsive layout
-- [redux-router](https://github.com/rackt/react-router) & [history](https://github.com/rackt/history) for routing
+- [react-router](https://github.com/rackt/react-router) & [history](https://github.com/rackt/history) & [redux-router](https://github.com/rackt/redux-router) for routing
 - [classnames](https://github.com/JedWatson/classnames) to conditionally joining classNames together
 - [greensock](https://github.com/greensock/GreenSock-JS) for create animation
 - [halogen](https://github.com/yuanyan/halogen) for loading spinner
