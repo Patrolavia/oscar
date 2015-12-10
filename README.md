@@ -2,6 +2,8 @@
 
 Oscar is part of MDPAD project.
 
+[![Build Status](https://travis-ci.org/Patrolavia/oscar.svg?branch=travis)](https://travis-ci.org/Patrolavia/oscar)
+
 MDPAD's official front-end. Designed for simple, clean and responsive. Created by using:
 
 Develop:
@@ -36,8 +38,8 @@ and it will open in your default browser automatically, or you can visit `http:/
 
 ## Oscar?
 
-Oscar is a teenage wandering albatross, smaller than other hatchling, also the latest one leaves the nest. He lives in an island in the Antarctic Ocean, and get ready to explore this world.
+Oscar is a teenage wandering albatross, smaller than others, also the latest one leaves the nest. He lives in an island in the Antarctic Ocean, and get ready to explore this world.
 
 ## LICENSE
 
-MIT
+Any version of MIT, GPL or LGPL.
