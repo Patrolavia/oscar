@@ -22,13 +22,6 @@ module.exports = {
       'cooperator': [],
       'tags': ['No authority'],
       'id': 3
-    },
-    {
-      'title': 'mdpad API',
-      'user': 3,
-      'cooperator': [1, 2],
-      'tags': ['Tag', 'Another'],
-      'id': 4
     }
   ]
 };
