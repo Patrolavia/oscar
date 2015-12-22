@@ -2,7 +2,7 @@ import {
   FETCH_PADS_REQUEST, FETCH_PADS_SUCCESS, FETCH_PADS_FAILURE,
   SEARCH_PADS_BY_TITLE, SEARCH_PADS_BY_USER, SEARCH_PADS_BY_TAG, SEARCH_OWN, SEARCH_ALL, SEARCH_CANCEL
 } from 'actions';
-import { merge, assign, filter, indexOf } from 'lodash';
+import { merge, assign, filter, indexOf, sortBy } from 'lodash';
 
 const initialState = {
   isFetching: false,
@@ -18,7 +18,13 @@ export default function Pads(state = initialState, action) {
       });
 
     case FETCH_PADS_SUCCESS:
-      return assign({}, state, action.json, {
+      const response = action.json;
+      const preprocessData = {
+        data: sortBy(response.data, function(pad){
+          return -pad.id;
+        })
+      };
+      return assign({}, state, assign(response, preprocessData), {
         errorStatus: null,
         isFetching: false
       });
