@@ -1,0 +1,118 @@
+// *************************************
+//
+//   List
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .padList
+//   .padList-item
+//     .padList-title
+//     .padList-detail
+//       img
+//       span.padList-owner
+//       i.[^=icon] (options)
+//
+// *************************************
+
+.padList
+  width: 100%
+
+.padList-item
+  +border-radius(2px)
+  +box-shadow(0, 1px, 2px, rgba(0, 0, 0, .1))
+  margin: $b-space-s 0
+  background-color: MDcolor(grey, 100)
+  cursor: default
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+.padList-title
+  padding: $b-space-s
+  display: block
+  font-size: $b-fontSize-l
+
+.padList-detail
+  border-top: 1px MDcolor(grey, 200) solid
+  height: 30px
+  padding: 0 $b-space-s
+  padding-top: $b-space-xs * 1.5
+  color: MDcolor(grey, 500)
+  background-color: rgba(MDcolor(grey, 300), .3)
+
+.padList-control
+  float: right
+  text-align: right
+  width: 40%
+  i
+    margin-left: $b-space-s
+    &:after
+      content: ''
+    &:hover
+      cursor: pointer
+      color: MDcolor(blue-grey, 600)
+    &.icon-trash:hover
+      color: MDcolor(red, 900)
+
+
+.padList-ownerInfo
+  width: 60%
+  float: left
+  display: table
+  text-align-last: auto
+
+.padList-ownerPic
+  +border-radius(3px)
+  display: table-cell
+  float: left
+  width: 20px
+  height: 20px
+  background-color: MDcolor(grey, 300)
+  img
+    +border-radius(3px)
+    height: inherit
+    width: inherit
+
+.padList-owner
+  display: table-cell
+  float: left
+  margin-left: $b-space-s
+  vertical-align: middle
+  font-size: $b-fontSize-s
+  &:hover
+    cursor: pointer
+    color: MDcolor(grey, 600)
+
+.padList-tags
+  display: block
+  position: relative
+  padding: $b-space-xs 0
+  .icon-tags
+    position: absolute
+    top: $b-space-xs * 1.5
+    left: $b-space-s
+    color: MDcolor(blue-grey, 300)
+    font-size: $b-fontSize-s
+  ul
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+    margin: 0
+    padding: 0
+    padding-left: $b-space * 1.5
+  li
+    +border-radius(3px)
+    display: inline-block
+    font-size: $b-fontSize-xs
+    color: MDcolor(blue-grey, 400)
+    background-color: MDcolor(grey, 200)
+    padding: 1px 4px
+    margin-left: $b-space-s
+    margin-bottom: $b-space-xs
+    cursor: pointer
+    &:hover
+      color: MDcolor(blue-grey, 700)
+      background-color: MDcolor(blue-grey, 100)

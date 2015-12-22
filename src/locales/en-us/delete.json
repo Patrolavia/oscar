@@ -1,0 +1,21 @@
+{
+  "delete": {
+    "form": {
+      "title": "Are you sure?",
+      "describe": "To contiune, please type in the name of the pad to confirm."
+    },
+    "button": {
+      "delete": "Delete this pad",
+      "deleting": "Deleting..."
+    },
+    "requesting" : "Sending delete request...",
+    "valueInvaild": "Value Invaild",
+    "error": [
+      "Success.",
+      "Not logged in.",
+      "No such pad.",
+      "Not owner.",
+      "Unknown error."
+    ]
+  }
+}

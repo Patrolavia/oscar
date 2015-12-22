@@ -1,0 +1,40 @@
+.button
+  +border-radius(3px)
+  float: right
+  cursor: pointer
+  font-size: $b-fontSize-s
+  border-bottom: 0
+  padding: $b-space-xs $b-space-s
+  color: MDcolor(grey, 100)
+  &[disabled]
+    pointer-events: none
+  &:hover
+    color: MDcolor(grey, 50)
+    background-color: MDcolor(blue-grey, 600)
+  &:active
+    background-color: rgba(MDcolor(blue-grey, 700), .7)
+  &.cancel
+    color: MDcolor(blue-grey, 200)
+  &.delete
+    font-weight: bold
+    color: MDcolor(red, 900)
+    &:hover
+      color: MDcolor(red, 800)
+
+.button-wb
+  @extend .button
+  color: MDcolor(blue-grey, 500)
+  &:hover
+    color: MDcolor(blue-grey, 700)
+    background-color: MDcolor(grey, 300)
+  &:active
+    background-color: rgba(MDcolor(grey, 400), .5)
+  &.cancel
+    color: MDcolor(blue-grey, 300)
+  &[disabled]
+    cursor: default
+    color: MDcolor(grey, 400)
+    background-color: MDcolor(grey, 200)
+
+.button-larger
+  padding: $b-space-s $b-space

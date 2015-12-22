@@ -1,0 +1,23 @@
+{
+  "editor": {
+    "form": {
+      "title": "Pad title",
+      "content": "Content",
+      "cooperator": "Cooperate",
+      "tags": "Tags"
+    },
+    "button": {
+      "submit": "Submit",
+      "sending": "Sending...",
+      "preview": "Preview"
+    },
+    "responseResults": [
+      "Success.",
+      "Not logged in.",
+      "No such pad.",
+      "Not cooperator.",
+      "Failed to save pad.",
+      "Version not match."
+    ]
+  }
+}

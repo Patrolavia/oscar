@@ -1,0 +1,126 @@
+// *************************************
+//
+//   Content
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .content
+//   .padContent
+//   .content-tags
+//     .content-tag
+//       i.[^=icon] (tags)
+//
+// *************************************
+
+.content
+  padding: $b-space
+  +breakpoint($middle)
+    +span(6 of 6)
+  +breakpoint($large)
+    +span(10 of 13)
+
+.padContent
+  position: relative
+
+  // -------------------------------------
+  //   Scaffolding
+  // -------------------------------------
+
+  h1,
+  h2,
+  h3,
+  h4
+    padding-top: $b-space-l
+    padding-bottom: $b-space-xs
+    margin-bottom: $b-space-xs
+    color: MDcolor(blue-grey, 700)
+    &.is-topHeading
+      padding-top: 0
+  h1
+    border-bottom: 3px rgba(MDcolor(blue-grey, 700), .1) solid
+  h2
+    border-bottom: 2px rgba(MDcolor(blue-grey, 700), .1) solid
+  h3
+    border-bottom: 2px rgba(MDcolor(blue-grey, 700), .1) solid
+  li
+    margin: 0
+
+  table
+    border-collapse: separate
+    width: inherit
+    thead th
+      border-bottom: 1px $c-text solid
+    tbody td
+      border-top: 1px MDcolor(grey, 300) solid
+    tbody tr
+      &:hover
+        background-color: MDcolor(grey, 50)
+      &:first-child td
+        border-top: none
+    td,
+    th
+      padding: $b-space-xs $b-space-s
+
+  blockquote
+    margin: 0
+    padding-left: $b-space-s
+    border-left: 3px MDcolor(blue-grey, 400) solid
+    background-color: rgba(MDcolor(blue-grey, 100), .6)
+    color: MDcolor(blue-grey, 700)
+    p
+      padding: $b-space-s $b-space-xs
+
+  code
+    +border-radius(3px)
+    background-color: MDcolor(grey, 50)
+    font-size: $b-fontSize-s
+    padding: 2px $b-space-s
+    margin: $b-space-xs
+
+  hr
+    margin: $b-space 0
+    border: 0
+    border-top: 1px MDcolor(grey, 300) solid
+    border-bottom: 1px white solid
+
+
+.content-tags
+  margin-bottom: $b-space
+
+  .icon-tags
+    color: MDcolor(blue-grey, 500)
+    margin-right: $b-space-xs
+    display: inline-block
+
+.content-tag
+  +border-radius(3px)
+  display: inline-block
+  padding: 1px $b-space-s
+  margin: $b-space-xs
+  font-size: $b-fontSize-s
+  color: MDcolor(blue-grey, 300)
+  background-color: rgba(MDcolor(blue-grey, 100), .6)
+  cursor: pointer
+  &:hover
+    color: MDcolor(blue-grey, 500)
+
+.content-whale
+  pre
+    padding: 0
+    border: 0
+    background: none
+    color: MDcolor(blue-grey, 500)
+
+// -------------------------------------
+//   Animation
+// -------------------------------------
+
+.fadeIn-enter,
+.fadeIn-appear
+  opacity: 0.01
+  transition: opacity .5s ease-in
+  &.fadeIn-enter-active,
+  &.fadeIn-appear-active
+    opacity: 1

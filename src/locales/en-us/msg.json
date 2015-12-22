@@ -1,0 +1,21 @@
+{
+  "msg": {
+    "noPads": {
+      "title": "Hey, There are no pads here.",
+      "msg": "Enjoy today ;)"
+    },
+    "noSuchPad": {
+      "title": "Sorry! No such pad. :(",
+      "msg": "The pad you are looking for was deleted or never existed."
+    },
+    "pageNotFound": {
+      "title": "The truth is ... Page not found.",
+      "msg": "Looks like you are lost. Maybe go back to list?"
+    },
+    "unknownError": {
+      "title": "Oops!",
+      "msg": "An unexpected error has occurred."
+    }
+  },
+  "error": "An unexpected error has occurred, please contact the server administrator. [Code: :errCode]"
+}
