@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchMe, fetchPaths, login, logout } from 'actions';
 import g11n from 'utils/g11n';
+import Helmet from 'react-helmet';
 
 import PadOptions from 'containers/PadOptions';
 import Auth from 'components/Auth';
@@ -22,21 +23,26 @@ export default class Header extends Component {
     };
 
     let currentTitle;
+    let isList = false;
     switch (true) {
       case pathname === '/':
         currentTitle = g11n.t('pageTitle.padlist');
+        isList = true;
         break;
       case pathname.match(/create/) !== null:
         currentTitle = g11n.t('pageTitle.create');
+        isList = false;
         break;
       default:
         currentTitle = title;
+        isList = false;
         authorityInfo.ownerId = padState.data.user;
         authorityInfo.cooperatorList = padState.data.cooperator;
     }
 
     return (
       <div className="header">
+        <Helmet title={(isList) ? 'MDPAD' : currentTitle} />
         <h1>
           <span className="header-heading">{ currentTitle }</span>
           <PadOptions

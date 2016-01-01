@@ -28,6 +28,7 @@ App:
 - [react-sticky](https://github.com/captivationsoftware/react-sticky) makes TOC sticky
 - [react-tagsinput](https://github.com/olahol/react-tagsinput) for add or remove pad's cooperators & tags in editor
 - [superagent](https://github.com/visionmedia/superagent) for create HTTP request
+- [react-helmet](https://github.com/nfl/react-helmet) to handle document title change
 
 ## Synopsis
 
