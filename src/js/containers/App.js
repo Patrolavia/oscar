@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { fadeIn } from 'utils/animation';
 import StickyDiv from 'react-sticky';
+import g11n from 'utils/g11n';
+import { isDevEnv } from 'utils/config';
 
 import Header from 'containers/Header';
 import Toolbar from 'containers/Toolbar';
@@ -15,6 +17,12 @@ class App extends Component {
   componentDidUpdate() {
     const $contentNode = findDOMNode(this.refs.contentWrapper);
     fadeIn($contentNode);
+  }
+
+  componentWillMount() {
+    const href = window.location.href;
+    const baseUrl = (isDevEnv()) ? false : href.replace(this.props.location.pathname, '/');
+    g11n.importData(baseUrl);
   }
 
   render() {
