@@ -13,7 +13,13 @@ export default ((lang)=> {
     'locales/:locale/search'
   ];
 
-  g11n.imports(data.map((url) => url.replace(/:locale/, lang)));
+  g11n.importData = (baseUrl) => {
+    let ret = data.map((url) => url.replace(/:locale/, lang));
+    if (baseUrl) {
+      ret = ret.map((restUrl) => baseUrl + restUrl);
+    }
+    g11n.imports(ret);
+  }
 
   document.documentElement.setAttribute('lang', lang);
 
